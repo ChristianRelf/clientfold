@@ -1,0 +1,810 @@
+// ClientFold data model.
+//
+// Local dev uses SQLite for zero-infra runnability. For production, change the
+// provider below to "postgresql" and set DATABASE_URL accordingly — the schema
+// avoids provider-specific features (native enums / scalar lists) so the switch
+// is a one-line change. "Enums" are modelled as String columns with the allowed
+// values documented next to each field; JSON payloads are stored as String and
+// parsed at the edge. Tenancy: every tenant-scoped row carries organisationId
+// and access is verified server-side (see src/lib/tenancy.ts).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Identity & tenancy
+// ---------------------------------------------------------------------------
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  avatarUrl     String?
+  passwordHash  String? // null when the user only uses magic-link auth
+  emailVerified DateTime?
+  isInternal    Boolean   @default(false) // gate for /internal growth dashboard
+  referralCode  String    @unique @default(cuid())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  memberships   OrganisationMember[]
+  sessions      Session[]
+  notifications Notification[]
+  attributions  Attribution[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+// Client portal session — separate from staff Session. DB-backed so access can
+// be revoked (spec: invitation tokens are revocable). A client is NOT a User.
+model ClientSession {
+  id        String   @id @default(cuid())
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([clientId])
+}
+
+model Organisation {
+  id           String  @id @default(cuid())
+  name         String
+  slug         String  @unique
+  logoUrl      String?
+  accentColor  String  @default("231 48% 48%") // HSL triplet, drives portal theme
+  website      String?
+  timezone     String  @default("Europe/London")
+  currency     String  @default("GBP")
+  billingEmail String?
+
+  // Invoice + portal branding.
+  invoiceDetails String? // JSON: address, tax id, footer, payment terms
+  portalName     String?
+  portalIconUrl  String?
+  customDomain   String? @unique // e.g. portal.northline.studio
+  removeBranding Boolean @default(false) // paid plans hide "Powered by ClientFold"
+
+  plan         String @default("free") // free | solo | studio | agency
+  referralCode String @unique @default(cuid())
+
+  // Stripe Connect: the connected account that receives invoice payments.
+  stripeConnectId       String?
+  stripeConnectComplete Boolean @default(false) // onboarding finished
+
+  activatedAt DateTime? // organisation.activated milestone
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  members        OrganisationMember[]
+  clients        Client[]
+  projects       Project[]
+  invoices       Invoice[]
+  files          File[]
+  invitations    Invitation[]
+  integrations   Integration[]
+  subscription   Subscription?
+  activities     Activity[]
+  auditLogs      AuditLog[]
+  waitingItems   WaitingItem[]
+  messageThreads MessageThread[]
+  notifications  Notification[]
+  attributions   Attribution[]
+
+  @@index([customDomain])
+}
+
+model OrganisationMember {
+  id             String       @id @default(cuid())
+  organisationId String
+  organisation   Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role           String       @default("member") // owner | admin | member
+  createdAt      DateTime     @default(now())
+
+  @@unique([organisationId, userId])
+  @@index([userId])
+}
+
+// ---------------------------------------------------------------------------
+// Clients
+// ---------------------------------------------------------------------------
+
+model Client {
+  id             String       @id @default(cuid())
+  organisationId String
+  organisation   Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  name           String
+  email          String
+  company        String?
+  phone          String?
+  avatarUrl      String?
+  notes          String?
+  status         String       @default("active") // active | inactive | archived
+  lastActiveAt   DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  contacts     ClientContact[]
+  projectLinks ProjectClient[]
+  invoices     Invoice[]
+  invitations  Invitation[]
+  waitingItems WaitingItem[]
+  sessions     ClientSession[]
+
+  @@unique([organisationId, email])
+  @@index([organisationId])
+}
+
+model ClientContact {
+  id        String   @id @default(cuid())
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  name      String
+  email     String
+  role      String?
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([clientId])
+}
+
+// ---------------------------------------------------------------------------
+// Projects
+// ---------------------------------------------------------------------------
+
+model Project {
+  id             String       @id @default(cuid())
+  organisationId String
+  organisation   Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  name           String
+  slug           String
+  description    String?
+  status         String       @default("active") // active | completed | archived
+  // Health is derived (see src/lib/health.ts) but cached for list performance.
+  health         String       @default("on_track") // on_track | waiting_on_client | at_risk | overdue
+  healthReason   String?
+  progress       Int          @default(0) // 0-100, derived from milestones
+  startDate      DateTime?
+  targetDate     DateTime?
+  completedAt    DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  clients      ProjectClient[]
+  members      ProjectMember[]
+  milestones   Milestone[]
+  tasks        Task[]
+  approvals    Approval[]
+  files        File[]
+  fileRequests FileRequest[]
+  invoices     Invoice[]
+  threads      MessageThread[]
+  activities   Activity[]
+  waitingItems WaitingItem[]
+
+  @@unique([organisationId, slug])
+  @@index([organisationId])
+}
+
+model ProjectClient {
+  id        String  @id @default(cuid())
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  clientId  String
+  client    Client  @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, clientId])
+  @@index([clientId])
+}
+
+model ProjectMember {
+  id        String  @id @default(cuid())
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  userId    String
+  role      String  @default("member")
+
+  @@unique([projectId, userId])
+}
+
+model Milestone {
+  id          String    @id @default(cuid())
+  projectId   String
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  status      String    @default("upcoming") // upcoming | in_progress | complete
+  startDate   DateTime?
+  dueDate     DateTime?
+  completedAt DateTime?
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+
+  tasks     Task[]
+  approvals Approval[]
+
+  @@index([projectId])
+}
+
+model Task {
+  id               String     @id @default(cuid())
+  projectId        String
+  project          Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  milestoneId      String?
+  milestone        Milestone? @relation(fields: [milestoneId], references: [id], onDelete: SetNull)
+  title            String
+  description      String?
+  status           String     @default("todo") // todo | in_progress | blocked | complete
+  priority         String     @default("normal") // low | normal | high | urgent
+  dueDate          DateTime?
+  // A task can be assigned to an internal user OR a client (client tasks are
+  // first-class — they generate Waiting items).
+  assigneeUserId   String?
+  assigneeClientId String?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+
+  @@index([projectId])
+  @@index([milestoneId])
+}
+
+// ---------------------------------------------------------------------------
+// Approvals (flagship)
+// ---------------------------------------------------------------------------
+
+model Approval {
+  id                    String     @id @default(cuid())
+  projectId             String
+  project               Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  milestoneId           String?
+  milestone             Milestone? @relation(fields: [milestoneId], references: [id], onDelete: SetNull)
+  title                 String
+  description           String?
+  type                  String     @default("deliverable") // design | document | deliverable | milestone | quote | scope_change | custom
+  status                String     @default("draft") // draft | awaiting_approval | approved | changes_requested | withdrawn
+  requestedFromClientId String?
+  requestedAt           DateTime?
+  deadline              DateTime?
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+
+  versions  ApprovalVersion[]
+  responses ApprovalResponse[]
+
+  @@index([projectId])
+}
+
+model ApprovalVersion {
+  id         String   @id @default(cuid())
+  approvalId String
+  approval   Approval @relation(fields: [approvalId], references: [id], onDelete: Cascade)
+  version    Int
+  status     String   @default("awaiting_approval") // awaiting_approval | approved | changes_requested | superseded
+  notes      String?
+  fileIds    String? // JSON array of File ids attached to this version
+  previewUrl String?
+  createdAt  DateTime @default(now())
+
+  responses ApprovalResponse[]
+
+  @@unique([approvalId, version])
+  @@index([approvalId])
+}
+
+// Immutable audit record of a client's decision. Never updated after creation.
+model ApprovalResponse {
+  id         String          @id @default(cuid())
+  approvalId String
+  approval   Approval        @relation(fields: [approvalId], references: [id], onDelete: Cascade)
+  versionId  String
+  version    ApprovalVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
+  decision   String // approved | changes_requested
+  comment    String?
+  // Who acted — captured by opaque identity, not necessarily a User.
+  actorType  String // client | user
+  actorId    String
+  actorName  String
+  ipHash     String? // hashed, for audit — never raw PII
+  userAgent  String?
+  createdAt  DateTime        @default(now())
+
+  @@index([approvalId])
+}
+
+// ---------------------------------------------------------------------------
+// Files & requests
+// ---------------------------------------------------------------------------
+
+model File {
+  id             String       @id @default(cuid())
+  organisationId String
+  organisation   Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  projectId      String?
+  project        Project?     @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  name           String
+  description    String?
+  mimeType       String
+  size           Int          @default(0)
+  storageKey     String // object-storage key; served via signed URLs only
+  folder         String? // simple path-style grouping, not a real FS
+  relatedType    String? // milestone | task | approval | invoice | client | message
+  relatedId      String?
+  uploaderType   String       @default("user") // user | client
+  uploaderId     String?
+  archived       Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+
+  versions FileVersion[]
+  comments FileComment[]
+
+  @@index([organisationId])
+  @@index([projectId])
+}
+
+// Contextual feedback on a file. A comment may be pinned to a location (x/y as
+// 0..1 fractions of the image, plus page for PDFs) or be a general note. Replies
+// link via parentId. Either party (agency user or client) can comment; comments
+// can be resolved. Not a Figma clone — just pin, discuss, resolve.
+model FileComment {
+  id         String   @id @default(cuid())
+  fileId     String
+  file       File     @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  parentId   String? // set for replies
+  authorType String // user | client
+  authorId   String?
+  authorName String
+  body       String
+  x          Float? // 0..1 pin position; null = general comment
+  y          Float?
+  page       Int? // for multi-page PDFs
+  resolved   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@index([fileId])
+}
+
+model FileVersion {
+  id         String   @id @default(cuid())
+  fileId     String
+  file       File     @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  version    Int
+  storageKey String
+  size       Int      @default(0)
+  createdAt  DateTime @default(now())
+
+  @@unique([fileId, version])
+}
+
+model FileRequest {
+  id                    String    @id @default(cuid())
+  projectId             String
+  project               Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title                 String
+  instructions          String?
+  requestedItems        String? // JSON array of requested item labels
+  status                String    @default("pending") // pending | partial | complete
+  requestedFromClientId String?
+  dueDate               DateTime?
+  completedAt           DateTime?
+  createdAt             DateTime  @default(now())
+
+  @@index([projectId])
+}
+
+// ---------------------------------------------------------------------------
+// Messaging
+// ---------------------------------------------------------------------------
+
+model MessageThread {
+  id             String       @id @default(cuid())
+  organisationId String
+  organisation   Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  projectId      String?
+  project        Project?     @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  subject        String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  messages Message[]
+
+  @@index([organisationId])
+  @@index([projectId])
+}
+
+model Message {
+  id          String        @id @default(cuid())
+  threadId    String
+  thread      MessageThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  body        String
+  authorType  String // user | client | system
+  authorId    String?
+  authorName  String
+  isSystem    Boolean       @default(false)
+  attachments String? // JSON array of File ids
+  readBy      String? // JSON array of viewer ids
+  createdAt   DateTime      @default(now())
+
+  @@index([threadId])
+}
+
+// ---------------------------------------------------------------------------
+// Invoices & payments
+// ---------------------------------------------------------------------------
+
+model Invoice {
+  id                    String       @id @default(cuid())
+  organisationId        String
+  organisation          Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  clientId              String?
+  client                Client?      @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  projectId             String?
+  project               Project?     @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  number                String
+  status                String       @default("draft") // draft | sent | viewed | paid | partially_paid | overdue | cancelled
+  currency              String       @default("GBP")
+  issueDate             DateTime?
+  dueDate               DateTime?
+  taxRate               Float        @default(0)
+  discount              Int          @default(0) // in minor units
+  notes                 String?
+  paymentTerms          String?
+  // Cached totals in minor units (pence) to avoid float drift.
+  subtotal              Int          @default(0)
+  taxTotal              Int          @default(0)
+  total                 Int          @default(0)
+  amountPaid            Int          @default(0)
+  viewedAt              DateTime?
+  paidAt                DateTime?
+  stripePaymentIntentId String?
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
+
+  items    InvoiceItem[]
+  payments Payment[]
+
+  @@unique([organisationId, number])
+  @@index([clientId])
+  @@index([projectId])
+}
+
+model InvoiceItem {
+  id          String  @id @default(cuid())
+  invoiceId   String
+  invoice     Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  description String
+  quantity    Float   @default(1)
+  unitPrice   Int     @default(0) // minor units
+  order       Int     @default(0)
+
+  @@index([invoiceId])
+}
+
+model Payment {
+  id             String   @id @default(cuid())
+  invoiceId      String
+  invoice        Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  amount         Int // minor units
+  method         String   @default("stripe") // stripe | manual | bank_transfer
+  reference      String?
+  stripeChargeId String?
+  createdAt      DateTime @default(now())
+
+  @@index([invoiceId])
+}
+
+// ---------------------------------------------------------------------------
+// Waiting Room (signature) — a materialised list of "blocked on client" items
+// ---------------------------------------------------------------------------
+
+model WaitingItem {
+  id             String       @id @default(cuid())
+  organisationId String
+  organisation   Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  projectId      String?
+  project        Project?     @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  clientId       String?
+  client         Client?      @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  type           String // approval | file_request | payment | task | reply
+  title          String
+  // Link back to the source record so "View" can deep-link.
+  sourceType     String
+  sourceId       String
+  amount         Int? // for payment items, minor units
+  currency       String?
+  status         String       @default("waiting") // waiting | resolved
+  requestedAt    DateTime     @default(now())
+  resolvedAt     DateTime?
+  lastRemindedAt DateTime?
+  reminderCount  Int          @default(0)
+  createdAt      DateTime     @default(now())
+
+  reminders Reminder[]
+
+  @@index([organisationId, status])
+  @@index([projectId])
+}
+
+model Reminder {
+  id            String      @id @default(cuid())
+  waitingItemId String
+  waitingItem   WaitingItem @relation(fields: [waitingItemId], references: [id], onDelete: Cascade)
+  channel       String      @default("email") // email | in_app
+  automatic     Boolean     @default(false)
+  sentAt        DateTime    @default(now())
+
+  @@index([waitingItemId])
+}
+
+// ---------------------------------------------------------------------------
+// Notifications, activity, audit
+// ---------------------------------------------------------------------------
+
+model Notification {
+  id             String       @id @default(cuid())
+  organisationId String
+  organisation   Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type           String
+  title          String
+  body           String?
+  href           String?
+  readAt         DateTime?
+  createdAt      DateTime     @default(now())
+
+  @@index([userId, readAt])
+}
+
+// Event-driven activity feed — powers feeds, notifications, analytics.
+model Activity {
+  id             String       @id @default(cuid())
+  organisationId String
+  organisation   Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  projectId      String?
+  project        Project?     @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  type           String // project.created | approval.approved | invoice.paid | ...
+  actorType      String // user | client | system
+  actorId        String?
+  actorName      String
+  summary        String // human-readable, no confidential payloads
+  metadata       String? // JSON, sanitised
+  createdAt      DateTime     @default(now())
+
+  @@index([organisationId, createdAt])
+  @@index([projectId])
+}
+
+model AuditLog {
+  id             String       @id @default(cuid())
+  organisationId String
+  organisation   Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  actorId        String?
+  actorName      String
+  action         String
+  targetType     String?
+  targetId       String?
+  metadata       String?
+  ipHash         String?
+  createdAt      DateTime     @default(now())
+
+  @@index([organisationId, createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Invitations & integrations
+// ---------------------------------------------------------------------------
+
+model Invitation {
+  id             String       @id @default(cuid())
+  organisationId String
+  organisation   Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  clientId       String?
+  client         Client?      @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  email          String
+  role           String       @default("client") // client | member | admin
+  tokenHash      String       @unique // store only a hash of the secure token
+  status         String       @default("pending") // pending | opened | accepted | revoked | expired
+  expiresAt      DateTime
+  openedAt       DateTime?
+  acceptedAt     DateTime?
+  createdAt      DateTime     @default(now())
+
+  @@index([organisationId])
+}
+
+model Integration {
+  id             String       @id @default(cuid())
+  organisationId String
+  organisation   Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  provider       String // stripe | google_drive | dropbox | slack | discord | webhook
+  status         String       @default("disconnected") // connected | disconnected | error
+  config         String? // JSON (never secrets in plaintext in prod)
+  connectedAt    DateTime?
+  createdAt      DateTime     @default(now())
+
+  @@unique([organisationId, provider])
+}
+
+model Subscription {
+  id                   String       @id @default(cuid())
+  organisationId       String       @unique
+  organisation         Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  plan                 String       @default("free")
+  status               String       @default("active") // trialing | active | past_due | canceled
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  currentPeriodEnd     DateTime?
+  attributionSource    String? // first-touch source for revenue attribution
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+}
+
+// ---------------------------------------------------------------------------
+// Growth: referrals, attribution, events, experiments, consent, campaigns
+// ---------------------------------------------------------------------------
+
+model Referral {
+  id              String    @id @default(cuid())
+  referralCode    String
+  referrerType    String // user | organisation
+  referrerId      String
+  // Funnel timestamps — rewards are intentionally not hard-coded.
+  signupUserId    String?
+  signedUpAt      DateTime?
+  convertedOrgId  String?
+  activatedAt     DateTime?
+  paidAt          DateTime?
+  attributionDate DateTime  @default(now())
+  createdAt       DateTime  @default(now())
+
+  @@index([referralCode])
+}
+
+// First-party, privacy-conscious attribution. First-touch is preserved when an
+// anonymous visitor later signs up; latest-touch is updated on each visit.
+model Attribution {
+  id             String        @id @default(cuid())
+  visitorId      String        @unique // anonymous first-party id from cookie
+  userId         String?
+  user           User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  organisationId String?
+  organisation   Organisation? @relation(fields: [organisationId], references: [id], onDelete: SetNull)
+
+  firstUtmSource   String?
+  firstUtmMedium   String?
+  firstUtmCampaign String?
+  firstUtmTerm     String?
+  firstUtmContent  String?
+  firstReferrer    String?
+  firstLandingPage String?
+  firstTouchAt     DateTime @default(now())
+
+  lastUtmSource   String?
+  lastUtmMedium   String?
+  lastUtmCampaign String?
+  lastLandingPage String?
+  lastTouchAt     DateTime @default(now())
+
+  gclid   String?
+  fbclid  String?
+  msclkid String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([organisationId])
+}
+
+// Consistent marketing event taxonomy (marketing.page_view, approval.approved,
+// subscription.started, ...). Metadata must never contain client-confidential
+// content — only opaque ids and safe descriptors.
+model MarketingEvent {
+  id             String   @id @default(cuid())
+  name           String // dotted taxonomy name
+  visitorId      String?
+  userId         String?
+  organisationId String?
+  sessionId      String?
+  campaign       String?
+  source         String?
+  medium         String?
+  landingPage    String?
+  path           String?
+  metadata       String? // JSON, sanitised
+  createdAt      DateTime @default(now())
+
+  @@index([name, createdAt])
+  @@index([organisationId])
+  @@index([campaign])
+}
+
+model Experiment {
+  id          String   @id @default(cuid())
+  key         String   @unique // hero_copy | cta_text | pricing_presentation ...
+  name        String
+  status      String   @default("running") // draft | running | paused | concluded
+  description String?
+  createdAt   DateTime @default(now())
+
+  variants    ExperimentVariant[]
+  assignments ExperimentAssignment[]
+}
+
+model ExperimentVariant {
+  id           String     @id @default(cuid())
+  experimentId String
+  experiment   Experiment @relation(fields: [experimentId], references: [id], onDelete: Cascade)
+  key          String // control | pain | outcome | feature
+  name         String
+  weight       Int        @default(50)
+  payload      String? // JSON: the copy/config this variant renders
+  createdAt    DateTime   @default(now())
+
+  assignments ExperimentAssignment[]
+
+  @@unique([experimentId, key])
+}
+
+model ExperimentAssignment {
+  id           String            @id @default(cuid())
+  experimentId String
+  experiment   Experiment        @relation(fields: [experimentId], references: [id], onDelete: Cascade)
+  variantId    String
+  variant      ExperimentVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  visitorId    String
+  exposedAt    DateTime          @default(now())
+  convertedAt  DateTime?
+
+  @@unique([experimentId, visitorId])
+  @@index([variantId])
+}
+
+model Consent {
+  id          String   @id @default(cuid())
+  visitorId   String   @unique
+  essential   Boolean  @default(true)
+  analytics   Boolean  @default(false)
+  advertising Boolean  @default(false)
+  region      String?
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+}
+
+model WaitlistEntry {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  organisation String?
+  workType     String?
+  source       String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Campaign {
+  id          String   @id @default(cuid())
+  key         String   @unique // meta-stop-chasing-clients
+  name        String
+  channel     String? // meta | google | microsoft | linkedin
+  angle       String? // waiting | approvals | files | fragmentation | professionalism
+  landingPath String? // /lp/stop-chasing-clients
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}

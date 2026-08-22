@@ -1,0 +1,33 @@
+services:
+  clientfold:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: clientfold:local
+    init: true
+    restart: unless-stopped
+    ports:
+      - "${CLIENTFOLD_PORT:-3000}:3000"
+    environment:
+      DATABASE_URL: file:/data/clientfold.db
+      AUTH_SECRET: ${AUTH_SECRET:-local-container-secret-change-before-production}
+      APP_URL: ${APP_URL:-http://localhost:3000}
+      SEED_DATABASE: ${SEED_DATABASE:-false}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+      STRIPE_CONNECT_CLIENT_ID: ${STRIPE_CONNECT_CLIENT_ID:-}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      EMAIL_FROM: ${EMAIL_FROM:-ClientFold <hello@clientfold.com>}
+      STORAGE_BUCKET: ${STORAGE_BUCKET:-}
+      STORAGE_REGION: ${STORAGE_REGION:-}
+      STORAGE_ACCESS_KEY_ID: ${STORAGE_ACCESS_KEY_ID:-}
+      STORAGE_SECRET_ACCESS_KEY: ${STORAGE_SECRET_ACCESS_KEY:-}
+      STORAGE_ENDPOINT: ${STORAGE_ENDPOINT:-}
+      NEXT_PUBLIC_ATTRIBUTION_COOKIE: ${NEXT_PUBLIC_ATTRIBUTION_COOKIE:-cf_attrib}
+    volumes:
+      - clientfold_data:/data
+      - clientfold_uploads:/app/.storage
+
+volumes:
+  clientfold_data:
+  clientfold_uploads:

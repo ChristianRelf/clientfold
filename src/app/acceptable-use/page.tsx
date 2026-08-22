@@ -1,0 +1,15 @@
+import type { Metadata } from "next";
+import { LegalPage, type LegalSection } from "@/components/legal/legal-page";
+
+export const metadata: Metadata = { title: "Acceptable Use Policy", description: "Rules for safe and responsible use of ClientFold.", alternates: { canonical: "/acceptable-use" } };
+
+const sections: LegalSection[] = [
+  { title: "Purpose", content: <><p>This policy forms part of the ClientFold Terms of Service. It protects users, their clients and the reliability of the service. It applies to account holders, organisation members, invited clients and anyone accessing ClientFold.</p></> },
+  { title: "Illegal and harmful content", content: <><p>Do not use ClientFold to create, upload, store or share content that is unlawful, fraudulent, defamatory, threatening, exploitative, discriminatory, or that infringes privacy, confidentiality, intellectual property or other rights.</p><p>Content that facilitates child sexual exploitation, terrorism, human trafficking or credible threats of violence is strictly prohibited and may be reported to the relevant authorities.</p></> },
+  { title: "Security and platform abuse", content: <><ul><li>Do not attempt unauthorised access, probe vulnerabilities or bypass access controls.</li><li>Do not distribute malware, malicious code, phishing material or deceptive links.</li><li>Do not disrupt the service, overload infrastructure, scrape at unreasonable volume or evade rate limits.</li><li>Do not reverse engineer the service except where applicable law expressly permits it.</li><li>Do not share credentials or portal links with people who are not intended recipients.</li></ul></> },
+  { title: "Messaging and client contact", content: <><p>Messages, invitations and reminders must relate to legitimate client work. Do not send spam, unsolicited promotions or communications that breach data protection or electronic-marketing rules. You must honour applicable objections and opt-outs.</p></> },
+  { title: "Sensitive and regulated use", content: <><p>Do not use ClientFold as the sole system for emergency communications, clinical decisions, regulated financial advice or other high-risk activity requiring a purpose-built regulated service. Do not upload special-category or highly sensitive information unless you have assessed the risks and have a lawful, necessary reason to do so.</p></> },
+  { title: "Enforcement and reporting", content: <><p>We may investigate suspected breaches and remove content, restrict features or suspend accounts where reasonably necessary. We consider context, severity, repetition and risk when responding. Where practical, we will notify the account owner and allow an opportunity to address the issue.</p><p>Report abuse or security concerns to <a href="mailto:security@clientfold.com">security@clientfold.com</a>.</p></> },
+];
+
+export default function AcceptableUsePage() { return <LegalPage title="Acceptable Use Policy" summary="Simple boundaries for using ClientFold safely, lawfully and respectfully." sections={sections}/>; }
