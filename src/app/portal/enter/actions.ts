@@ -20,7 +20,7 @@ export async function requestPortalLinkAction(_prev: EnterState, formData: FormD
 
   const invite = await issueLinkByEmail(parsed.data.email);
   if (invite) {
-    const delivered = await sendMagicLink(parsed.data.email, invite.url);
+    const delivered = (await sendMagicLink(parsed.data.email, invite.url)).accepted;
     // Only reveal the link in dev when no real email was sent.
     if (!delivered && process.env.NODE_ENV !== "production") {
       return { sent: true, devLink: invite.url };

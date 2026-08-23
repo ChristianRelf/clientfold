@@ -90,7 +90,7 @@ export async function createClientAction(_prev: ClientFormState, formData: FormD
     ? (await db.project.findUnique({ where: { id: safeProjectId }, select: { name: true } }))?.name ?? "your project"
     : "your project";
   const invite = await createClientInvitation({ organisationId: ctx.org.id, clientId: client.id, email });
-  const sent = await sendClientInvite(email, invite.url, ctx.org.name, projectName);
+  const sent = (await sendClientInvite(email, invite.url, ctx.org.name, projectName)).accepted;
 
   return {
     ok: true,

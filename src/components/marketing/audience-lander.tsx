@@ -3,6 +3,7 @@ import { SiteFooter } from "@/components/marketing/site-footer";
 import { ButtonLink } from "@/components/ui/button";
 import { Showcase } from "@/components/marketing/showcase";
 import { PricingTable } from "@/components/marketing/pricing-table";
+import { AutopilotHero } from "@/components/marketing/autopilot-hero";
 
 type AudienceLanderProps = {
   eyebrow: string;
@@ -10,6 +11,7 @@ type AudienceLanderProps = {
   subhead: string;
   pains: string[];
   showcase?: "waiting" | "approval" | "portal";
+  autopilot?: boolean;
 };
 
 const outcomes = [
@@ -36,6 +38,7 @@ export function AudienceLander({
   subhead,
   pains,
   showcase = "waiting",
+  autopilot = false,
 }: AudienceLanderProps) {
   return (
     <div className="min-h-screen bg-[#f7f6f1] text-[#292b26]">
@@ -57,7 +60,7 @@ export function AudienceLander({
                 </p>
                 <div className="mt-8 flex flex-wrap items-center gap-3">
                   <ButtonLink href="/waitlist" size="lg" className="bg-[#242620] px-6 hover:bg-[#3b3d36]">
-                    Join the waitlist
+                    Join early access
                   </ButtonLink>
                   <ButtonLink href="/demo" size="lg" variant="outline" className="border-[#bfc0b8] bg-transparent px-6 hover:bg-white/60">
                     Try the demo <span aria-hidden>→</span>
@@ -70,7 +73,7 @@ export function AudienceLander({
 
               <div className="relative" data-reveal>
                 <div className="absolute -right-3 -top-3 hidden h-24 w-24 border-r border-t border-[#aeb1a7] sm:block" aria-hidden />
-                <Showcase kind={showcase} />
+                {autopilot ? <AutopilotHero /> : <Showcase kind={showcase} />}
                 <div className="absolute -bottom-5 left-5 hidden items-center gap-3 border border-[#d1d1c9] bg-[#fbfbf7] px-3.5 py-2.5 shadow-[0_12px_35px_-18px_rgba(35,39,31,0.5)] sm:flex">
                   <span className="flex size-7 items-center justify-center rounded-full bg-[#dfe4da] text-xs text-[#596453]">✓</span>
                   <span>
@@ -155,7 +158,7 @@ export function AudienceLander({
             <div className="flex flex-col justify-end py-16 lg:pl-16 lg:py-20">
               <p className="max-w-sm text-sm leading-6 text-white/60">Give every client one clear place to approve, upload, pay and keep the work moving.</p>
               <div className="mt-7 flex flex-wrap gap-3">
-                <ButtonLink href="/waitlist" size="lg" className="bg-[#f3f2ed] text-[#2d302a] hover:bg-white">Join the waitlist</ButtonLink>
+                <ButtonLink href="/waitlist" size="lg" className="bg-[#f3f2ed] text-[#2d302a] hover:bg-white">Join early access</ButtonLink>
                 <ButtonLink href="/demo" size="lg" variant="ghost" className="border border-white/20 text-white hover:bg-white/10">View demo</ButtonLink>
               </div>
             </div>

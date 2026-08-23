@@ -10,7 +10,7 @@ import type { DemoWaitingItem, WaitingType } from "@/lib/demo/data";
 export async function getWaitingRoom(organisationId: string): Promise<DemoWaitingItem[]> {
   const items = await db.waitingItem.findMany({
     where: { organisationId, status: "waiting" },
-    include: { client: true, project: true },
+    include: { client: true, project: true, organisation: true },
     orderBy: { requestedAt: "asc" },
   });
 
@@ -27,6 +27,11 @@ export async function getWaitingRoom(organisationId: string): Promise<DemoWaitin
     amount: i.amount ?? undefined,
     currency: i.currency ?? undefined,
     lastRemindedDays: i.lastRemindedAt ? daysWaiting(i.lastRemindedAt) : undefined,
+    automaticReminderState: i.automaticReminderState as "inherit" | "paused",
+    automaticReminderStep: i.automaticReminderStep,
+    nextAutomaticReminderAt: i.nextAutomaticReminderAt?.toISOString(),
+    autopilotEnabled: i.organisation.automaticRemindersEnabled,
+    timezone: i.organisation.timezone,
     href: hrefFor(i.type as WaitingType, i.project?.slug, i.sourceId),
   }));
 }

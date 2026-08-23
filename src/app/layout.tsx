@@ -1,36 +1,42 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import "./globals.css";
 import { ConsentBanner } from "@/components/marketing/consent-banner";
 import { MotionLayer } from "@/components/marketing/motion-layer";
 
-const APP_URL = process.env.APP_URL ?? "https://clientfold.com";
-
-export const metadata: Metadata = {
-  metadataBase: new URL(APP_URL),
+export async function generateMetadata(): Promise<Metadata> {
+  const requestHeaders = await headers();
+  const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
+  const protocol = requestHeaders.get("x-forwarded-proto") ?? (host?.includes("localhost") ? "http" : "https");
+  const appUrl = host ? `${protocol}://${host}` : process.env.APP_URL ?? "https://clientfold.com";
+  const socialImage = new URL("/og.png", appUrl).toString();
+  return {
+  metadataBase: new URL(appUrl),
   title: {
-    default: "ClientFold — The calm layer for client work",
+    default: "ClientFold — The client portal that follows up for you",
     template: "%s · ClientFold",
   },
   description:
-    "A clear shared workspace for client projects, approvals, files, updates and payments.",
+    "Keep approvals, files and invoices moving with a client portal that sends polite follow-ups automatically.",
   applicationName: "ClientFold",
   openGraph: {
     type: "website",
     siteName: "ClientFold",
-    title: "The calm layer between your team and your clients.",
+    title: "Do the work. ClientFold does the chasing.",
     description:
-      "A clear shared workspace for client projects, approvals, files, updates and payments.",
-    url: APP_URL,
-    images: ["/og.png"],
+      "A client portal for approvals, files and invoices—with polite follow-ups that send themselves.",
+    url: appUrl,
+    images: [socialImage],
   },
   twitter: {
     card: "summary_large_image",
-    title: "The calm layer between your team and your clients.",
-    description: "One shared workspace for approvals, files, invoices and updates.",
-    images: ["/og.png"],
+    title: "Do the work. ClientFold does the chasing.",
+    description: "A client portal for approvals, files and invoices—with polite follow-ups that send themselves.",
+    images: [socialImage],
   },
   robots: { index: true, follow: true },
-};
+  };
+}
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

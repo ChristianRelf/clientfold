@@ -72,6 +72,9 @@ model Organisation {
   currency     String  @default("GBP")
   billingEmail String?
 
+  // Follow-up Autopilot is deliberately opt-in and plan-gated.
+  automaticRemindersEnabled Boolean @default(false)
+
   // Invoice + portal branding.
   invoiceDetails String? // JSON: address, tax id, footer, payment terms
   portalName     String?
@@ -532,11 +535,16 @@ model WaitingItem {
   resolvedAt     DateTime?
   lastRemindedAt DateTime?
   reminderCount  Int          @default(0)
+  automaticReminderState     String    @default("inherit") // inherit | paused
+  automaticReminderStep      Int       @default(0) // 0 | 1 | 2 automatic sends completed
+  nextAutomaticReminderAt    DateTime?
+  automaticReminderClaimedAt DateTime?
   createdAt      DateTime     @default(now())
 
   reminders Reminder[]
 
   @@index([organisationId, status])
+  @@index([status, nextAutomaticReminderAt])
   @@index([projectId])
 }
 
@@ -546,9 +554,16 @@ model Reminder {
   waitingItem   WaitingItem @relation(fields: [waitingItemId], references: [id], onDelete: Cascade)
   channel       String      @default("email") // email | in_app
   automatic     Boolean     @default(false)
-  sentAt        DateTime    @default(now())
+  status        String      @default("sent") // processing | sent | failed
+  scheduledFor  DateTime?
+  idempotencyKey String?    @unique
+  providerId    String?
+  failureReason String?
+  sentAt        DateTime?
+  createdAt     DateTime    @default(now())
 
   @@index([waitingItemId])
+  @@index([status, scheduledFor])
 }
 
 // ---------------------------------------------------------------------------

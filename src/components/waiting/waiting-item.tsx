@@ -4,6 +4,8 @@ import { formatMoney } from "@/lib/format";
 import { WAITING_TYPE_LABEL, type DemoWaitingItem } from "@/lib/demo/data";
 import { RemindButton } from "./remind-button";
 import { cn } from "@/lib/utils";
+import { AutopilotControl } from "./autopilot-control";
+import { formatReminderTime } from "@/lib/autopilot";
 
 const TYPE_TONE: Record<DemoWaitingItem["type"], Parameters<typeof Badge>[0]["tone"]> = {
   approval: "accent",
@@ -55,6 +57,17 @@ export function WaitingItemRow({
         {item.lastRemindedDays != null ? (
           <div className="text-2xs text-muted-foreground">Reminded {item.lastRemindedDays}d ago</div>
         ) : null}
+        {item.autopilotEnabled ? (
+          <div className="mt-0.5 text-2xs text-accent">
+            {item.automaticReminderState === "paused"
+              ? "Autopilot paused"
+              : item.automaticReminderStep === 2
+                ? "Final reminder sent"
+                : item.nextAutomaticReminderAt
+                  ? `Next ${formatReminderTime(new Date(item.nextAutomaticReminderAt), item.timezone ?? "Europe/London")}`
+                  : "Autopilot on"}
+          </div>
+        ) : null}
       </div>
 
       <div className="flex shrink-0 items-center gap-1.5">
@@ -65,6 +78,7 @@ export function WaitingItemRow({
           View
         </Link>
         <RemindButton waitingItemId={item.id} demo={demo} />
+        {!demo && item.autopilotEnabled && item.automaticReminderStep !== 2 ? <AutopilotControl waitingItemId={item.id} paused={item.automaticReminderState === "paused"} /> : null}
       </div>
     </div>
   );

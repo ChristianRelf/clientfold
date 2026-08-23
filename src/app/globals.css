@@ -107,11 +107,51 @@
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-7px); }
   }
+
+  @keyframes fold-float {
+    0%, 100% { transform: translateY(0) rotate(-1deg); }
+    50% { transform: translateY(-6px) rotate(1deg); }
+  }
+
+  @keyframes fold-travel {
+    0%, 18% { transform: translateX(0) rotate(-4deg); }
+    44% { transform: translateX(180px) rotate(3deg); }
+    72% { transform: translateX(390px) rotate(-3deg); }
+    100% { transform: translateX(590px) rotate(2deg); }
+  }
+
+  .fold-float {
+    animation: fold-float 5.5s ease-in-out infinite;
+  }
+
+  .fold-workflow-travel {
+    animation: fold-travel 9s ease-in-out infinite;
+  }
+
+  .fold-mascot--celebrating {
+    animation: fold-float 3.8s ease-in-out infinite;
+  }
 }
 
 @layer components {
   .font-editorial {
     font-family: Iowan Old Style, Baskerville, "Times New Roman", serif;
+  }
+
+  .gesture-underline {
+    position: relative;
+  }
+
+  .gesture-underline::after {
+    position: absolute;
+    right: 0;
+    bottom: -0.18em;
+    left: 0;
+    height: 0.16em;
+    border-radius: 999px;
+    background: #de7044;
+    content: "";
+    transform: rotate(-1.5deg);
   }
 
   /* A quiet drafting-table texture used inside the product workspace. */
@@ -150,5 +190,13 @@
     color: #4f5b49;
     text-decoration: underline;
     text-underline-offset: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fold-float,
+  .fold-workflow-travel,
+  .fold-mascot--celebrating {
+    animation: none;
   }
 }

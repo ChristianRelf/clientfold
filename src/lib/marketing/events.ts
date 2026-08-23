@@ -10,6 +10,11 @@ import { db } from "@/lib/db";
 export const MARKETING_EVENTS = [
   "marketing.page_view",
   "marketing.cta_clicked",
+  "marketing.hero_demo_started",
+  "marketing.hero_demo_completed",
+  "marketing.demo_started",
+  "marketing.demo_completed",
+  "waitlist.started",
   "marketing.pricing_viewed",
   "waitlist.joined",
   "auth.signup_started",
@@ -27,6 +32,8 @@ export const MARKETING_EVENTS = [
   "invoice.paid",
   "waiting.item_created",
   "waiting.item_resolved",
+  "reminder.automatic_sent",
+  "reminder.automatic_failed",
   "subscription.checkout_started",
   "subscription.started",
   "subscription.upgraded",
@@ -52,6 +59,8 @@ const SAFE_METADATA_KEYS = new Set([
   "value",
   "currency",
   "workType",
+  "placement",
+  "page",
 ]);
 
 export function sanitiseMetadata(input?: Record<string, unknown>): string | undefined {

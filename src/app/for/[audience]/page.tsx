@@ -32,5 +32,5 @@ export default async function AudiencePage({
   const a = AUDIENCES[audience];
   if (!a) notFound();
 
-  return <AudienceLander eyebrow={a.eyebrow} headline={a.headline} subhead={a.subhead} pains={a.pains} />;
+  return <AudienceLander eyebrow={a.eyebrow} headline={a.headline} subhead={a.subhead} pains={a.pains} autopilot={audience === "freelancers"} />;
 }

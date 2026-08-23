@@ -24,9 +24,23 @@ services:
       STORAGE_SECRET_ACCESS_KEY: ${STORAGE_SECRET_ACCESS_KEY:-}
       STORAGE_ENDPOINT: ${STORAGE_ENDPOINT:-}
       NEXT_PUBLIC_ATTRIBUTION_COOKIE: ${NEXT_PUBLIC_ATTRIBUTION_COOKIE:-cf_attrib}
+      AUTOMATIC_REMINDERS_ENABLED: ${AUTOMATIC_REMINDERS_ENABLED:-false}
+      REMINDER_JOB_SECRET: ${REMINDER_JOB_SECRET:-}
     volumes:
       - clientfold_data:/data
       - clientfold_uploads:/app/.storage
+
+  reminder-worker:
+    profiles: ["automation"]
+    image: clientfold:local
+    depends_on:
+      - clientfold
+    command: ["node", "scripts/reminder-worker.mjs"]
+    environment:
+      REMINDER_JOB_SECRET: ${REMINDER_JOB_SECRET:-}
+      REMINDER_WORKER_URL: http://clientfold:3000/api/internal/reminders/run
+      REMINDER_POLL_INTERVAL_MS: ${REMINDER_POLL_INTERVAL_MS:-900000}
+    restart: unless-stopped
 
 volumes:
   clientfold_data:

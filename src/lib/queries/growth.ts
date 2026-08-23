@@ -8,7 +8,22 @@ import { db } from "@/lib/db";
 
 export type FunnelStage = { key: string; label: string; count: number };
 
-export async function getFunnel(): Promise<FunnelStage[]> {
+export async function getMarketingFunnel(): Promise<FunnelStage[]> {
+  const [pageViews, hookPlayed, demoCompleted, waitlistJoined] = await Promise.all([
+    db.marketingEvent.count({ where: { name: "marketing.page_view" } }),
+    db.marketingEvent.count({ where: { name: "marketing.hero_demo_started" } }),
+    db.marketingEvent.count({ where: { name: "marketing.demo_completed" } }),
+    db.marketingEvent.count({ where: { name: "waitlist.joined" } }),
+  ]);
+  return [
+    { key: "page_view", label: "Marketing page views", count: pageViews },
+    { key: "hook_played", label: "Hero demo played", count: hookPlayed },
+    { key: "demo_completed", label: "Full demo completed", count: demoCompleted },
+    { key: "waitlist_joined", label: "Waitlist joined", count: waitlistJoined },
+  ];
+}
+
+export async function getActivationFunnel(): Promise<FunnelStage[]> {
   const [signupStarted, signupCompleted, orgs, firstProject, clientInvited, activated, paid] =
     await Promise.all([
       db.marketingEvent.count({ where: { name: "auth.signup_started" } }),

@@ -327,14 +327,14 @@ async function main() {
     });
   }
 
-  // Growth: a live hero-copy experiment + a campaign.
+  // Growth: keep the previous hero-copy experiment paused while the new hook establishes a baseline.
   await db.experiment.upsert({
     where: { key: "hero_copy" },
-    update: {},
+    update: { status: "paused" },
     create: {
       key: "hero_copy",
       name: "Homepage hero copy",
-      status: "running",
+      status: "paused",
       variants: {
         create: [
           { key: "pain", name: "Pain-led", weight: 50, payload: JSON.stringify({ headline: "Stop chasing your clients." }) },

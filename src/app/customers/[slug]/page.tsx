@@ -16,7 +16,13 @@ export async function generateMetadata({
   const { slug } = await params;
   const c = getCaseStudy(slug);
   if (!c) return {};
-  return { title: `${c.customer} · Customer story`, description: c.summary };
+  return {
+    title: `${c.customer} · Customer story`,
+    description: c.summary,
+    alternates: { canonical: `/customers/${c.slug}` },
+    openGraph: { title: `${c.customer} · Customer story`, description: c.summary, images: [] },
+    twitter: { title: `${c.customer} · Customer story`, description: c.summary, images: [] },
+  };
 }
 
 export default async function CaseStudyPage({

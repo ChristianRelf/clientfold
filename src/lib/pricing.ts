@@ -26,7 +26,7 @@ export const PLANS: Plan[] = [
     tagline: "Try it with one client.",
     cta: "Join the waitlist",
     limits: { activeProjects: 1, clients: 2, members: 1, storageGb: 1 },
-    features: ["1 active project", "2 clients", "1 user", "1 GB storage", "ClientFold branding"],
+    features: ["1 active project", "2 clients", "Manual reminders", "1 GB storage", "ClientFold branding"],
   },
   {
     key: "solo",
@@ -34,6 +34,7 @@ export const PLANS: Plan[] = [
     price: 12,
     cadence: "/mo",
     tagline: "For freelancers who bill clients.",
+    featured: true,
     cta: "Join the waitlist",
     limits: { activeProjects: 10, clients: "unlimited", members: 1, storageGb: 25 },
     features: [
@@ -42,6 +43,7 @@ export const PLANS: Plan[] = [
       "25 GB storage",
       "Custom branding",
       "Invoices & approvals",
+      "Follow-up Autopilot",
     ],
   },
   {
@@ -50,7 +52,6 @@ export const PLANS: Plan[] = [
     price: 29,
     cadence: "/mo",
     tagline: "For small teams and studios.",
-    featured: true,
     cta: "Join the waitlist",
     limits: { activeProjects: "unlimited", clients: "unlimited", members: 5, storageGb: 100 },
     features: [
@@ -59,7 +60,7 @@ export const PLANS: Plan[] = [
       "100 GB storage",
       "Custom domain",
       "Permissions",
-      "Automatic reminders",
+      "Follow-up Autopilot",
     ],
   },
   {
@@ -76,6 +77,7 @@ export const PLANS: Plan[] = [
       "White-label",
       "Audit history",
       "Advanced integrations",
+      "Follow-up Autopilot",
     ],
   },
 ];

@@ -6,7 +6,7 @@ const APP_URL = process.env.APP_URL ?? "https://clientfold.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const staticPaths = ["", "/features", "/pricing", "/demo", "/customers", "/waitlist", "/legal", "/terms", "/privacy", "/cookies", "/acceptable-use"];
+  const staticPaths = ["", "/features", "/pricing", "/demo", "/waitlist", "/legal", "/terms", "/privacy", "/cookies", "/acceptable-use"];
   const audiencePaths = Object.keys(AUDIENCES).map((s) => `/for/${s}`);
   const landerPaths = Object.keys(SEO_LANDERS).map((s) => `/${s}`);
   const customerPaths = CASE_STUDIES.map((c) => `/customers/${c.slug}`);

@@ -5,6 +5,7 @@ import { getPlan } from "@/lib/pricing";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { connectStripeAction } from "./actions";
+import Link from "next/link";
 
 export const metadata = { title: "Settings" };
 export const dynamic = "force-dynamic";
@@ -25,7 +26,9 @@ export default async function SettingsPage() {
       <PageHeader title="Settings" description="Organisation and workspace configuration." />
       <div className="grid gap-6 p-6 lg:grid-cols-[180px_1fr]">
         <nav className="space-y-0.5">
-          {SECTIONS.map((s, i) => (
+          {SECTIONS.map((s, i) => s === "Notifications" ? (
+            <Link key={s} href="/settings/notifications" className="block rounded-md px-3 py-1.5 text-[13px] text-muted-foreground hover:bg-muted hover:text-foreground">{s}</Link>
+          ) : (
             <span
               key={s}
               className={

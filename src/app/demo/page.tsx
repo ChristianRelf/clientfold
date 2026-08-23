@@ -28,12 +28,12 @@ export default function DemoPage() {
           <div className="container pb-12 pt-12 sm:pb-14 sm:pt-16">
             <div className="grid gap-7 lg:grid-cols-[1fr_0.62fr] lg:items-end">
               <div>
-                <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#596453]">The ClientFold walkthrough</p>
-                <h1 className="mt-5 max-w-3xl text-balance text-4xl font-medium leading-[0.98] tracking-[-0.05em] text-[#242620] sm:text-6xl">One project. Three sides of the story.</h1>
+                <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#596453]">A 60-second follow-up story</p>
+                <h1 className="mt-5 max-w-3xl text-balance text-4xl font-medium leading-[0.98] tracking-[-0.05em] text-[#242620] sm:text-6xl">See the blocker. Send the nudge. Watch the project move.</h1>
               </div>
               <div className="border-l border-[#cfcec7] pl-5 lg:pl-7">
-                <p className="max-w-sm text-sm leading-6 text-[#666860]">Find what is holding up the work, capture a clear decision, then see the same project through your client’s eyes.</p>
-                <p className="mt-3 text-[9px] uppercase tracking-[0.12em] text-[#85877f]">Interactive · Sample data · About 2 minutes</p>
+                <p className="max-w-sm text-sm leading-6 text-[#666860]">Follow one client action from the Waiting Room to a gentle reminder, a clear approval and an unblocked project.</p>
+                <p className="mt-3 text-[9px] uppercase tracking-[0.12em] text-[#85877f]">Interactive · Sample data · About 60 seconds</p>
               </div>
             </div>
           </div>

@@ -24,7 +24,6 @@ const COLUMNS: { title: string; links: { href: string; label: string }[] }[] = [
   {
     title: "Company",
     links: [
-      { href: "/customers", label: "Customers" },
       { href: "/login", label: "Log in" },
       { href: "/waitlist", label: "Join the waitlist" },
     ],
@@ -47,7 +46,7 @@ export function SiteFooter() {
         <div>
           <Wordmark className="text-sm" />
           <p className="mt-3 max-w-xs text-[12px] leading-5 text-[#74766e]">
-            The calm layer between your team and your clients.
+            The client portal that follows up for you.
           </p>
         </div>
         {COLUMNS.map((col) => (

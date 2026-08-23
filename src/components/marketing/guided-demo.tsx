@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import { DEMO_WAITING, WAITING_TYPE_LABEL, type WaitingType } from "@/lib/demo/data";
+import { fireMarketingEvent } from "./tracked-button-link";
 
 type DemoView = "waiting" | "approval" | "portal";
 type DemoFilter = "all" | WaitingType;
@@ -344,8 +345,20 @@ export function GuidedDemo() {
   const [remindedIds, setRemindedIds] = useState<string[]>([]);
   const [events, setEvents] = useState<DemoEvent[]>(initialEvents);
   const [toast, setToast] = useState("");
+  const [completionTracked, setCompletionTracked] = useState(false);
   const active = views.findIndex((item) => item.id === view);
   const completed = [remindedIds.length > 0 || view !== "waiting", decision !== "idle", uploaded || paid];
+
+  useEffect(() => {
+    fireMarketingEvent("marketing.demo_started", { page: "/demo" });
+  }, []);
+
+  useEffect(() => {
+    if (!completionTracked && completed.every(Boolean)) {
+      setCompletionTracked(true);
+      fireMarketingEvent("marketing.demo_completed", { page: "/demo" });
+    }
+  }, [completed, completionTracked]);
 
   useEffect(() => {
     if (!toast) return;

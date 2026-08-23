@@ -20,6 +20,11 @@ export type DemoWaitingItem = {
   amount?: number; // minor units
   currency?: string;
   lastRemindedDays?: number;
+  automaticReminderState?: "inherit" | "paused";
+  automaticReminderStep?: number;
+  nextAutomaticReminderAt?: string;
+  autopilotEnabled?: boolean;
+  timezone?: string;
   href: string;
 };
 

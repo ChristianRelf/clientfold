@@ -33,12 +33,12 @@ export const AUDIENCES: Record<string, AudiencePage> = {
   freelancers: {
     slug: "freelancers",
     eyebrow: "For freelancers",
-    headline: "Look like a studio. Chase like never.",
+    headline: "Your client process, minus the chasing.",
     subhead:
-      "A branded portal that makes solo work feel buttoned-up — approvals, files and invoices without the admin.",
-    pains: ["Clients who go quiet", "Getting paid on time", "Looking professional on your own"],
+      "Keep approvals, files and invoices in one polished portal—and let Follow-up Autopilot send the reminders you never want to write.",
+    pains: ["Clients who go quiet", "Approvals buried in email", "Following up on overdue invoices"],
     seoTitle: "Client portal for freelancers",
-    seoDescription: "ClientFold helps freelancers manage approvals, files and invoices in one clean client portal.",
+    seoDescription: "ClientFold gives freelancers one client portal for approvals, files and invoices, with polite follow-ups that send themselves.",
   },
   "design-studios": {
     slug: "design-studios",

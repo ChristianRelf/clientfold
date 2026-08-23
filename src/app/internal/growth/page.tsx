@@ -1,16 +1,17 @@
-import { getFunnel, getAcquisitionBySource, getRevenueSummary } from "@/lib/queries/growth";
+import { getMarketingFunnel, getActivationFunnel, getAcquisitionBySource, getRevenueSummary } from "@/lib/queries/growth";
 
 export const metadata = { title: "Growth" };
 export const dynamic = "force-dynamic";
 
 export default async function GrowthPage() {
-  const [funnel, sources, revenue] = await Promise.all([
-    getFunnel(),
+  const [marketingFunnel, activationFunnel, sources, revenue] = await Promise.all([
+    getMarketingFunnel(),
+    getActivationFunnel(),
     getAcquisitionBySource(),
     getRevenueSummary(),
   ]);
 
-  const top = funnel[0]?.count || 1;
+  const top = marketingFunnel[0]?.count || 1;
 
   return (
     <div className="container py-8">
@@ -23,10 +24,10 @@ export default async function GrowthPage() {
         {/* Funnel */}
         <section>
           <h2 className="mb-3 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-            Conversion funnel
+            Marketing → waitlist
           </h2>
           <div className="space-y-1.5">
-            {funnel.map((stage) => {
+            {marketingFunnel.map((stage) => {
               const pct = Math.round((stage.count / top) * 100);
               return (
                 <div key={stage.key} className="rounded-md border border-border p-3">
@@ -40,6 +41,10 @@ export default async function GrowthPage() {
                 </div>
               );
             })}
+          </div>
+          <h2 className="mb-3 mt-8 text-xs font-medium uppercase tracking-wide text-muted-foreground">Account activation</h2>
+          <div className="space-y-1.5">
+            {activationFunnel.map((stage) => <div key={stage.key} className="rounded-md border border-border p-3"><div className="flex items-center justify-between text-sm"><span>{stage.label}</span><span className="font-mono tabular-nums">{stage.count}</span></div></div>)}
           </div>
         </section>
 
