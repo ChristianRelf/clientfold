@@ -27,7 +27,7 @@ ENV APP_URL=http://localhost:3000
 
 RUN pnpm exec prisma generate \
     && pnpm exec prisma db push --skip-generate \
-    && pnpm build
+    && pnpm exec next build
 
 FROM node:22-bookworm-slim AS runner
 
