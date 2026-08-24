@@ -24,6 +24,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV DATABASE_URL=file:./container-build.db
 ENV AUTH_SECRET=container-build-only-secret-not-used-at-runtime
 ENV APP_URL=http://localhost:3000
+ENV NEXT_LOW_MEMORY_BUILD=1
 
 # Keep code generation and application compilation as separate layers. This
 # makes BuildKit's progress output useful and avoids rebuilding Prisma Client
