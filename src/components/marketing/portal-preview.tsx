@@ -1,4 +1,4 @@
-/** The client portal overview — deliberately screenshot-able, mobile-first. */
+/** The client portal overview - deliberately screenshot-able, mobile-first. */
 export function PortalPreview() {
   return (
     <div className="overflow-hidden rounded-2xl border border-border bg-background shadow-pop">

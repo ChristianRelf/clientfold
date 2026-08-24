@@ -36,7 +36,7 @@ export async function createClientAction(_prev: ClientFormState, formData: FormD
   const { name, email, company, projectId } = parsed.data;
   const sendInvite = parsed.data.sendInvite === "on";
 
-  // Unique per org (matches the DB constraint) — give a friendly message.
+  // Unique per org (matches the DB constraint) - give a friendly message.
   const existing = await db.client.findFirst({
     where: { organisationId: ctx.org.id, email },
     select: { id: true },

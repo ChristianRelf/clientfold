@@ -26,7 +26,7 @@ export default function PublicIntegrationsPage() {
       <main>
         <section className="border-b border-[#d9d8d2] bg-[#f3f2ed]">
           <div className="container grid gap-12 py-16 sm:py-24 lg:grid-cols-[0.68fr_1.32fr] lg:items-end">
-            <div><p className="text-[10px] uppercase tracking-[0.16em] text-[#697363]">Integrations</p><p className="mt-7 max-w-sm text-sm leading-7 text-[#71736b]">Bring work in, keep payment connected, and send useful events out—without pretending every connection does more than it does.</p></div>
+            <div><p className="text-[10px] uppercase tracking-[0.16em] text-[#697363]">Integrations</p><p className="mt-7 max-w-sm text-sm leading-7 text-[#71736b]">Bring work in, keep payment connected, and send useful events out-without pretending every connection does more than it does.</p></div>
             <div><h1 className="max-w-4xl text-balance text-5xl font-medium leading-[0.93] tracking-[-0.06em] sm:text-7xl">Your tools keep their job. <span className="font-editorial font-normal italic text-[#5d6857]">ClientFold closes the loop.</span></h1><div className="mt-8 flex flex-wrap gap-3"><TrackedButtonLink placement="integrations_hero" href="/waitlist" size="lg" className="bg-[#2d302a]">Get early access</TrackedButtonLink><Link href="/contact?topic=integration" className="inline-flex h-11 items-center border-b border-[#90958a] px-1 text-xs font-medium text-[#4f584b]">Request an integration →</Link></div></div>
           </div>
         </section>

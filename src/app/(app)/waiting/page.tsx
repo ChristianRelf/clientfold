@@ -14,7 +14,7 @@ export default async function WaitingPage() {
     <div className="min-h-full bg-workbench">
       <PageHeader
         title="Waiting on Clients"
-        description="Everything still sitting with a client — sorted by how long they've kept you waiting."
+        description="Everything still sitting with a client - sorted by how long they've kept you waiting."
       />
       <div className="p-4 sm:p-6 lg:p-8">
         {items.length === 0 ? (

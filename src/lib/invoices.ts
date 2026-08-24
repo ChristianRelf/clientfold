@@ -3,7 +3,7 @@ import { trackEvent } from "@/lib/marketing/events";
 import { notifyMembers } from "@/lib/notifications";
 
 /**
- * Single source of truth for marking an invoice paid — called by the Stripe
+ * Single source of truth for marking an invoice paid - called by the Stripe
  * webhook AND the dev simulation, so both paths behave identically. Idempotent:
  * a second call on an already-paid invoice is a no-op. Records a Payment,
  * resolves the matching Waiting item, and logs activity.

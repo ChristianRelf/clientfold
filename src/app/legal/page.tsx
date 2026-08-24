@@ -36,7 +36,7 @@ export default function LegalCentrePage() {
             <div data-reveal="soft">
               <div className="flex items-center gap-3 text-[9px] font-medium uppercase tracking-[0.18em] text-[#aeb7a8]"><span>ClientFold legal</span><span className="h-px w-8 bg-[#687264]" /></div>
               <h1 className="font-editorial mt-7 max-w-3xl text-balance text-5xl font-normal leading-[0.96] tracking-[-0.045em] sm:text-6xl lg:text-7xl">Clear agreements.<br />No hidden corners.</h1>
-              <p className="mt-7 max-w-xl text-[13px] leading-6 text-[#b9beb4] sm:text-sm sm:leading-7">Our legal documents explain the rules of the service and how information is handled—in language designed to be read, not buried.</p>
+              <p className="mt-7 max-w-xl text-[13px] leading-6 text-[#b9beb4] sm:text-sm sm:leading-7">Our legal documents explain the rules of the service and how information is handled-in language designed to be read, not buried.</p>
             </div>
             <div className="self-end border-t border-[#4e554b] pt-5 lg:border-l lg:border-t-0 lg:pl-7 lg:pt-0">
               <p className="text-[9px] font-medium uppercase tracking-[0.16em] text-[#7f897b]">Document set</p>

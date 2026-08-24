@@ -34,7 +34,7 @@ export function HeroWorkspace() {
                   <div className="flex justify-between"><span className="text-[#85877f]">Follow-up</span><span className="flex items-center gap-2 font-medium text-[#596453]"><span className="size-1.5 rounded-full bg-[#6e9a63]" /> {approved ? "Stopped automatically" : "Autopilot on"}</span></div>
                 </div>
                 <div className="mt-auto pt-6" aria-live="polite">
-                  {approved ? <div className="mb-3 flex items-center gap-2 rounded-lg bg-[#e7efe3] px-3 py-2.5 text-[9px] font-medium text-[#52684b]"><span className="grid size-5 place-items-center rounded-full bg-[#6f9565] text-white">✓</span> Approved — development unlocked</div> : <p className="mb-3 text-[9px] leading-4 text-[#7d7f76]">See the exact one-click experience your client receives.</p>}
+                  {approved ? <div className="mb-3 flex items-center gap-2 rounded-lg bg-[#e7efe3] px-3 py-2.5 text-[9px] font-medium text-[#52684b]"><span className="grid size-5 place-items-center rounded-full bg-[#6f9565] text-white">✓</span> Approved - development unlocked</div> : <p className="mb-3 text-[9px] leading-4 text-[#7d7f76]">See the exact one-click experience your client receives.</p>}
                   <button type="button" onClick={() => setView("client")} className="w-full bg-[#2d302a] px-4 py-3 text-left text-[10px] font-medium text-white transition-colors hover:bg-[#42463d]">{approved ? "Replay the client view" : "Open Sarah’s approval"} <span className="float-right">→</span></button>
                 </div>
               </div>
@@ -69,7 +69,7 @@ export function HeroWorkspace() {
                   <div className="flex justify-between gap-4"><span className="text-[9px] uppercase tracking-[0.13em] text-[#697363]">Approval</span><span className="text-[9px] text-[#777970]">Homepage · v3</span></div>
                   <p className="mt-6 text-sm font-medium text-[#30332c]">Homepage design is ready</p>
                   <p className="mt-2 text-[9px] leading-4 text-[#777970]">Review the latest version and record your decision. No account or password needed.</p>
-                  <button type="button" disabled={approved} onClick={() => setApproved(true)} className="mt-5 w-full rounded-md bg-[#30332c] px-4 py-3 text-[10px] font-medium text-white transition-all hover:bg-[#464a40] disabled:bg-[#dfe6dc] disabled:text-[#52684b]">{approved ? "Approved — project unblocked ✓" : "Approve homepage"}</button>
+                  <button type="button" disabled={approved} onClick={() => setApproved(true)} className="mt-5 w-full rounded-md bg-[#30332c] px-4 py-3 text-[10px] font-medium text-white transition-all hover:bg-[#464a40] disabled:bg-[#dfe6dc] disabled:text-[#52684b]">{approved ? "Approved - project unblocked ✓" : "Approve homepage"}</button>
                 </div>
                 <button type="button" onClick={() => setView("studio")} className="mt-5 w-full text-center text-[9px] font-medium text-[#596453]">See what changed in the studio →</button>
               </div>
@@ -77,7 +77,7 @@ export function HeroWorkspace() {
           </div>
         )}
       </div>
-      <div className="mt-5 flex items-center justify-center gap-3 text-center text-[10px] uppercase tracking-[0.13em] text-[#7d7f76]"><span className="size-1.5 rounded-full bg-[#de7044]" /> Interactive product preview — try both views</div>
+      <div className="mt-5 flex items-center justify-center gap-3 text-center text-[10px] uppercase tracking-[0.13em] text-[#7d7f76]"><span className="size-1.5 rounded-full bg-[#de7044]" /> Interactive product preview - try both views</div>
     </div>
   );
 }

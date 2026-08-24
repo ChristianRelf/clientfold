@@ -10,11 +10,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
   const protocol = requestHeaders.get("x-forwarded-proto") ?? (host?.includes("localhost") ? "http" : "https");
   const appUrl = host ? `${protocol}://${host}` : process.env.APP_URL ?? "https://useclientfold.com";
-  const socialImage = new URL("/opengraph-image", appUrl).toString();
+  const socialImage = new URL("/og-v2.png", appUrl).toString();
   return {
   metadataBase: new URL(appUrl),
   title: {
-    default: "ClientFold — Client work without the chase",
+    default: "ClientFold - Client work without the chase",
     template: "%s · ClientFold",
   },
   description:
@@ -25,14 +25,14 @@ export async function generateMetadata(): Promise<Metadata> {
     siteName: "ClientFold",
     title: "Client work. Without the chase.",
     description:
-      "A client portal for approvals, files and invoices—with polite follow-ups that send themselves.",
+      "A client portal for approvals, files and invoices-with polite follow-ups that send themselves.",
     url: appUrl,
-    images: [socialImage],
+    images: [{ url: socialImage, width: 1730, height: 909, alt: "ClientFold - Client work. Without the chase." }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Client work. Without the chase.",
-    description: "A client portal for approvals, files and invoices—with polite follow-ups that send themselves.",
+    description: "A client portal for approvals, files and invoices-with polite follow-ups that send themselves.",
     images: [socialImage],
   },
   robots: { index: true, follow: true },

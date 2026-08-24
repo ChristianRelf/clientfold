@@ -63,7 +63,7 @@ export type CheckoutInput = {
  */
 export async function createInvoiceCheckoutUrl(input: CheckoutInput): Promise<string> {
   if (!isStripeConfigured()) {
-    // Dev simulation — a local page that stands in for Stripe Checkout. Return a
+    // Dev simulation - a local page that stands in for Stripe Checkout. Return a
     // host-relative path so it resolves against the current request host.
     return `/portal/pay/${input.invoiceId}`;
   }
@@ -105,7 +105,7 @@ export type SubscriptionCheckoutInput = {
 /**
  * Start a subscription Checkout for a plan upgrade. Real Stripe uses an inline
  * recurring price (no pre-created Price object needed); dev returns a simulated
- * confirmation page. This is the ClientFold subscription itself (our revenue) —
+ * confirmation page. This is the ClientFold subscription itself (our revenue) -
  * distinct from client invoice payments, which use Connect.
  */
 export async function createSubscriptionCheckoutUrl(input: SubscriptionCheckoutInput): Promise<string> {

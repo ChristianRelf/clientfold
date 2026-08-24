@@ -44,8 +44,8 @@ export default async function InvoicesPage() {
             invoices.map((invoice) => (
               <div key={invoice.id} className="grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 px-4 py-4 hairline md:grid-cols-[auto_1.4fr_1fr_auto_auto] md:gap-4 md:py-3">
                 <span className="col-start-1 row-start-1 font-mono text-[13px] font-medium md:col-auto md:row-auto">{invoice.number}</span>
-                <span className="col-start-1 row-start-2 truncate text-xs text-muted-foreground md:col-auto md:row-auto md:text-[13px] md:text-foreground">{invoice.client?.company ?? "—"}</span>
-                <span className="hidden text-[13px] text-muted-foreground md:block">{invoice.dueDate ? formatDate(invoice.dueDate, { day: "numeric", month: "short" }) : "—"}</span>
+                <span className="col-start-1 row-start-2 truncate text-xs text-muted-foreground md:col-auto md:row-auto md:text-[13px] md:text-foreground">{invoice.client?.company ?? "-"}</span>
+                <span className="hidden text-[13px] text-muted-foreground md:block">{invoice.dueDate ? formatDate(invoice.dueDate, { day: "numeric", month: "short" }) : "-"}</span>
                 <span className="col-start-2 row-start-1 text-right md:col-auto md:row-auto"><Badge tone={STATUS_TONE[invoice.status] ?? "neutral"}>{invoice.status.replace("_", " ")}</Badge></span>
                 <span className="col-start-2 row-start-2 text-right font-mono text-[13px] md:col-auto md:row-auto">{formatMoney(invoice.total, invoice.currency)}</span>
               </div>

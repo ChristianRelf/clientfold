@@ -1,6 +1,6 @@
 import type { PortalProjectView } from "@/lib/portal-view";
 
-/** Demo portal view — Sarah Whitfield's view of the Northstar Website Redesign. */
+/** Demo portal view - Sarah Whitfield's view of the Northstar Website Redesign. */
 export const DEMO_PORTAL_CLIENT = { name: "Sarah Whitfield", brand: "Northline Studio" };
 
 const iso = (daysAgo: number) => new Date(Date.now() - daysAgo * 86_400_000).toISOString();
@@ -51,7 +51,7 @@ export const DEMO_PORTAL_PROJECT: PortalProjectView = {
   ],
   messages: [
     { id: "msg1", body: "Homepage Concepts v3 uploaded.", authorName: "System", authorType: "system", createdAt: iso(1) },
-    { id: "msg2", body: "Here's the updated homepage — let us know what you think!", authorName: "Northline Studio", authorType: "user", createdAt: iso(1) },
+    { id: "msg2", body: "Here's the updated homepage - let us know what you think!", authorName: "Northline Studio", authorType: "user", createdAt: iso(1) },
     { id: "msg3", body: "Looks great, reviewing with the team today.", authorName: "Sarah Whitfield", authorType: "client", createdAt: iso(0) },
   ],
   messagesUnread: 0,

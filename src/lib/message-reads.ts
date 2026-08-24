@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 
 /**
- * Message read-state. `Message.readBy` is a JSON array of *viewer keys* — a
+ * Message read-state. `Message.readBy` is a JSON array of *viewer keys* - a
  * type-prefixed id so a staff user (`u:<id>`) and a client (`c:<id>`) can never
  * collide even if their cuids happened to match. A message is "unread" for a
  * viewer when their key is absent from `readBy`. Authors are seeded into

@@ -48,7 +48,7 @@ export function sendMagicLink(to: string, url: string): Promise<ReminderDelivery
 }
 
 export function sendClientInvite(to: string, url: string, orgName: string, projectName: string): Promise<ReminderDeliveryResult> {
-  return send(to, `${orgName} invited you to ${projectName}`, `<p>${escapeHtml(orgName)} has set up a portal for <strong>${escapeHtml(projectName)}</strong>.</p><p><a href="${escapeHtml(url)}">Open your portal</a></p><p>You can review approvals, share files and see invoices—no account needed.</p>`);
+  return send(to, `${orgName} invited you to ${projectName}`, `<p>${escapeHtml(orgName)} has set up a portal for <strong>${escapeHtml(projectName)}</strong>.</p><p><a href="${escapeHtml(url)}">Open your portal</a></p><p>You can review approvals, share files and see invoices-no account needed.</p>`);
 }
 
 export function sendTeamInvitation(to: string, url: string, orgName: string, role: string): Promise<ReminderDeliveryResult> {
@@ -60,7 +60,7 @@ export function sendTeamInvitation(to: string, url: string, orgName: string, rol
 }
 
 export function sendClientMessageNotification(to: string, params: { orgName: string; projectName: string; clientName: string; preview: string; inboxUrl: string }): Promise<ReminderDeliveryResult> {
-  return send(to, `New message from ${params.clientName} — ${params.projectName}`, `<p><strong>${escapeHtml(params.clientName)}</strong> sent a message on <strong>${escapeHtml(params.projectName)}</strong>:</p><blockquote style="border-left:3px solid #e2e8f0;padding-left:12px;color:#4b5563;">${escapeHtml(params.preview)}</blockquote><p><a href="${escapeHtml(params.inboxUrl)}">View in inbox</a></p>`);
+  return send(to, `New message from ${params.clientName} - ${params.projectName}`, `<p><strong>${escapeHtml(params.clientName)}</strong> sent a message on <strong>${escapeHtml(params.projectName)}</strong>:</p><blockquote style="border-left:3px solid #e2e8f0;padding-left:12px;color:#4b5563;">${escapeHtml(params.preview)}</blockquote><p><a href="${escapeHtml(params.inboxUrl)}">View in inbox</a></p>`);
 }
 
 export function sendAgencyReplyNotification(to: string, params: { orgName: string; projectName: string; preview: string; portalUrl: string }): Promise<ReminderDeliveryResult> {
@@ -86,7 +86,7 @@ export function sendReminderEmail(
   return send(
     to,
     `A quick reminder from ${params.orgName}: ${params.itemTitle}`,
-    `<p>${greeting}</p><p>${escapeHtml(params.orgName)} is waiting on you for <strong>${escapeHtml(params.itemTitle)}</strong> on ${escapeHtml(params.projectName)}.</p><p><a href="${escapeHtml(url)}" style="display:inline-block;background:#2d302a;color:#fff;padding:11px 16px;text-decoration:none;">${escapeHtml(params.action)}</a></p><p>It only takes a moment—thanks.</p>${footer}`,
+    `<p>${greeting}</p><p>${escapeHtml(params.orgName)} is waiting on you for <strong>${escapeHtml(params.itemTitle)}</strong> on ${escapeHtml(params.projectName)}.</p><p><a href="${escapeHtml(url)}" style="display:inline-block;background:#2d302a;color:#fff;padding:11px 16px;text-decoration:none;">${escapeHtml(params.action)}</a></p><p>It only takes a moment-thanks.</p>${footer}`,
     { idempotencyKey: params.idempotencyKey, replyTo: params.replyTo },
   );
 }

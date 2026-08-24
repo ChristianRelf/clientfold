@@ -25,9 +25,15 @@ ENV DATABASE_URL=file:./container-build.db
 ENV AUTH_SECRET=container-build-only-secret-not-used-at-runtime
 ENV APP_URL=http://localhost:3000
 
-RUN pnpm exec prisma generate \
-    && pnpm exec prisma db push --skip-generate \
-    && pnpm exec next build
+# Keep code generation and application compilation as separate layers. This
+# makes BuildKit's progress output useful and avoids rebuilding Prisma Client
+# when only application source changes.
+RUN pnpm exec prisma generate
+
+# Next stores reusable webpack/SWC artifacts in .next/cache. Persisting that
+# directory across invalidated Docker layers materially shortens repeat builds.
+RUN --mount=type=cache,id=clientfold-next-cache,target=/app/.next/cache,sharing=locked \
+    pnpm exec next build
 
 FROM node:22-bookworm-slim AS runner
 

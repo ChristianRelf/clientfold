@@ -65,7 +65,7 @@ const sections: LegalSection[] = [
   {
     title: "Invoices and client payments",
     content: <>
-      <p>ClientFold can help you prepare and present invoices and direct clients to payment services. You—not ClientFold—are the seller of your goods or services and are responsible for invoice accuracy, tax treatment, payment terms, refunds, disputes and your relationship with each client.</p>
+      <p>ClientFold can help you prepare and present invoices and direct clients to payment services. You-not ClientFold-are the seller of your goods or services and are responsible for invoice accuracy, tax treatment, payment terms, refunds, disputes and your relationship with each client.</p>
       <p>Card and connected-account services are provided by Stripe. Your use of those services is also subject to the applicable Stripe agreement. Payment availability, settlement, reserves, verification and chargebacks are controlled by Stripe and the relevant financial institutions.</p>
       <p>ClientFold is not a bank, accountant, tax adviser, escrow service or regulated payment institution. Information shown in the Service does not replace your own accounting records or professional advice.</p>
     </>,
@@ -131,7 +131,7 @@ const sections: LegalSection[] = [
     content: <>
       <p>You may stop using the Service at any time. We may suspend or terminate access for material breach, non-payment, unlawful use, a credible security risk, or where required by law. Where practical, we will give notice and an opportunity to fix the issue. We may act immediately if delay could cause harm.</p>
       <p>When the agreement ends, your right to use the Service ends. Subject to account status, we may provide a reasonable opportunity to export Customer Content before deletion. We may retain limited records where needed for law, fraud prevention, dispute resolution or enforcement.</p>
-      <p>Terms that by their nature should continue—including ownership, confidentiality, accrued payment obligations, disclaimers and liability limits—survive termination.</p>
+      <p>Terms that by their nature should continue-including ownership, confidentiality, accrued payment obligations, disclaimers and liability limits-survive termination.</p>
     </>,
   },
   {
@@ -173,7 +173,7 @@ export default function TermsPage() {
       activeHref="/terms"
       documentNumber="01"
       title="Terms of Service"
-      summary="The agreement for using ClientFold—covering accounts, subscriptions, client work, payments, data protection and the responsibilities we owe each other."
+      summary="The agreement for using ClientFold-covering accounts, subscriptions, client work, payments, data protection and the responsibilities we owe each other."
       sections={sections}
     />
   );

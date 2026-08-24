@@ -5,7 +5,7 @@ import { dispatchWebhookEvent } from "@/lib/integrations/webhooks";
 /**
  * Consistent marketing event taxonomy. Events power the funnel, activation
  * metric and growth dashboard. Metadata is sanitised: never filenames, client
- * names, invoice descriptions or message content — only opaque ids and safe
+ * names, invoice descriptions or message content - only opaque ids and safe
  * descriptors (plan keys, counts, campaign keys).
  */
 

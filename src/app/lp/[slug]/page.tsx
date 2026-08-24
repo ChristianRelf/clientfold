@@ -29,7 +29,7 @@ export async function generateMetadata({
 /**
  * Campaign landing page. Minimal chrome, single CTA, real product surface.
  * Campaign context (the slug) is carried into signup so onboarding can suggest
- * a relevant first step — without cloaking; the page stays semantically honest.
+ * a relevant first step - without cloaking; the page stays semantically honest.
  */
 export default async function CampaignPage({
   params,

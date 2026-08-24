@@ -11,7 +11,7 @@ export const metadata = { title: "Payment", robots: { index: false, follow: fals
 export const dynamic = "force-dynamic";
 
 /**
- * Local simulated checkout. Only reachable in dev (no Stripe keys) — with keys
+ * Local simulated checkout. Only reachable in dev (no Stripe keys) - with keys
  * configured, the checkout route sends clients to real Stripe Checkout instead.
  */
 export default async function SimulatedCheckout({ params }: { params: Promise<{ id: string }> }) {
@@ -40,7 +40,7 @@ export default async function SimulatedCheckout({ params }: { params: Promise<{ 
         </div>
         <div className="p-5">
           <div className="mb-4 rounded-md border border-warning/20 bg-warning/10 px-3 py-2 text-2xs text-warning">
-            Test mode — no real payment is taken. This simulates Stripe Checkout locally.
+            Test mode - no real payment is taken. This simulates Stripe Checkout locally.
           </div>
           <form action={simulatePaymentAction}>
             <input type="hidden" name="invoiceId" value={invoice.id} />

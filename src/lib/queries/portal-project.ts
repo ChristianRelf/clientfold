@@ -6,7 +6,7 @@ import { parseAttachmentIds } from "@/lib/message-attachments";
 /**
  * Build the portal view of a project. Caller must have already verified the
  * client's access to `projectId` (see assertClientProject). Only client-facing
- * records are exposed — internal tasks and notes are never included.
+ * records are exposed - internal tasks and notes are never included.
  */
 export async function getPortalProjectView(projectId: string, clientId: string): Promise<PortalProjectView | null> {
   const project = await db.project.findUnique({

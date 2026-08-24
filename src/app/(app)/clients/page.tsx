@@ -42,7 +42,7 @@ export default async function ClientsPage() {
                 </div>
                 <Badge tone={c.status === "active" ? "success" : "neutral"}>{c.status}</Badge>
                 <div className="hidden w-24 text-right text-2xs text-muted-foreground sm:block">
-                  {c.lastActiveAt ? relativeTime(c.lastActiveAt) : "—"}
+                  {c.lastActiveAt ? relativeTime(c.lastActiveAt) : "-"}
                 </div>
               </div>
             ))

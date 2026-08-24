@@ -1,5 +1,5 @@
 /**
- * The Northline Studio demo dataset — one source of truth shared by the Prisma
+ * The Northline Studio demo dataset - one source of truth shared by the Prisma
  * seed, the interactive /demo, and the marketing screenshots. Realistic, never
  * lorem ipsum / Acme / John Doe. These figures are DEMO DATA and must never be
  * presented as real customer metrics.

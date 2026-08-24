@@ -1,5 +1,5 @@
 /**
- * Project health is derived from real state — never a meaningless AI score. We
+ * Project health is derived from real state - never a meaningless AI score. We
  * always return a reason so the UI can explain *why*. Precedence:
  *   overdue > at_risk > waiting_on_client > on_track
  */

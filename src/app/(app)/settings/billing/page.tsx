@@ -91,7 +91,7 @@ export default async function BillingPage({
                       </button>
                     </form>
                   ) : (
-                    <span className="text-2xs text-muted-foreground">—</span>
+                    <span className="text-2xs text-muted-foreground">-</span>
                   )}
                 </div>
               </div>

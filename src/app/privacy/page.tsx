@@ -23,7 +23,7 @@ const sections: LegalSection[] = [
       <ul>
         <li><b>Directly from you</b> when you register, join the waitlist, enter a portal, contact support, configure a workspace or submit content.</li>
         <li><b>From a ClientFold customer</b> when it adds you as a team member, client or contact, sends an invitation, assigns work or uploads information about a project.</li>
-        <li><b>Automatically</b> from your browser or device when you use the website or Service, including session, security, activity and—where permitted—campaign information.</li>
+        <li><b>Automatically</b> from your browser or device when you use the website or Service, including session, security, activity and-where permitted-campaign information.</li>
         <li><b>From service providers</b>, such as payment status and transaction references from Stripe or delivery information from our email provider.</li>
       </ul>
       <p>If you give us information about another person, you should have authority to do so and provide any notice required by law.</p>
@@ -122,7 +122,7 @@ const sections: LegalSection[] = [
     title: "Cookies, analytics and communications",
     content: <>
       <p>Essential cookies keep sign-in, portal access and privacy choices working. Non-essential analytics or advertising measurement remains off until the relevant consent is given. See the <a href="/cookies">Cookie Notice</a> or use Cookie settings in the footer to change your choice at any time.</p>
-      <p>We send operational email where needed for the Service—for example invitations, approvals, reminders, billing and security messages. These are not promotional messages. If we send optional marketing, you can unsubscribe using the link in the message or contact us. We may still send essential service communications.</p>
+      <p>We send operational email where needed for the Service-for example invitations, approvals, reminders, billing and security messages. These are not promotional messages. If we send optional marketing, you can unsubscribe using the link in the message or contact us. We may still send essential service communications.</p>
     </>,
   },
   {
@@ -171,7 +171,7 @@ export default function PrivacyPage() {
       activeHref="/privacy"
       documentNumber="02"
       title="Privacy Notice"
-      summary="How ClientFold handles personal information across our website, accounts and customer workspaces—and the choices and rights available to you."
+      summary="How ClientFold handles personal information across our website, accounts and customer workspaces-and the choices and rights available to you."
       contactEmail="privacy@useclientfold.com"
       sections={sections}
     />

@@ -1,7 +1,7 @@
 // ClientFold data model.
 //
 // Local dev uses SQLite for zero-infra runnability. For production, change the
-// provider below to "postgresql" and set DATABASE_URL accordingly — the schema
+// provider below to "postgresql" and set DATABASE_URL accordingly - the schema
 // avoids provider-specific features (native enums / scalar lists) so the switch
 // is a one-line change. "Enums" are modelled as String columns with the allowed
 // values documented next to each field; JSON payloads are stored as String and
@@ -49,7 +49,7 @@ model Session {
   @@index([userId])
 }
 
-// Client portal session — separate from staff Session. DB-backed so access can
+// Client portal session - separate from staff Session. DB-backed so access can
 // be revoked (spec: invitation tokens are revocable). A client is NOT a User.
 model ClientSession {
   id        String   @id @default(cuid())
@@ -267,7 +267,7 @@ model Task {
   priority         String     @default("normal") // low | normal | high | urgent
   dueDate          DateTime?
   // A task can be assigned to an internal user OR a client (client tasks are
-  // first-class — they generate Waiting items).
+  // first-class - they generate Waiting items).
   assigneeUserId   String?
   assigneeClientId String?
   createdAt        DateTime   @default(now())
@@ -329,11 +329,11 @@ model ApprovalResponse {
   version    ApprovalVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
   decision   String // approved | changes_requested
   comment    String?
-  // Who acted — captured by opaque identity, not necessarily a User.
+  // Who acted - captured by opaque identity, not necessarily a User.
   actorType  String // client | user
   actorId    String
   actorName  String
-  ipHash     String? // hashed, for audit — never raw PII
+  ipHash     String? // hashed, for audit - never raw PII
   userAgent  String?
   createdAt  DateTime        @default(now())
 
@@ -373,7 +373,7 @@ model File {
 // Contextual feedback on a file. A comment may be pinned to a location (x/y as
 // 0..1 fractions of the image, plus page for PDFs) or be a general note. Replies
 // link via parentId. Either party (agency user or client) can comment; comments
-// can be resolved. Not a Figma clone — just pin, discuss, resolve.
+// can be resolved. Not a Figma clone - just pin, discuss, resolve.
 model FileComment {
   id         String   @id @default(cuid())
   fileId     String
@@ -522,7 +522,7 @@ model Payment {
 }
 
 // ---------------------------------------------------------------------------
-// Waiting Room (signature) — a materialised list of "blocked on client" items
+// Waiting Room (signature) - a materialised list of "blocked on client" items
 // ---------------------------------------------------------------------------
 
 model WaitingItem {
@@ -596,7 +596,7 @@ model Notification {
   @@index([userId, readAt])
 }
 
-// Event-driven activity feed — powers feeds, notifications, analytics.
+// Event-driven activity feed - powers feeds, notifications, analytics.
 model Activity {
   id             String       @id @default(cuid())
   organisationId String
@@ -866,7 +866,7 @@ model Referral {
   referrerType    String // user | organisation
   referrerId      String
   waitlistEmail   String?
-  // Funnel timestamps — rewards are intentionally not hard-coded.
+  // Funnel timestamps - rewards are intentionally not hard-coded.
   signupUserId    String?
   signedUpAt      DateTime?
   convertedOrgId  String?
@@ -918,7 +918,7 @@ model Attribution {
 
 // Consistent marketing event taxonomy (marketing.page_view, approval.approved,
 // subscription.started, ...). Metadata must never contain client-confidential
-// content — only opaque ids and safe descriptors.
+// content - only opaque ids and safe descriptors.
 model MarketingEvent {
   id             String   @id @default(cuid())
   name           String // dotted taxonomy name

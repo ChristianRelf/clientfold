@@ -11,7 +11,7 @@ type AddInput = { fileId: string; body: string; x?: number | null; y?: number | 
 /**
  * Pin-based image feedback. Click the image to drop a pin and comment; existing
  * pins are numbered and open a thread in the side panel. Either party can reply
- * or resolve. Deliberately simple — pin, discuss, resolve. Not a Figma clone.
+ * or resolve. Deliberately simple - pin, discuss, resolve. Not a Figma clone.
  */
 export function ImageAnnotator({
   fileId,

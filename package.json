@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@9.15.9",
-  "description": "ClientFold — the client portal for freelancers, studios, consultants and agencies.",
+  "description": "ClientFold - the client portal for freelancers, studios, consultants and agencies.",
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",

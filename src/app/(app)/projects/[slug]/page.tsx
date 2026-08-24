@@ -92,7 +92,7 @@ export default async function ProjectWorkspace({
           <Meta label="Status" value={project.status === "active" ? "In progress" : project.status} />
           <div className="flex items-center gap-1.5"><span className="text-muted-foreground">Health</span><Badge tone={HEALTH_TONE[project.health as Health] ?? "neutral"}>{HEALTH_LABEL[project.health as Health] ?? project.health}</Badge></div>
           <Meta label="Progress" value={`${project.progress}%`} />
-          <Meta label="Target" value={project.targetDate ? formatDate(project.targetDate) : "—"} />
+          <Meta label="Target" value={project.targetDate ? formatDate(project.targetDate) : "-"} />
         </div>
 
         <nav className="-mb-5 mt-5 flex gap-1 overflow-x-auto" aria-label="Project views">

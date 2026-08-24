@@ -3,7 +3,7 @@ import { localProvider } from "./local";
 import { s3Provider } from "./s3";
 
 /**
- * Object storage abstraction. Files are NEVER served directly — access is always
+ * Object storage abstraction. Files are NEVER served directly - access is always
  * through short-lived signed URLs (`/api/files/[id]`), so a storage key alone
  * grants nothing. Local dev uses a filesystem provider (zero infra); production
  * uses S3-compatible storage when STORAGE_* env is set. Same interface either

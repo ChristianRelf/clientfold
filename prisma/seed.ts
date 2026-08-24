@@ -195,7 +195,7 @@ async function main() {
       messages: {
         create: [
           { body: "Homepage Concepts v3 uploaded.", authorType: "system", authorName: "System", isSystem: true, createdAt: daysAgo(1), readBy: JSON.stringify([staffKey, clientKey]) },
-          { body: "Here's the updated homepage — let us know what you think!", authorType: "user", authorName: "Alex Morgan", authorId: owner.id, createdAt: daysAgo(1), readBy: JSON.stringify([staffKey]) },
+          { body: "Here's the updated homepage - let us know what you think!", authorType: "user", authorName: "Alex Morgan", authorId: owner.id, createdAt: daysAgo(1), readBy: JSON.stringify([staffKey]) },
           { body: "Looks great, reviewing with the team today.", authorType: "client", authorName: "Sarah Whitfield", authorId: clientBySlug.get("Northstar Ltd"), createdAt: daysAgo(0), readBy: JSON.stringify([clientKey]) },
         ],
       },
@@ -238,7 +238,7 @@ async function main() {
       authorType: "user",
       authorId: owner.id,
       authorName: "Alex Morgan",
-      body: "Made the hero headline bolder here — does this land for you?",
+      body: "Made the hero headline bolder here - does this land for you?",
       x: 0.28,
       y: 0.38,
     },
@@ -290,7 +290,7 @@ async function main() {
     });
   }
 
-  // Waiting Room — the signature dataset.
+  // Waiting Room - the signature dataset.
   for (const w of DEMO_WAITING) {
     await db.waitingItem.create({
       data: {
@@ -365,7 +365,7 @@ async function main() {
     update: {},
     create: {
       key: "meta-stop-chasing-clients",
-      name: "Meta — Stop Chasing Clients",
+      name: "Meta - Stop Chasing Clients",
       channel: "meta",
       angle: "waiting",
       landingPath: "/lp/stop-chasing-clients",

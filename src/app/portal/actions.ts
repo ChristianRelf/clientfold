@@ -22,7 +22,7 @@ const schema = z.object({
  * The flagship client action. Verifies the portal client owns the approval's
  * project, then writes an IMMUTABLE ApprovalResponse, advances the latest
  * version + approval status, resolves the matching Waiting item, and records
- * activity. Approval history is append-only — we never mutate past responses.
+ * activity. Approval history is append-only - we never mutate past responses.
  */
 export async function respondToApproval(input: z.infer<typeof schema>): Promise<ApprovalActionState> {
   const parsed = schema.safeParse(input);

@@ -36,7 +36,7 @@ const DIVISIONS: [number, Intl.RelativeTimeFormatUnit][] = [
   [Number.POSITIVE_INFINITY, "years"],
 ];
 
-/** "4 days ago" / "in 2 days" — compact and human. */
+/** "4 days ago" / "in 2 days" - compact and human. */
 export function relativeTime(date: Date | string, now: Date = new Date()): string {
   const d = typeof date === "string" ? new Date(date) : date;
   let duration = (d.getTime() - now.getTime()) / 1000;
@@ -51,7 +51,7 @@ export function relativeTime(date: Date | string, now: Date = new Date()): strin
   return rtf.format(Math.round(duration), "years");
 }
 
-/** Whole days a client has been kept waiting — used for sorting & badges. */
+/** Whole days a client has been kept waiting - used for sorting & badges. */
 export function daysWaiting(since: Date | string, now: Date = new Date()): number {
   const d = typeof since === "string" ? new Date(since) : since;
   return Math.max(0, Math.floor((now.getTime() - d.getTime()) / 86_400_000));

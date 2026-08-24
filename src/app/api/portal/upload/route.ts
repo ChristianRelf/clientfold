@@ -10,7 +10,7 @@ import { notifyMembers } from "@/lib/notifications";
  * Client file upload against a FileRequest. Verifies the portal session AND that
  * the client is assigned to the request's project (no IDOR). Validates each file
  * (size + type), stores it, records File + FileVersion, advances the request and
- * — when complete — resolves the matching Waiting item and logs activity.
+ * - when complete - resolves the matching Waiting item and logs activity.
  */
 export const runtime = "nodejs";
 

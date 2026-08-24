@@ -56,7 +56,7 @@ export async function POST(request: Request) {
         // Checkout Session; fall back to a stored payment-intent id.
         const metadata = (obj["metadata"] as Record<string, string> | undefined) ?? {};
 
-        // Plan upgrade (subscription Checkout) — has plan + organisationId.
+        // Plan upgrade (subscription Checkout) - has plan + organisationId.
         if (metadata.plan && metadata.organisationId) {
           await applyPlanChange(metadata.organisationId, metadata.plan, {
             stripeCustomerId: obj["customer"] as string | undefined,

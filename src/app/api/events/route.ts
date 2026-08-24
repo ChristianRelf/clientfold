@@ -15,7 +15,7 @@ const schema = z.object({
 /**
  * First-party event ingestion. Client fires safe, taxonomy-constrained events.
  * We attach the server-known visitorId and drop any metadata key that isn't on
- * the allow-list — client content never reaches analytics.
+ * the allow-list - client content never reaches analytics.
  */
 export async function POST(request: Request) {
   let body: unknown;

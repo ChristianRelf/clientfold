@@ -5,7 +5,7 @@ import { sign, unsign } from "./crypto";
 /**
  * Client portal sessions. Entirely separate from staff sessions (different
  * cookie, different table). A client is not a User and can only ever reach the
- * portal — never the agency app.
+ * portal - never the agency app.
  */
 
 const PORTAL_COOKIE = "cf_portal";

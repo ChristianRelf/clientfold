@@ -6,7 +6,7 @@ import { trackEvent } from "@/lib/marketing/events";
 
 /**
  * Start payment for an invoice from the portal. Verifies the client owns the
- * invoice, then redirects to Stripe Checkout (on the org's connected account) —
+ * invoice, then redirects to Stripe Checkout (on the org's connected account) -
  * or, in dev without keys, to the local simulated checkout page.
  */
 export const runtime = "nodejs";

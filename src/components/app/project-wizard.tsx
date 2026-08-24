@@ -99,7 +99,7 @@ export function ProjectWizard({ clients }: { clients: ClientOption[] }) {
         ))}
       </ol>
 
-      {/* Step 1 — Details */}
+      {/* Step 1 - Details */}
       {step === 0 ? (
         <div className="space-y-4">
           <label className="block">
@@ -144,7 +144,7 @@ export function ProjectWizard({ clients }: { clients: ClientOption[] }) {
         </div>
       ) : null}
 
-      {/* Step 2 — Milestones */}
+      {/* Step 2 - Milestones */}
       {step === 1 ? (
         <div className="space-y-3">
           <p className="text-[13px] text-muted-foreground">Add the key stages. You can skip this and add them later.</p>
@@ -183,7 +183,7 @@ export function ProjectWizard({ clients }: { clients: ClientOption[] }) {
         </div>
       ) : null}
 
-      {/* Step 3 — Invite client */}
+      {/* Step 3 - Invite client */}
       {step === 2 ? (
         <div className="space-y-4">
           {selectedClient ? (
@@ -229,10 +229,10 @@ export function ProjectWizard({ clients }: { clients: ClientOption[] }) {
         </div>
       ) : null}
 
-      {/* Step 4 — Review */}
+      {/* Step 4 - Review */}
       {step === 3 ? (
         <div className="space-y-3 rounded-lg border border-border p-4 text-[13px]">
-          <Row label="Project" value={name || "—"} />
+          <Row label="Project" value={name || "-"} />
           <Row label="Client" value={willInviteName ?? "None yet"} />
           <Row label="Target" value={targetDate || "Not set"} />
           <Row

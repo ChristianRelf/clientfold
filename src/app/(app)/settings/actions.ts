@@ -24,7 +24,7 @@ export async function connectStripeAction(): Promise<void> {
   });
 
   if (!isStripeConfigured()) {
-    // Dev simulation — pretend onboarding completed.
+    // Dev simulation - pretend onboarding completed.
     await db.organisation.update({
       where: { id: ctx.org.id },
       data: { stripeConnectId: org?.stripeConnectId ?? `acct_dev_${ctx.org.id.slice(0, 8)}`, stripeConnectComplete: true },

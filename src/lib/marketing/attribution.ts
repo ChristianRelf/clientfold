@@ -41,7 +41,7 @@ export function parseTouch(searchParams: URLSearchParams, landingPage: string, r
   };
 }
 
-/** Read the visitor id from the cookie, or null (does not set — see ensure). */
+/** Read the visitor id from the cookie, or null (does not set - see ensure). */
 export async function getVisitorId(): Promise<string | null> {
   const jar = await cookies();
   return jar.get(VISITOR_COOKIE)?.value ?? null;

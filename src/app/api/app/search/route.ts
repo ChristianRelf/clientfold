@@ -5,7 +5,7 @@ import { getAppContext } from "@/lib/app";
 /**
  * Global search for the ⌘K palette. Tenant-scoped to the current org across the
  * things people actually look for: projects, clients, invoices, approvals.
- * SQLite `contains` is case-sensitive, so we match on a few casings — good
+ * SQLite `contains` is case-sensitive, so we match on a few casings - good
  * enough for a quick-find; swap to Postgres ILIKE / full-text in production.
  */
 export const runtime = "nodejs";

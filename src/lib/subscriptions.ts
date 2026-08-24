@@ -5,7 +5,7 @@ import { markReferralPaid } from "@/lib/marketing/referrals";
 import { notifyMembers } from "@/lib/notifications";
 
 /**
- * Single source of truth for applying a plan change — called by both the Stripe
+ * Single source of truth for applying a plan change - called by both the Stripe
  * webhook and the dev simulation so they behave identically. Updates the org +
  * subscription, records activity, and emits the right growth event (started for
  * free→paid, upgraded for paid→paid).
@@ -51,7 +51,7 @@ export async function applyPlanChange(
         actorName: "Billing",
         summary:
           plan === "free"
-            ? "Subscription cancelled — moved to Free"
+            ? "Subscription cancelled - moved to Free"
             : `Plan changed to ${getPlan(plan)?.name ?? plan}`,
       },
     });

@@ -4,7 +4,7 @@ import { generateToken, hashToken } from "./crypto";
 /**
  * Client invitations / magic links. Tokens are cryptographically secure, only
  * their hash is stored, they expire, and they are revocable (status = revoked).
- * The raw token is returned exactly once at creation time — to be emailed.
+ * The raw token is returned exactly once at creation time - to be emailed.
  */
 
 const INVITE_TTL_MS = 1000 * 60 * 60 * 24 * 14; // 14 days

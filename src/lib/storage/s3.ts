@@ -86,7 +86,7 @@ export const s3Provider: StorageProvider = {
   },
 
   async get() {
-    // Not used for S3 — downloads go straight to a presigned GET URL.
+    // Not used for S3 - downloads go straight to a presigned GET URL.
     return null;
   },
 

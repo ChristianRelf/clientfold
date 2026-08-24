@@ -32,7 +32,7 @@ export function hashToken(token: string): string {
   return createHash("sha256").update(token).digest("hex");
 }
 
-/** Hash an IP for audit records — never store raw PII. */
+/** Hash an IP for audit records - never store raw PII. */
 export function hashIp(ip: string): string {
   return createHmac("sha256", SECRET).update(ip).digest("hex").slice(0, 32);
 }

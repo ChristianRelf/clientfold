@@ -14,7 +14,7 @@ const schema = z.object({ body: z.string().max(4000).optional() });
 /**
  * Staff replies to a thread. Tenant-scoped: the thread must belong to the
  * caller's organisation (threadId is bound server-side by the page, but we
- * re-verify ownership here — never trust the client).
+ * re-verify ownership here - never trust the client).
  */
 export async function sendAgencyMessageAction(threadId: string, formData: FormData): Promise<void> {
   const ctx = await getAppContext();

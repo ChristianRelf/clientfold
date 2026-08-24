@@ -4,8 +4,8 @@ import { db } from "@/lib/db";
 /**
  * Lightweight experimentation. Assignment is deterministic per visitor (stable
  * across reloads without a write on the hot path) and also persisted for
- * exposure/conversion analysis. Rendered pages stay semantically appropriate —
- * we vary copy, not intent — so this is not SEO cloaking.
+ * exposure/conversion analysis. Rendered pages stay semantically appropriate -
+ * we vary copy, not intent - so this is not SEO cloaking.
  */
 
 export type Variant = { key: string; name: string; payload: Record<string, unknown> };

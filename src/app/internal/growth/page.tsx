@@ -78,7 +78,7 @@ export default async function GrowthPage() {
                         <td className="px-3 py-2 text-right tabular-nums">{s.visitors}</td>
                         <td className="px-3 py-2 text-right tabular-nums">{s.signups}</td>
                         <td className="px-3 py-2 text-right tabular-nums text-muted-foreground">
-                          {s.visitors ? `${Math.round((s.signups / s.visitors) * 100)}%` : "—"}
+                          {s.visitors ? `${Math.round((s.signups / s.visitors) * 100)}%` : "-"}
                         </td>
                       </tr>
                     ))

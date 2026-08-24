@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 /**
- * The client portal shell — deliberately simpler and calmer than the agency app.
+ * The client portal shell - deliberately simpler and calmer than the agency app.
  * Top brand bar + a segmented nav that collapses to a bottom bar on mobile.
  * Unused sections are hidden by the caller (pass only the tabs that apply).
  */

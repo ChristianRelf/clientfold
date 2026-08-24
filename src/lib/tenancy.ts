@@ -4,7 +4,7 @@ import { getCurrentUser, type SessionUser } from "@/lib/auth/session";
 /**
  * Server-side multi-tenancy. Every tenant-scoped read/write must go through a
  * resolved membership so Organisation A can never touch Organisation B. We NEVER
- * trust an organisationId supplied by the client — callers pass a slug or id and
+ * trust an organisationId supplied by the client - callers pass a slug or id and
  * we verify the current user actually belongs to it.
  */
 
@@ -54,7 +54,7 @@ export function assertRole(ctx: OrgContext, minimum: Role): void {
 
 /**
  * Fetch a project ensuring it belongs to the org in context. Returns null if it
- * doesn't exist OR belongs to another tenant — callers must treat both as 404 to
+ * doesn't exist OR belongs to another tenant - callers must treat both as 404 to
  * avoid leaking existence (IDOR-safe).
  */
 export async function getScopedProject(ctx: OrgContext, slug: string) {

@@ -26,7 +26,7 @@ export function MemberInviteForm({ canInviteAdmin }: { canInviteAdmin: boolean }
       {state?.error ? <p className="mt-3 rounded-md bg-danger/10 px-3 py-2 text-[11px] text-danger">{state.error}</p> : null}
       {state?.inviteUrl ? (
         <div className="mt-3 rounded-md bg-surface px-3 py-2 text-[11px]">
-          <div className="font-medium">{state.delivered ? "Invitation sent." : "Email is not configured—share this link securely:"}</div>
+          <div className="font-medium">{state.delivered ? "Invitation sent." : "Email is not configured-share this link securely:"}</div>
           <input readOnly value={state.inviteUrl} onFocus={(event) => event.currentTarget.select()} className="mt-1 w-full bg-transparent font-mono text-[10px] text-muted-foreground outline-none" />
         </div>
       ) : null}

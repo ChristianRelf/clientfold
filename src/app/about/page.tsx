@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 const principles = [
   ["Clarity over theatre", "Every screen should answer one practical question: what needs to happen next?"],
   ["Automation with manners", "Useful reminders should feel considerate, stop at the right moment and always leave people in control."],
-  ["A shared record", "Files, decisions, feedback and payment status belong with the work—not scattered across private inboxes."],
+  ["A shared record", "Files, decisions, feedback and payment status belong with the work-not scattered across private inboxes."],
   ["Small teams, first", "Independent studios and consultants deserve the operational polish of a large firm without its overhead."],
 ] as const;
 
@@ -26,7 +26,7 @@ export default function AboutPage() {
           <div className="container grid gap-12 py-16 sm:py-24 lg:grid-cols-[0.72fr_1.28fr] lg:items-end lg:py-28">
             <div>
               <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-[#697363]">About ClientFold</p>
-              <p className="mt-8 max-w-sm text-sm leading-7 text-[#74766e]">Built for the people doing excellent client work—and losing too many hours to chasing the next approval, file or invoice.</p>
+              <p className="mt-8 max-w-sm text-sm leading-7 text-[#74766e]">Built for the people doing excellent client work-and losing too many hours to chasing the next approval, file or invoice.</p>
             </div>
             <h1 className="max-w-4xl text-balance text-5xl font-medium leading-[0.94] tracking-[-0.06em] sm:text-7xl lg:text-[5.5rem]">Good work should not get stuck in the <span className="font-editorial font-normal italic text-[#5d6857]">gaps between people.</span></h1>
           </div>
@@ -49,7 +49,7 @@ export default function AboutPage() {
           <div className="container">
             <div className="grid gap-6 lg:grid-cols-[0.55fr_1.45fr] lg:items-end">
               <div><p className="text-[10px] uppercase tracking-[0.16em] text-[#697363]">What guides us</p><h2 className="mt-4 text-3xl font-medium tracking-[-0.04em]">Quietly opinionated.</h2></div>
-              <p className="max-w-lg text-sm leading-6 text-[#73756d]">The product is young. These principles are the standard we use to decide what belongs—and what does not.</p>
+              <p className="max-w-lg text-sm leading-6 text-[#73756d]">The product is young. These principles are the standard we use to decide what belongs-and what does not.</p>
             </div>
             <div className="mt-12 grid border-l border-t border-[#d0cfc8] sm:grid-cols-2">
               {principles.map(([title, body], index) => (

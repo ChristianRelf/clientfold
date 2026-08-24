@@ -6,7 +6,7 @@ import type { PortalProjectView } from "@/lib/portal-view";
 
 /**
  * Portal data access. A client may only ever see projects explicitly assigned to
- * them via ProjectClient — enforced here, server-side. Every portal query is
+ * them via ProjectClient - enforced here, server-side. Every portal query is
  * scoped by clientId; a client can never read another client's data or reach the
  * agency app.
  */

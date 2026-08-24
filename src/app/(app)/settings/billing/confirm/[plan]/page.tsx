@@ -9,7 +9,7 @@ import { confirmDevUpgradeAction } from "../../actions";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Confirm upgrade" };
 
-/** Local simulated subscription checkout — dev only (no Stripe keys). */
+/** Local simulated subscription checkout - dev only (no Stripe keys). */
 export default async function ConfirmUpgrade({ params }: { params: Promise<{ plan: string }> }) {
   const { plan: planKey } = await params;
   await getAppContext(); // ensure authenticated + in an org
@@ -24,7 +24,7 @@ export default async function ConfirmUpgrade({ params }: { params: Promise<{ pla
       <div className="max-w-md p-6">
         <div className="rounded-lg border border-border p-5">
           <div className="mb-3 rounded-md border border-warning/20 bg-warning/10 px-3 py-2 text-2xs text-warning">
-            Test mode — no real charge. This simulates Stripe subscription Checkout locally.
+            Test mode - no real charge. This simulates Stripe subscription Checkout locally.
           </div>
           <div className="flex items-baseline justify-between">
             <span className="text-sm font-medium">ClientFold {plan.name}</span>

@@ -8,7 +8,7 @@ import { markReferralActivated } from "@/lib/marketing/referrals";
 /**
  * Magic-link redemption. Validates the token, opens a client portal session and
  * sends the client to their portal. On failure we send them to /portal/enter to
- * request a fresh link — never expose why (avoid enumeration).
+ * request a fresh link - never expose why (avoid enumeration).
  */
 export async function GET(request: Request, { params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;

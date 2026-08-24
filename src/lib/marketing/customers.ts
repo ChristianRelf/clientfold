@@ -1,6 +1,6 @@
 /**
  * Case studies / testimonials. Intentionally empty until real, approved customer
- * content exists — we never invent testimonials. Populate this array (or back it
+ * content exists - we never invent testimonials. Populate this array (or back it
  * with the CMS/DB) as real stories are gathered.
  */
 

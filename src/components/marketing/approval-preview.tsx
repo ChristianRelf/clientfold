@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 
-/** A static render of the approval version history — an ad-ready product moment. */
+/** A static render of the approval version history - an ad-ready product moment. */
 export function ApprovalPreview() {
   const versions = [
     { v: 3, status: "Awaiting Approval", tone: "waiting" as const, date: "Today" },

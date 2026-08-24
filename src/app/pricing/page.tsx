@@ -9,7 +9,7 @@ import { getVariant } from "@/lib/marketing/experiments";
 export const metadata: Metadata = { title: "Pricing", description: "Start free with manual reminders, or let Follow-up Autopilot handle the chase on Solo and above.", alternates: { canonical: "/pricing" } };
 
 const faq = [
-  ["Is there a free plan?", "Yes—one active project, two clients and manual reminders, free for as long as you need it."],
+  ["Is there a free plan?", "Yes-one active project, two clients and manual reminders, free for as long as you need it."],
   ["Which plans include Autopilot?", "Follow-up Autopilot is included on Solo, Studio and Agency."],
   ["Do clients pay?", "No. Clients can view portals, upload files, approve work and pay invoices without a subscription."],
   ["Do you take an invoice fee?", "No. Payments go through your connected Stripe account; Stripe processing fees still apply."],

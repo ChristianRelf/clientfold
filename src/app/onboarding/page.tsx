@@ -7,7 +7,7 @@ export const metadata = { title: "Get started", robots: { index: false, follow: 
 
 /**
  * Reached only when an authenticated user has no organisation membership (an
- * edge case — signup creates one). Guides them to create a workspace.
+ * edge case - signup creates one). Guides them to create a workspace.
  */
 export default async function OnboardingPage() {
   const user = await getCurrentUser();

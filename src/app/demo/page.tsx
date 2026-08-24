@@ -52,7 +52,7 @@ export default function DemoPage() {
             </div>
             <div className="flex flex-col justify-between border-t border-white/10 py-10 lg:border-t-0 lg:py-16 lg:pl-14">
               <div className="flex items-start justify-between gap-8">
-                <p className="max-w-sm text-sm leading-6 text-white/60">Bring projects, decisions and client actions into one calm workspace—and keep the work moving without another follow-up thread.</p>
+                <p className="max-w-sm text-sm leading-6 text-white/60">Bring projects, decisions and client actions into one calm workspace-and keep the work moving without another follow-up thread.</p>
                 <span className="hidden font-mono text-[9px] text-white/25 sm:block">03 / 03</span>
               </div>
               <div className="mt-10">

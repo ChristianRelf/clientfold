@@ -1,4 +1,4 @@
-/** View-models the portal renders — mapped from DB (real) or demo data. */
+/** View-models the portal renders - mapped from DB (real) or demo data. */
 
 export type PortalApprovalVersion = {
   id: string;
@@ -66,7 +66,7 @@ export type PortalProjectView = {
   messagesUnread: number;
 };
 
-/** Items that "need the client" — drives the overview attention list. */
+/** Items that "need the client" - drives the overview attention list. */
 export function attentionItems(p: PortalProjectView) {
   const items: { kind: "approval" | "file"; id: string; title: string; detail: string; href: string }[] = [];
   for (const a of p.approvals) {

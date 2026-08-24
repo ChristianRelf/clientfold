@@ -22,7 +22,7 @@ export const supportArticles: SupportArticle[] = [
     category: "Getting started",
     readTime: "4 min",
     sections: [
-      { title: "Before you begin", body: ["Have the client’s name and email address, a short project title, and the first thing you need from them. You can add the rest later."], note: "Start with the next real client action—not a complete project plan. A focused portal is easier for clients to understand." },
+      { title: "Before you begin", body: ["Have the client’s name and email address, a short project title, and the first thing you need from them. You can add the rest later."], note: "Start with the next real client action-not a complete project plan. A focused portal is easier for clients to understand." },
       { title: "Create the project", body: ["From Projects, choose New project and enter the core details."], steps: ["Choose or create the client.", "Name the project in language the client will recognise.", "Set the target date and confirm the project currency.", "Add the first milestone or request, then save the project."] },
       { title: "Check before inviting", body: ["Preview the client portal and check the organisation name, accent colour, contact details and first action. The invitation opens directly to the project, so clients do not need a ClientFold account."], steps: ["Open the portal preview.", "Make sure the first request has a clear title and deadline.", "Send the invitation when the page reads clearly without extra context."] },
     ],
@@ -84,7 +84,7 @@ export const supportArticles: SupportArticle[] = [
     sections: [
       { title: "Connect payments", body: ["Connect a Stripe account from Settings → Integrations before taking online payment. Stripe handles card details and payout onboarding; ClientFold stores payment status and transaction references, not card numbers."] },
       { title: "Create the invoice", body: ["Open the project or Invoices and choose New invoice."], steps: ["Confirm the client and billing email.", "Add clear line items, tax treatment and due date.", "Review the currency and total.", "Send the invoice to the client portal."] },
-      { title: "Track and reconcile", body: ["Verified Stripe events update the invoice status after payment. If a payment appears in Stripe but not ClientFold, wait briefly, refresh the invoice, and then contact support with the invoice number—never a full card number."] },
+      { title: "Track and reconcile", body: ["Verified Stripe events update the invoice status after payment. If a payment appears in Stripe but not ClientFold, wait briefly, refresh the invoice, and then contact support with the invoice number-never a full card number."] },
     ],
   },
   {

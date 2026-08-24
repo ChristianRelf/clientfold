@@ -37,7 +37,7 @@ const features = [
     number: "05",
     eyebrow: "Client portal",
     title: "Your client always knows what comes next.",
-    body: "One branded link shows progress, recent updates and the next action—without exposing internal clutter.",
+    body: "One branded link shows progress, recent updates and the next action-without exposing internal clutter.",
   },
   {
     id: "integrations",
@@ -111,7 +111,7 @@ function MessagingScene() {
             </div>
 
             <div className="showcase-message showcase-message--two flex items-end justify-end gap-2">
-              <div className="max-w-[78%] text-right"><div className="rounded-[14px_14px_3px_14px] bg-[#596453] px-4 py-3 text-left text-[10px] leading-4 text-white">Absolutely — I’ve added a softer option to v4. It’s ready above.</div><p className="mt-1 pr-1 text-[7px] text-[#9a9c94]">You · 10:18 · Read</p></div>
+              <div className="max-w-[78%] text-right"><div className="rounded-[14px_14px_3px_14px] bg-[#596453] px-4 py-3 text-left text-[10px] leading-4 text-white">Absolutely - I’ve added a softer option to v4. It’s ready above.</div><p className="mt-1 pr-1 text-[7px] text-[#9a9c94]">You · 10:18 · Read</p></div>
               <span className="grid size-6 shrink-0 place-items-center rounded-full bg-[#30342d] text-[7px] font-semibold text-white">NL</span>
             </div>
 
@@ -122,7 +122,7 @@ function MessagingScene() {
 
             <div className="showcase-message showcase-message--three flex items-end gap-2">
               <span className="grid size-6 shrink-0 place-items-center rounded-full bg-[#e2e6dd] text-[7px] font-semibold text-[#596453]">SW</span>
-              <div className="max-w-[78%]"><div className="rounded-[14px_14px_14px_3px] border border-[#cbd4c6] bg-[#edf1e9] px-4 py-3 text-[10px] leading-4 text-[#465040]">That’s it — approved. Thank you!</div><p className="mt-1 pl-1 text-[7px] text-[#9a9c94]">Sarah · Just now</p></div>
+              <div className="max-w-[78%]"><div className="rounded-[14px_14px_14px_3px] border border-[#cbd4c6] bg-[#edf1e9] px-4 py-3 text-[10px] leading-4 text-[#465040]">That’s it - approved. Thank you!</div><p className="mt-1 pl-1 text-[7px] text-[#9a9c94]">Sarah · Just now</p></div>
             </div>
           </div>
           <div className="showcase-message showcase-message--outcome absolute inset-x-4 bottom-3 flex items-center gap-2 border-l-2 border-[#718069] bg-[#e3e9df] px-3 py-2 text-[8px] font-medium text-[#52604d] sm:inset-x-6"><span className="grid size-4 place-items-center rounded-full bg-[#6f9565] text-[7px] text-white">✓</span> Approval recorded · Development unblocked</div>

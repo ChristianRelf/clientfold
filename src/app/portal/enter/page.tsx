@@ -22,7 +22,7 @@ export default async function PortalEnterPage({
         <p className="mt-1 text-[13px] text-muted-foreground">
           {expired
             ? "That link has expired or been used. Enter your email and we'll send a fresh one."
-            : "Enter the email your project team used to invite you. We'll send you a secure link — no password needed."}
+            : "Enter the email your project team used to invite you. We'll send you a secure link - no password needed."}
         </p>
         <div className="mt-5">
           <EnterForm />

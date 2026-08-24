@@ -5,7 +5,7 @@ import type { DemoWaitingItem, WaitingType } from "@/lib/demo/data";
 /**
  * Load the Waiting Room for an organisation and map DB rows to the shared
  * WaitingItem view shape used across app, demo and marketing. Tenant-scoped by
- * organisationId — callers must pass an org id resolved from a verified session.
+ * organisationId - callers must pass an org id resolved from a verified session.
  */
 export async function getWaitingRoom(organisationId: string): Promise<DemoWaitingItem[]> {
   const items = await db.waitingItem.findMany({

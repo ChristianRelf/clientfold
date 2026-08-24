@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 /**
  * Edge middleware. Runs before every request to:
  *  1. Ensure a first-party anonymous visitor id exists (for attribution and
- *     experiments) — set here so even fully-cached pages get one. No DB access
+ *     experiments) - set here so even fully-cached pages get one. No DB access
  *     on the edge; persistence happens server-side on meaningful events.
  *  2. Belt-and-braces noindex for private surfaces.
  *

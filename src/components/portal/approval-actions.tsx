@@ -4,8 +4,8 @@ import { useState, useTransition } from "react";
 import { respondToApproval, type ApprovalActionState } from "@/app/portal/actions";
 
 /**
- * The flagship client action. Approving asks for explicit confirmation — "by
- * approving this version you confirm the project may proceed using it" — so the
+ * The flagship client action. Approving asks for explicit confirmation - "by
+ * approving this version you confirm the project may proceed using it" - so the
  * decision is deliberate and defensible. Disabled in demo mode.
  */
 export function ApprovalActions({
@@ -35,7 +35,7 @@ export function ApprovalActions({
         <p className="mt-2 text-sm font-medium">
           {result.decision === "approved" ? "Approved" : "Changes requested"}
         </p>
-        <p className="mt-0.5 text-2xs text-muted-foreground">Thanks — we&apos;ve let the team know.</p>
+        <p className="mt-0.5 text-2xs text-muted-foreground">Thanks - we&apos;ve let the team know.</p>
       </div>
     );
   }

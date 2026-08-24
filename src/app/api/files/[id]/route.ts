@@ -4,7 +4,7 @@ import { storage, verifyFileSignature } from "@/lib/storage";
 
 /**
  * Serve a file via a short-lived signed URL (local provider). The HMAC signature
- * IS the capability — it's unguessable and expires — so a leaked storage key
+ * IS the capability - it's unguessable and expires - so a leaked storage key
  * grants nothing. S3 downloads never reach here (they use a presigned S3 URL).
  */
 export const runtime = "nodejs";

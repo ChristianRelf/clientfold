@@ -1,6 +1,6 @@
 /**
  * Marketing copy as data. Audience pages (/for/[audience]) and campaign landing
- * pages (/lp/[slug]) render from these definitions with reusable components —
+ * pages (/lp/[slug]) render from these definitions with reusable components -
  * unique messaging, not hundreds of thin SEO pages. Only defined entries exist.
  */
 
@@ -20,7 +20,7 @@ export const AUDIENCES: Record<string, AudiencePage> = {
     eyebrow: "For web design agencies",
     headline: "Ship sites without the approval chaos.",
     subhead:
-      "Track every design approval, keep client files in one place, and see which projects are blocked on the client — not on you.",
+      "Track every design approval, keep client files in one place, and see which projects are blocked on the client - not on you.",
     pains: [
       "Approvals lost in email threads",
       "“Which version did they sign off?”",
@@ -35,7 +35,7 @@ export const AUDIENCES: Record<string, AudiencePage> = {
     eyebrow: "For freelancers",
     headline: "Your client process, minus the chasing.",
     subhead:
-      "Keep approvals, files and invoices in one polished portal—and let Follow-up Autopilot send the reminders you never want to write.",
+      "Keep approvals, files and invoices in one polished portal-and let Follow-up Autopilot send the reminders you never want to write.",
     pains: ["Clients who go quiet", "Approvals buried in email", "Following up on overdue invoices"],
     seoTitle: "Client portal for freelancers",
     seoDescription: "ClientFold gives freelancers one client portal for approvals, files and invoices, with polite follow-ups that send themselves.",
@@ -62,7 +62,7 @@ export const AUDIENCES: Record<string, AudiencePage> = {
     slug: "consultants",
     eyebrow: "For consultants",
     headline: "Give clients one clear place to look.",
-    subhead: "Deliverables, decisions and invoices — organised, professional, and always up to date.",
+    subhead: "Deliverables, decisions and invoices - organised, professional, and always up to date.",
     pains: ["Decisions buried in email", "Deliverables scattered", "Following up on invoices"],
     seoTitle: "Client portal for consultants",
     seoDescription: "ClientFold gives consultants a clean portal for deliverables, approvals and invoices.",
@@ -120,7 +120,7 @@ export const SEO_LANDERS: Record<string, CampaignPage> = {
     slug: "client-portal-for-agencies",
     eyebrow: "For agencies",
     headline: "A client portal built for agencies.",
-    subhead: "Approvals, files, invoices and updates — one portal per client, on your brand.",
+    subhead: "Approvals, files, invoices and updates - one portal per client, on your brand.",
     cta: "Join the waitlist",
     showcase: "portal",
     pains: ["Approvals across too many threads", "Client files without a clear home", "Teams guessing what is blocked"],

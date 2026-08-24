@@ -4,7 +4,7 @@ import type { PortalMessage } from "@/lib/portal-view";
 
 /**
  * Renders a conversation from a given viewpoint. `viewerType` decides which
- * bubbles are "mine" (right-aligned) — "client" in the portal, "user" in the
+ * bubbles are "mine" (right-aligned) - "client" in the portal, "user" in the
  * agency inbox. System events render as centred meta lines.
  */
 export function MessageList({

@@ -5,7 +5,7 @@ import { storage } from "@/lib/storage";
 
 /**
  * Staff-side download. Verifies the user is a member of the file's organisation,
- * then redirects to a fresh short-lived download URL. Enforces tenancy — a user
+ * then redirects to a fresh short-lived download URL. Enforces tenancy - a user
  * can only download files from organisations they belong to.
  */
 export const runtime = "nodejs";

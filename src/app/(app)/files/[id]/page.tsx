@@ -34,7 +34,7 @@ export default async function AgencyFileView({ params }: { params: Promise<{ id:
         </Link>
         <div className="min-w-0">
           <div className="truncate text-sm font-semibold">{file.name}</div>
-          <div className="text-2xs text-muted-foreground">{file.project?.name ?? "—"}</div>
+          <div className="text-2xs text-muted-foreground">{file.project?.name ?? "-"}</div>
         </div>
         <a href={`/api/app/files/${file.id}`} className="ml-auto rounded-md border border-border px-2.5 py-1 text-xs font-medium hover:bg-muted">
           Download
