@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
   metadataBase: new URL(appUrl),
   title: {
-    default: "ClientFold — The client portal that follows up for you",
+    default: "ClientFold — Client work without the chase",
     template: "%s · ClientFold",
   },
   description:
@@ -23,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
   openGraph: {
     type: "website",
     siteName: "ClientFold",
-    title: "Do the work. ClientFold does the chasing.",
+    title: "Client work. Without the chase.",
     description:
       "A client portal for approvals, files and invoices—with polite follow-ups that send themselves.",
     url: appUrl,
@@ -31,7 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Do the work. ClientFold does the chasing.",
+    title: "Client work. Without the chase.",
     description: "A client portal for approvals, files and invoices—with polite follow-ups that send themselves.",
     images: [socialImage],
   },

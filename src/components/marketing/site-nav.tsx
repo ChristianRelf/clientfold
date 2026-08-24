@@ -35,7 +35,7 @@ export function SiteNav() {
         <div className="flex items-center gap-4">
           <Link href="/login" className="hidden text-xs text-[#73756d] hover:text-[#2c2f28] sm:inline">Log in</Link>
           <ButtonLink href="/waitlist" size="sm" className="bg-[#2c2f28] px-4 hover:bg-[#44473f]">
-            Join the waitlist
+            Get early access
           </ButtonLink>
         </div>
       </div>

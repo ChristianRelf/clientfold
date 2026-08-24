@@ -20,9 +20,9 @@ export default async function PricingPage() {
   const variant = await getVariant(await getVisitorId(), "pricing_presentation", {
     key: "control",
     name: "Control",
-    payload: { headline: "Start free. Pay when you want the chasing handled.", description: "Manual reminders are free. Follow-up Autopilot starts with Solo at £12 a month." },
+    payload: { headline: "Simple pricing. Less chasing. More shipping.", description: "Start free with manual reminders. When you want the follow-up handled too, Solo starts at £12 a month." },
   });
-  const headline = typeof variant.payload.headline === "string" ? variant.payload.headline : "Start free. Pay when you want the chasing handled.";
+  const headline = typeof variant.payload.headline === "string" ? variant.payload.headline : "Simple pricing. Less chasing. More shipping.";
   const description = typeof variant.payload.description === "string" ? variant.payload.description : "Manual reminders are free. Follow-up Autopilot starts with Solo at £12 a month.";
   return <div className="min-h-screen bg-[#f7f6f1] text-[#292b26]"><Track event="marketing.pricing_viewed"/><SiteNav/><main>
     <header className="border-b border-[#d9d8d2] bg-[#f3f2ed]"><div className="container grid gap-8 py-16 sm:py-24 lg:grid-cols-[0.72fr_1.28fr]"><div><p className="text-[10px] uppercase tracking-[0.16em] text-[#697363]">Pricing</p><p className="mt-6 text-[10px] leading-5 text-[#8a8c83]">Your clients never pay.<br/>No percentage taken from invoices.</p></div><div><h1 className="max-w-2xl text-balance text-4xl font-medium leading-tight tracking-[-0.045em] sm:text-5xl">{headline}</h1><p className="mt-5 max-w-lg text-sm leading-6 text-[#71736b]">{description}</p></div></div></header>

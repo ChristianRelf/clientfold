@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "ClientFold — Do the work. ClientFold does the chasing.";
+export const alt = "ClientFold — Client work without the chase.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -13,11 +13,11 @@ export default function OpenGraphImage() {
         ClientFold
       </div>
       <div style={{ display: "flex", flexDirection: "column", maxWidth: 940 }}>
-        <div style={{ fontSize: 78, lineHeight: 0.98, letterSpacing: "-4px", fontWeight: 600 }}>Do the work.</div>
-        <div style={{ marginTop: 12, fontSize: 78, lineHeight: 0.98, letterSpacing: "-4px", color: "#5d6857", fontStyle: "italic" }}>ClientFold does the chasing.</div>
-        <div style={{ marginTop: 34, fontSize: 25, color: "#686a62" }}>Approvals, files and invoices—with polite follow-ups that send themselves.</div>
+        <div style={{ fontSize: 78, lineHeight: 0.98, letterSpacing: "-4px", fontWeight: 600 }}>Client work.</div>
+        <div style={{ marginTop: 12, fontSize: 78, lineHeight: 0.98, letterSpacing: "-4px", color: "#5d6857", fontStyle: "italic" }}>Without the chase.</div>
+        <div style={{ marginTop: 34, fontSize: 25, color: "#686a62" }}>One obvious next step for every approval, file, reply and invoice.</div>
       </div>
-      <div style={{ display: "flex", justifyContent: "space-between", borderTop: "1px solid #cbc9c0", paddingTop: 22, fontSize: 19, color: "#73766d" }}><span>The calm layer for client work</span><span>clientfold.com</span></div>
+      <div style={{ display: "flex", justifyContent: "space-between", borderTop: "1px solid #cbc9c0", paddingTop: 22, fontSize: 19, color: "#73766d" }}><span>The client portal that keeps moving</span><span>clientfold.com</span></div>
     </div>,
     size,
   );

@@ -26,8 +26,15 @@ const features = [
     body: "Send an invoice from the project and let its status surface automatically in the Waiting Room.",
   },
   {
-    id: "portal",
+    id: "messages",
     number: "04",
+    eyebrow: "Messaging",
+    title: "The conversation stays with the work.",
+    body: "Clients ask, you reply and every decision stays in one calm thread instead of disappearing into email.",
+  },
+  {
+    id: "portal",
+    number: "05",
     eyebrow: "Client portal",
     title: "Your client always knows what comes next.",
     body: "One branded link shows progress, recent updates and the next action—without exposing internal clutter.",
@@ -78,6 +85,48 @@ function InvoiceScene() {
   );
 }
 
+function MessagingScene() {
+  return (
+    <div className="flex h-full items-center justify-center bg-[#ebeae4] p-4 sm:p-7" aria-label="Animated conversation between a client and Northline Studio">
+      <div className="flex h-full w-full max-w-lg flex-col overflow-hidden rounded-xl border border-[#d1d1ca] bg-[#fbfbf7] shadow-[0_22px_50px_-34px_rgba(35,39,31,.6)]">
+        <div className="flex items-center gap-3 border-b border-[#deddd6] px-4 py-3">
+          <span className="relative grid size-8 place-items-center rounded-full bg-[#e2e6dd] text-[9px] font-semibold text-[#596453]">SW<span className="absolute bottom-0 right-0 size-2 rounded-full border-2 border-[#fbfbf7] bg-[#6f9565]" /></span>
+          <div><p className="text-[10px] font-medium text-[#34372f]">Sarah Whitfield</p><p className="mt-0.5 text-[8px] text-[#8a8c83]">Northstar Ltd · Client</p></div>
+          <span className="ml-auto rounded-full bg-[#edf0e9] px-2 py-1 text-[8px] text-[#63705d]">Homepage v4</span>
+        </div>
+
+        <div className="relative flex-1 overflow-hidden bg-[#f4f3ee] px-4 py-5 sm:px-6">
+          <p className="text-center text-[7px] uppercase tracking-[0.14em] text-[#9a9c94]">Today · Project conversation</p>
+          <div className="mt-5 space-y-4">
+            <div className="showcase-message showcase-message--one flex items-end gap-2">
+              <span className="grid size-6 shrink-0 place-items-center rounded-full bg-[#e2e6dd] text-[7px] font-semibold text-[#596453]">SW</span>
+              <div className="max-w-[78%]"><div className="rounded-[14px_14px_14px_3px] border border-[#dad9d2] bg-white px-4 py-3 text-[10px] leading-4 text-[#4b4e46]">Could we make the opening line feel a little warmer?</div><p className="mt-1 pl-1 text-[7px] text-[#9a9c94]">Sarah · 10:14</p></div>
+            </div>
+
+            <div className="showcase-message showcase-message--two flex items-end justify-end gap-2">
+              <div className="max-w-[78%] text-right"><div className="rounded-[14px_14px_3px_14px] bg-[#596453] px-4 py-3 text-left text-[10px] leading-4 text-white">Absolutely — I’ve added a softer option to v4. It’s ready above.</div><p className="mt-1 pr-1 text-[7px] text-[#9a9c94]">You · 10:18 · Read</p></div>
+              <span className="grid size-6 shrink-0 place-items-center rounded-full bg-[#30342d] text-[7px] font-semibold text-white">NL</span>
+            </div>
+
+            <div className="showcase-typing flex items-end gap-2" aria-hidden>
+              <span className="grid size-6 shrink-0 place-items-center rounded-full bg-[#e2e6dd] text-[7px] font-semibold text-[#596453]">SW</span>
+              <div className="flex h-8 items-center gap-1 rounded-[12px_12px_12px_3px] border border-[#dad9d2] bg-white px-3"><span className="showcase-typing-dot size-1 rounded-full bg-[#9a9c94]" /><span className="showcase-typing-dot size-1 rounded-full bg-[#9a9c94]" /><span className="showcase-typing-dot size-1 rounded-full bg-[#9a9c94]" /></div>
+            </div>
+
+            <div className="showcase-message showcase-message--three flex items-end gap-2">
+              <span className="grid size-6 shrink-0 place-items-center rounded-full bg-[#e2e6dd] text-[7px] font-semibold text-[#596453]">SW</span>
+              <div className="max-w-[78%]"><div className="rounded-[14px_14px_14px_3px] border border-[#cbd4c6] bg-[#edf1e9] px-4 py-3 text-[10px] leading-4 text-[#465040]">That’s it — approved. Thank you!</div><p className="mt-1 pl-1 text-[7px] text-[#9a9c94]">Sarah · Just now</p></div>
+            </div>
+          </div>
+          <div className="showcase-message showcase-message--outcome absolute inset-x-4 bottom-3 flex items-center gap-2 border-l-2 border-[#718069] bg-[#e3e9df] px-3 py-2 text-[8px] font-medium text-[#52604d] sm:inset-x-6"><span className="grid size-4 place-items-center rounded-full bg-[#6f9565] text-[7px] text-white">✓</span> Approval recorded · Development unblocked</div>
+        </div>
+
+        <div className="flex items-center gap-3 border-t border-[#deddd6] bg-white px-4 py-3"><span className="flex-1 rounded-lg border border-[#deddd6] bg-[#faf9f5] px-3 py-2 text-[8px] text-[#a0a199]">Reply to Sarah…</span><span className="grid size-8 place-items-center rounded-lg bg-[#30342d] text-[10px] text-white">↑</span></div>
+      </div>
+    </div>
+  );
+}
+
 function PortalScene() {
   return (
     <div className="h-full p-5 sm:p-8">
@@ -89,12 +138,25 @@ function PortalScene() {
   );
 }
 
-function ProductScene({ active }: { active: FeatureId }) {
+function ProductScene({ active, onSelect }: { active: FeatureId; onSelect?: (id: FeatureId) => void }) {
+  const activeIndex = features.findIndex((feature) => feature.id === active);
+  const current = features[activeIndex];
   return (
-    <div className="overflow-hidden border border-[#d2d1ca] bg-[#fbfbf8] shadow-[0_30px_70px_-45px_rgba(38,41,34,.55)]">
-      <div className="flex h-10 items-center gap-1.5 border-b border-[#deddd7] bg-[#f4f3ee] px-3"><span className="size-1.5 rounded-full bg-[#c5c6bf]"/><span className="size-1.5 rounded-full bg-[#c5c6bf]"/><span className="size-1.5 rounded-full bg-[#c5c6bf]"/><span className="mx-auto text-[8px] text-[#8b8d84]">clientfold.com / northstar</span></div>
-      <div key={active} className="h-[410px] animate-scale-in bg-[#f7f6f1] sm:h-[470px]">
-        {active === "approvals" && <ApprovalScene />}{active === "files" && <FilesScene />}{active === "invoices" && <InvoiceScene />}{active === "portal" && <PortalScene />}
+    <div className="overflow-hidden rounded-xl border border-[#c5c6bd] bg-[#fbfbf8] shadow-[0_34px_80px_-45px_rgba(38,41,34,.68)]">
+      <div className="flex min-h-12 items-center gap-2 border-b border-[#d8d7d0] bg-[#efeee8] px-4">
+        <span className="grid size-6 place-items-center rounded-md bg-[#596453] text-[8px] font-semibold text-white">N</span>
+        <div><p className="text-[9px] font-medium text-[#3f423a]">Northline Studio</p><p className="text-[7px] text-[#92948b]">Northstar website</p></div>
+        <span className="ml-auto flex items-center gap-2 text-[8px] text-[#777a71]"><span className="size-1.5 rounded-full bg-[#de7044]" /> Live preview</span>
+      </div>
+      <div key={active} className="showcase-scene h-[410px] bg-[#f7f6f1] sm:h-[490px]">
+        {active === "approvals" && <ApprovalScene />}{active === "files" && <FilesScene />}{active === "invoices" && <InvoiceScene />}{active === "messages" && <MessagingScene />}{active === "portal" && <PortalScene />}
+      </div>
+      <div className="flex min-h-14 items-center justify-between gap-4 border-t border-[#d8d7d0] bg-[#fbfbf7] px-4">
+        <div><p className="text-[7px] uppercase tracking-[0.14em] text-[#999b93]">Now showing</p><p className="mt-0.5 text-[9px] font-medium text-[#4a4e45]">{current.eyebrow}</p></div>
+        <div className="flex items-center gap-2" aria-label="Showcase chapters">
+          {features.map((feature, index) => <button key={feature.id} type="button" onClick={() => onSelect?.(feature.id)} aria-label={`Show ${feature.eyebrow}`} aria-current={active === feature.id ? "step" : undefined} className={cn("h-1.5 rounded-full transition-all duration-300", active === feature.id ? "w-8 bg-[#65715f]" : "w-3 bg-[#d2d2cb] hover:bg-[#aeb1a7]")}><span className="sr-only">{index + 1}</span></button>)}
+        </div>
+        <p className="font-mono text-[8px] text-[#8c8e85]">{String(activeIndex + 1).padStart(2, "0")} / {String(features.length).padStart(2, "0")}</p>
       </div>
     </div>
   );
@@ -116,23 +178,40 @@ export function ScrollFeatureStory() {
     return () => observer.disconnect();
   }, []);
 
+  function selectFeature(id: FeatureId) {
+    setActive(id);
+    refs.current[id]?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  const activeIndex = features.findIndex((feature) => feature.id === active);
+
   return (
-    <section className="border-b border-[#d9d8d2] bg-[#f3f2ed]">
-      <div className="container grid gap-10 py-20 lg:grid-cols-[0.72fr_1.28fr] lg:gap-16 lg:py-28">
-        <div>
-          <div className="lg:sticky lg:top-28">
-            <p className="text-[10px] uppercase tracking-[0.16em] text-[#697363]">Watch the work move</p><h2 className="mt-4 max-w-sm text-balance text-3xl font-medium leading-tight tracking-[-0.035em] sm:text-4xl">The interface changes as the project does.</h2>
-            <div className="mt-10 hidden lg:block"><ProductScene active={active} /></div>
-          </div>
+    <section className="overflow-clip border-b border-[#d9d8d2] bg-[#f3f2ed]">
+      <div className="container border-b border-[#d5d4cd] py-16 sm:py-20">
+        <div className="grid gap-6 lg:grid-cols-[0.62fr_1.38fr] lg:items-end">
+          <div><p className="text-[10px] uppercase tracking-[0.16em] text-[#697363]">Watch the work move</p><p className="mt-4 max-w-xs text-xs leading-5 text-[#777970]">Scroll through a real client loop. The product changes with every action.</p></div>
+          <h2 className="max-w-3xl text-balance text-4xl font-medium leading-[1.02] tracking-[-0.045em] sm:text-5xl">Five tiny client actions. <span className="font-editorial font-normal italic text-[#5d6857]">One project suddenly moving again.</span></h2>
         </div>
-        <div className="border-t border-[#d6d5ce]">
-          <div className="my-8 lg:hidden"><ProductScene active={active} /></div>
+      </div>
+      <div className="container grid gap-12 pb-20 lg:grid-cols-[0.58fr_1.42fr] lg:gap-16 lg:pb-28">
+        <div className="relative border-l border-[#d0cfc8]">
+          <span className="absolute left-[-1px] top-0 hidden w-0.5 bg-[#de7044] transition-all duration-500 lg:block" style={{ height: `${100 / features.length}%`, transform: `translateY(${activeIndex * 100}%)` }} aria-hidden />
           {features.map((feature) => (
-            <article key={feature.id} ref={(node) => { refs.current[feature.id] = node; }} data-feature={feature.id} className={cn("flex min-h-[48vh] flex-col justify-center border-b border-[#d6d5ce] py-14 transition-opacity duration-500 lg:min-h-[58vh] lg:px-4", active === feature.id ? "opacity-100" : "opacity-45")}>
-              <div className="flex items-center gap-4"><span className="font-mono text-[9px] text-[#999b93]">{feature.number}</span><span className="text-[9px] uppercase tracking-[0.15em] text-[#667160]">{feature.eyebrow}</span></div>
-              <h3 className="mt-6 max-w-lg text-2xl font-medium tracking-[-0.025em] sm:text-3xl">{feature.title}</h3><p className="mt-4 max-w-md text-sm leading-6 text-[#74766e]">{feature.body}</p>
+            <article key={feature.id} ref={(node) => { refs.current[feature.id] = node; }} data-feature={feature.id} className={cn("flex min-h-[62vh] flex-col justify-center border-b border-[#d6d5ce] py-14 pl-6 transition-all duration-500 sm:pl-10 lg:min-h-[72vh] lg:pr-6", active === feature.id ? "opacity-100" : "opacity-40")}>
+              <button type="button" onClick={() => selectFeature(feature.id)} className="text-left">
+                <div className="flex items-center justify-between gap-4"><span className="flex items-center gap-4"><span className="font-mono text-[9px] text-[#999b93]">{feature.number}</span><span className="text-[9px] uppercase tracking-[0.15em] text-[#667160]">{feature.eyebrow}</span></span>{active === feature.id ? <span className="flex items-center gap-2 text-[8px] uppercase tracking-[0.13em] text-[#8a5a42]"><span className="size-1.5 rounded-full bg-[#de7044]" /> In view</span> : null}</div>
+                <h3 className="mt-6 max-w-md text-3xl font-medium leading-tight tracking-[-0.035em]">{feature.title}</h3><p className="mt-4 max-w-sm text-sm leading-6 text-[#74766e]">{feature.body}</p>
+                <span className={cn("mt-7 inline-flex items-center gap-2 text-[9px] font-medium uppercase tracking-[0.12em] text-[#596453] transition-opacity", active === feature.id ? "opacity-100" : "opacity-0")}>See it in the product <span aria-hidden>→</span></span>
+              </button>
+              <div className="mt-8 lg:hidden"><ProductScene active={feature.id} /></div>
             </article>
           ))}
+        </div>
+        <div className="hidden lg:block">
+          <div className="sticky top-24 pt-14">
+            <ProductScene active={active} onSelect={selectFeature} />
+            <div className="mt-4 flex items-center justify-between text-[8px] uppercase tracking-[0.13em] text-[#8b8d84]"><span>Scroll to keep exploring</span><span className="flex items-center gap-2"><span className="h-px w-8 bg-[#bfc1b8]" /> {features[activeIndex].title}</span></div>
+          </div>
         </div>
       </div>
     </section>
