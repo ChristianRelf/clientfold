@@ -33,7 +33,7 @@ export default async function MarketplaceImportReviewPage({ params }: { params: 
   return (
     <div className="min-h-full bg-workbench">
       <header className="border-b border-border bg-background px-4 py-5 sm:px-6 lg:px-8">
-        <Link href={`/integrations/${imported.provider}`} className="mb-4 inline-flex items-center gap-1 text-2xs font-medium uppercase tracking-[0.12em] text-muted-foreground hover:text-foreground">← {definition.name}</Link>
+        <Link href={`/settings/integrations/${imported.provider}`} className="mb-4 inline-flex items-center gap-1 text-2xs font-medium uppercase tracking-[0.12em] text-muted-foreground hover:text-foreground">← {definition.name}</Link>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex items-center gap-4"><IntegrationLogo integration={definition} /><div><h1 className="text-xl font-semibold tracking-tight">Review import</h1><p className="mt-0.5 text-[13px] text-muted-foreground">{imported.sourceName ?? imported.sourceType} · {imported.itemCount} item{imported.itemCount === 1 ? "" : "s"}</p></div></div>
           <Badge tone={imported.status === "completed" ? "success" : imported.status === "failed" ? "danger" : imported.status === "partially_completed" ? "warning" : "accent"}>{imported.status.replaceAll("_", " ")}</Badge>

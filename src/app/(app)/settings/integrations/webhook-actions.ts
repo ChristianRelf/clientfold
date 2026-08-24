@@ -24,7 +24,7 @@ export async function createWebhookEndpointAction(formData: FormData): Promise<v
   const ctx = await adminContext();
   const parsed = endpointSchema.safeParse({ url: formData.get("url"), description: formData.get("description") });
   const events = formData.getAll("events").filter((value): value is string => typeof value === "string" && isWebhookEvent(value));
-  if (!parsed.success || !events.length) redirect("/integrations/webhook?error=details");
+  if (!parsed.success || !events.length) redirect("/settings/integrations/webhook?error=details");
   try {
     const url = await assertSafeWebhookUrl(parsed.data.url);
     const endpoint = await db.webhookEndpoint.create({
@@ -39,11 +39,11 @@ export async function createWebhookEndpointAction(formData: FormData): Promise<v
       db.auditLog.create({ data: { organisationId: ctx.org.id, actorId: ctx.user.id, actorName: ctx.user.name ?? ctx.user.email, action: "webhook.endpoint_created", targetType: "WebhookEndpoint", targetId: endpoint.id, metadata: JSON.stringify({ events: events.length }) } }),
     ]);
   } catch {
-    redirect("/integrations/webhook?error=url");
+    redirect("/settings/integrations/webhook?error=url");
   }
-  revalidatePath("/integrations");
-  revalidatePath("/integrations/webhook");
-  redirect("/integrations/webhook?created=1");
+  revalidatePath("/settings/integrations");
+  revalidatePath("/settings/integrations/webhook");
+  redirect("/settings/integrations/webhook?created=1");
 }
 
 export async function setWebhookEndpointStatusAction(endpointId: string, enabled: boolean): Promise<void> {
@@ -60,8 +60,8 @@ export async function setWebhookEndpointStatusAction(endpointId: string, enabled
     }),
     db.auditLog.create({ data: { organisationId: ctx.org.id, actorId: ctx.user.id, actorName: ctx.user.name ?? ctx.user.email, action: enabled ? "webhook.endpoint_enabled" : "webhook.endpoint_disabled", targetType: "WebhookEndpoint", targetId: endpoint.id } }),
   ]);
-  revalidatePath("/integrations");
-  revalidatePath("/integrations/webhook");
+  revalidatePath("/settings/integrations");
+  revalidatePath("/settings/integrations/webhook");
 }
 
 export async function rotateWebhookSecretAction(endpointId: string): Promise<void> {
@@ -72,14 +72,14 @@ export async function rotateWebhookSecretAction(endpointId: string): Promise<voi
     db.webhookEndpoint.update({ where: { id: endpoint.id }, data: { secretVersion: { increment: 1 } } }),
     db.auditLog.create({ data: { organisationId: ctx.org.id, actorId: ctx.user.id, actorName: ctx.user.name ?? ctx.user.email, action: "webhook.secret_rotated", targetType: "WebhookEndpoint", targetId: endpoint.id } }),
   ]);
-  revalidatePath("/integrations/webhook");
+  revalidatePath("/settings/integrations/webhook");
 }
 
 export async function sendWebhookTestAction(endpointId: string): Promise<void> {
   const ctx = await adminContext();
   await queueWebhookTest(endpointId, ctx.org.id);
-  revalidatePath("/integrations/webhook");
-  redirect("/integrations/webhook?tested=1");
+  revalidatePath("/settings/integrations/webhook");
+  redirect("/settings/integrations/webhook?tested=1");
 }
 
 export async function retryWebhookDeliveryAction(deliveryId: string): Promise<void> {
@@ -87,5 +87,5 @@ export async function retryWebhookDeliveryAction(deliveryId: string): Promise<vo
   const delivery = await db.webhookDelivery.findFirst({ where: { id: deliveryId, endpoint: { organisationId: ctx.org.id } }, select: { id: true } });
   if (!delivery) return;
   await attemptWebhookDelivery(delivery.id);
-  revalidatePath("/integrations/webhook");
+  revalidatePath("/settings/integrations/webhook");
 }

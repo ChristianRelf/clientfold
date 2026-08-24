@@ -65,7 +65,7 @@ export function Sidebar({
   const resources: NavItem[] = [
     { href: "/invoices", label: "Invoices", icon: <Icon d={ICONS.invoices} /> },
     { href: "/files", label: "Files", icon: <Icon d={ICONS.files} /> },
-    { href: "/integrations", label: "Integrations", icon: <Icon d={ICONS.integrations} /> },
+    { href: "/settings/integrations", label: "Integrations", icon: <Icon d={ICONS.integrations} /> },
   ];
 
   const secondary: NavItem[] = [

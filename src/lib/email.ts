@@ -67,6 +67,15 @@ export function sendAgencyReplyNotification(to: string, params: { orgName: strin
   return send(to, `New message from ${params.orgName} on ${params.projectName}`, `<p><strong>${escapeHtml(params.orgName)}</strong> sent a message on <strong>${escapeHtml(params.projectName)}</strong>:</p><blockquote style="border-left:3px solid #e2e8f0;padding-left:12px;color:#4b5563;">${escapeHtml(params.preview)}</blockquote><p><a href="${escapeHtml(params.portalUrl)}">View in your portal</a></p>`);
 }
 
+export function sendContactMessage(params: { name: string; email: string; topic: string; message: string }): Promise<ReminderDeliveryResult> {
+  return send(
+    process.env.CONTACT_EMAIL ?? "hello@clientfold.com",
+    `ClientFold enquiry: ${params.topic}`,
+    `<p><strong>From:</strong> ${escapeHtml(params.name)} (${escapeHtml(params.email)})</p><p><strong>Topic:</strong> ${escapeHtml(params.topic)}</p><p>${escapeHtml(params.message).replace(/\n/g, "<br />")}</p>`,
+    { replyTo: params.email },
+  );
+}
+
 export function sendReminderEmail(
   to: string,
   url: string,

@@ -85,12 +85,12 @@ async function createReviewImport(params: {
 export async function uploadMarketplaceCsvAction(formData: FormData): Promise<void> {
   const ctx = await getAppContext();
   const providerValue = String(formData.get("provider") ?? "");
-  if (!isMarketplaceProvider(providerValue)) redirect("/integrations?error=provider");
+  if (!isMarketplaceProvider(providerValue)) redirect("/settings/integrations?error=provider");
   const file = formData.get("file");
-  if (!(file instanceof File) || !file.name || file.size === 0 || file.size > MAX_CSV_BYTES) redirect(`/integrations/${providerValue}?error=file`);
+  if (!(file instanceof File) || !file.name || file.size === 0 || file.size > MAX_CSV_BYTES) redirect(`/settings/integrations/${providerValue}?error=file`);
   const text = await file.text();
   const rows = normalizeCsv(text, providerValue, safeMapping(formData.get("mapping")));
-  if (!rows.length) redirect(`/integrations/${providerValue}?error=empty`);
+  if (!rows.length) redirect(`/settings/integrations/${providerValue}?error=empty`);
   const imported = await createReviewImport({
     organisationId: ctx.org.id,
     provider: providerValue,
@@ -100,7 +100,7 @@ export async function uploadMarketplaceCsvAction(formData: FormData): Promise<vo
     items: rows,
   });
   await db.auditLog.create({ data: { organisationId: ctx.org.id, actorId: ctx.user.id, actorName: ctx.user.name ?? ctx.user.email, action: "marketplace.import_created", targetType: "MarketplaceImport", targetId: imported.id, metadata: JSON.stringify({ provider: providerValue, sourceType: "csv", count: rows.length }) } });
-  redirect(`/integrations/imports/${imported.id}`);
+  redirect(`/settings/integrations/imports/${imported.id}`);
 }
 
 const manualSchema = z.object({
@@ -113,7 +113,7 @@ const manualSchema = z.object({
 export async function createManualMarketplaceImportAction(formData: FormData): Promise<void> {
   const ctx = await getAppContext();
   const parsed = manualSchema.safeParse(Object.fromEntries(formData));
-  if (!parsed.success) redirect(`/integrations/${String(formData.get("provider") ?? "generic")}?error=manual`);
+  if (!parsed.success) redirect(`/settings/integrations/${String(formData.get("provider") ?? "generic")}?error=manual`);
   const data = parsed.data;
   const due = data.dueAt ? new Date(data.dueAt) : null;
   const amountNumber = data.amount ? Number.parseFloat(data.amount.replace(/[^0-9.-]/g, "")) : Number.NaN;
@@ -126,7 +126,7 @@ export async function createManualMarketplaceImportAction(formData: FormData): P
     milestones: [], confidence: { title: 1 }, warnings: [],
   });
   const imported = await createReviewImport({ organisationId: ctx.org.id, provider: data.provider, sourceType: "manual", sourceName: data.title, sourceFingerprint: hash(`${ctx.user.id}\0${Date.now()}\0${JSON.stringify(item)}`), items: [item] });
-  redirect(`/integrations/imports/${imported.id}`);
+  redirect(`/settings/integrations/imports/${imported.id}`);
 }
 
 export async function enableMarketplaceForwardingAction(provider: MarketplaceProvider): Promise<void> {
@@ -137,8 +137,8 @@ export async function enableMarketplaceForwardingAction(provider: MarketplacePro
   const token = inboundTokenForConnection(connection.id);
   await db.marketplaceConnection.update({ where: { id: connection.id }, data: { inboundTokenHash: hashInboundToken(token), status: "connected", lastError: null } });
   await db.auditLog.create({ data: { organisationId: ctx.org.id, actorId: ctx.user.id, actorName: ctx.user.name ?? ctx.user.email, action: "marketplace.forwarding_enabled", targetType: "MarketplaceConnection", targetId: connection.id, metadata: JSON.stringify({ provider }) } });
-  revalidatePath(`/integrations/${provider}`);
-  revalidatePath("/integrations");
+  revalidatePath(`/settings/integrations/${provider}`);
+  revalidatePath("/settings/integrations");
 }
 
 export async function disableMarketplaceConnectionAction(connectionId: string): Promise<void> {
@@ -149,8 +149,8 @@ export async function disableMarketplaceConnectionAction(connectionId: string): 
   if (!connection) return;
   await db.marketplaceConnection.update({ where: { id: connection.id }, data: { status: "disabled", inboundTokenHash: null } });
   await db.auditLog.create({ data: { organisationId: ctx.org.id, actorId: ctx.user.id, actorName: ctx.user.name ?? ctx.user.email, action: "marketplace.connection_disabled", targetType: "MarketplaceConnection", targetId: connection.id, metadata: JSON.stringify({ provider: connection.provider }) } });
-  revalidatePath(`/integrations/${connection.provider}`);
-  revalidatePath("/integrations");
+  revalidatePath(`/settings/integrations/${connection.provider}`);
+  revalidatePath("/settings/integrations");
 }
 
 export async function disableStripeIntegrationAction(): Promise<void> {
@@ -159,8 +159,8 @@ export async function disableStripeIntegrationAction(): Promise<void> {
   assertRole(orgCtx, "admin");
   await db.organisation.update({ where: { id: ctx.org.id }, data: { stripeConnectComplete: false } });
   await db.auditLog.create({ data: { organisationId: ctx.org.id, actorId: ctx.user.id, actorName: ctx.user.name ?? ctx.user.email, action: "integration.stripe_disabled", targetType: "Organisation", targetId: ctx.org.id } });
-  revalidatePath("/integrations");
-  revalidatePath("/integrations/stripe");
+  revalidatePath("/settings/integrations");
+  revalidatePath("/settings/integrations/stripe");
   revalidatePath("/settings");
 }
 
@@ -173,8 +173,8 @@ export async function disableLegacyIntegrationAction(provider: IntegrationProvid
   if (!integration) return;
   await db.integration.update({ where: { id: integration.id }, data: { status: "disconnected" } });
   await db.auditLog.create({ data: { organisationId: ctx.org.id, actorId: ctx.user.id, actorName: ctx.user.name ?? ctx.user.email, action: "integration.disabled", targetType: "Integration", targetId: integration.id, metadata: JSON.stringify({ provider }) } });
-  revalidatePath("/integrations");
-  revalidatePath(`/integrations/${provider}`);
+  revalidatePath("/settings/integrations");
+  revalidatePath(`/settings/integrations/${provider}`);
 }
 
 async function refreshImportCounts(importId: string) {
@@ -287,7 +287,7 @@ export async function applyMarketplaceImportItemAction(itemId: string, formData:
     await db.activity.create({ data: { organisationId: ctx.org.id, projectId, type: "marketplace.project_imported", actorType: "user", actorId: ctx.user.id, actorName: ctx.user.name ?? "You", summary: `${ctx.user.name ?? "You"} imported ${title} from ${metadata.provider}`, metadata: JSON.stringify({ provider: metadata.provider, externalType: metadata.externalType }) } });
     await db.auditLog.create({ data: { organisationId: ctx.org.id, actorId: ctx.user.id, actorName: ctx.user.name ?? ctx.user.email, action: "marketplace.import_item_applied", targetType: "MarketplaceImportItem", targetId: item.id, metadata: JSON.stringify({ provider: metadata.provider, projectId }) } });
     await refreshImportCounts(item.importId);
-    revalidatePath("/integrations"); revalidatePath(`/integrations/${metadata.provider}`); revalidatePath(`/integrations/imports/${item.importId}`); revalidatePath("/projects");
+    revalidatePath("/settings/integrations"); revalidatePath(`/settings/integrations/${metadata.provider}`); revalidatePath(`/settings/integrations/imports/${item.importId}`); revalidatePath("/projects");
     if (projectSlug && formData.get("openProject") === "on") redirect(`/projects/${projectSlug}`);
   } catch (error) {
     await db.marketplaceImportItem.update({ where: { id: item.id }, data: { reviewStatus: "error", errorMessage: error instanceof Error ? error.message.slice(0, 240) : "Import failed", reviewedAt: new Date() } });
@@ -301,5 +301,5 @@ export async function ignoreMarketplaceImportItemAction(itemId: string): Promise
   if (!item || item.reviewStatus !== "pending") return;
   await db.marketplaceImportItem.update({ where: { id: item.id }, data: { reviewStatus: "ignored", proposedAction: "ignore", reviewedAt: new Date() } });
   await refreshImportCounts(item.importId);
-  revalidatePath(`/integrations/imports/${item.importId}`);
+  revalidatePath(`/settings/integrations/imports/${item.importId}`);
 }

@@ -29,15 +29,15 @@ export async function connectStripeAction(): Promise<void> {
       where: { id: ctx.org.id },
       data: { stripeConnectId: org?.stripeConnectId ?? `acct_dev_${ctx.org.id.slice(0, 8)}`, stripeConnectComplete: true },
     });
-    revalidatePath("/integrations/stripe");
-    redirect("/integrations/stripe?connected=dev");
+    revalidatePath("/settings/integrations/stripe");
+    redirect("/settings/integrations/stripe?connected=dev");
   }
 
   const { accountId, url } = await createConnectOnboardingUrl({
     organisationId: ctx.org.id,
     existingAccountId: org?.stripeConnectId ?? null,
     email: org?.billingEmail,
-    returnPath: "/integrations/stripe",
+    returnPath: "/settings/integrations/stripe",
   });
   await db.organisation.update({ where: { id: ctx.org.id }, data: { stripeConnectId: accountId } });
   redirect(url);

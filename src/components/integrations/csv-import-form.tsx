@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { uploadMarketplaceCsvAction } from "@/app/(app)/integrations/actions";
+import { uploadMarketplaceCsvAction } from "@/app/(app)/settings/integrations/actions";
 import { csvCanonicalFields, parseCsv, suggestCsvMapping, type CsvMapping, type MarketplaceProvider } from "@/lib/integrations/marketplace";
 
 const FIELD_LABELS: Record<(typeof csvCanonicalFields)[number], string> = {

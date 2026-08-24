@@ -25,7 +25,7 @@ export default async function SettingsPage() {
       <div className="grid gap-6 p-6 lg:grid-cols-[180px_1fr]">
         <nav className="space-y-0.5">
           {SECTIONS.map((s, i) => s === "Members" || s === "Referrals" || s === "Notifications" || s === "Integrations" ? (
-            <Link key={s} href={s === "Integrations" ? "/integrations" : s === "Members" ? "/settings/members" : s === "Referrals" ? "/settings/referrals" : "/settings/notifications"} className="block rounded-md px-3 py-1.5 text-[13px] text-muted-foreground hover:bg-muted hover:text-foreground">{s}</Link>
+            <Link key={s} href={s === "Integrations" ? "/settings/integrations" : s === "Members" ? "/settings/members" : s === "Referrals" ? "/settings/referrals" : "/settings/notifications"} className="block rounded-md px-3 py-1.5 text-[13px] text-muted-foreground hover:bg-muted hover:text-foreground">{s}</Link>
           ) : (
             <span
               key={s}
@@ -80,7 +80,7 @@ export default async function SettingsPage() {
               )}
             </div>
             {!org.stripeConnectComplete ? (
-              <Link href="/integrations/stripe" className="mt-3 inline-flex rounded-md bg-foreground px-3 py-1.5 text-xs font-semibold text-background">
+              <Link href="/settings/integrations/stripe" className="mt-3 inline-flex rounded-md bg-foreground px-3 py-1.5 text-xs font-semibold text-background">
                 Set up in integrations
               </Link>
             ) : (
@@ -89,7 +89,7 @@ export default async function SettingsPage() {
               </p>
             )}
             {org.stripeConnectComplete ? (
-              <Link href="/integrations/stripe" className="mt-3 inline-block text-2xs font-medium text-accent hover:underline">
+              <Link href="/settings/integrations/stripe" className="mt-3 inline-block text-2xs font-medium text-accent hover:underline">
                 Manage Stripe integration
               </Link>
             ) : null}

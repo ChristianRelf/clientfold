@@ -27,7 +27,7 @@ const destinations: CommandItem[] = [
   { label: "Invoices", detail: "Sent, viewed and paid", href: "/invoices", shortcut: "V" },
   { label: "Files", detail: "Shared project files", href: "/files", shortcut: "F" },
   { label: "Clients", detail: "People and companies", href: "/clients", shortcut: "C" },
-  { label: "Integrations", detail: "Plugins, marketplaces and connected tools", href: "/integrations", shortcut: "G" },
+  { label: "Integrations", detail: "Plugins, marketplaces and connected tools", href: "/settings/integrations", shortcut: "G" },
 ];
 
 const createActions: CommandItem[] = [

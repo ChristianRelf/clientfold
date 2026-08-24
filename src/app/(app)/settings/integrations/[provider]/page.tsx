@@ -57,7 +57,7 @@ export default async function IntegrationDetailPage({ params, searchParams }: { 
   return (
     <div className="min-h-full bg-workbench">
       <header className="border-b border-border bg-background px-4 py-5 sm:px-6 lg:px-8">
-        <Link href="/integrations" className="mb-4 inline-flex items-center gap-1 text-2xs font-medium uppercase tracking-[0.12em] text-muted-foreground hover:text-foreground">← Plugins & integrations</Link>
+        <Link href="/settings/integrations" className="mb-4 inline-flex items-center gap-1 text-2xs font-medium uppercase tracking-[0.12em] text-muted-foreground hover:text-foreground">← Plugins & integrations</Link>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex items-center gap-4">
             <IntegrationLogo integration={definition} className="size-14 p-2.5" />
@@ -176,7 +176,7 @@ export default async function IntegrationDetailPage({ params, searchParams }: { 
           <InfoList title="Information it reads" items={definition.reads} />
           <InfoList title="What it never does" items={definition.never} tone="danger" />
           {definition.policyNote ? <div className="rounded-xl border border-warning/25 bg-warning/[0.06] p-4"><div className="text-xs font-semibold text-warning">Marketplace boundary</div><p className="mt-1 text-xs leading-5 text-muted-foreground">{definition.policyNote}</p></div> : null}
-          {recentImports.length ? <section className="rounded-xl border border-border bg-background p-4 shadow-xs"><div className="text-xs font-semibold">Recent imports</div><div className="mt-3 space-y-2">{recentImports.map((item) => <Link key={item.id} href={`/integrations/imports/${item.id}`} className="block rounded-lg border border-border px-3 py-2 transition-colors hover:bg-surface"><div className="flex items-center justify-between gap-2"><span className="truncate text-xs font-medium">{item.sourceName ?? item.sourceType}</span><Badge tone={item.status === "completed" ? "success" : item.status === "failed" ? "danger" : "neutral"}>{item.status.replaceAll("_", " ")}</Badge></div><div className="mt-1 text-2xs text-muted-foreground">{item.itemCount} item{item.itemCount === 1 ? "" : "s"} · {relativeTime(item.createdAt)}</div></Link>)}</div></section> : null}
+          {recentImports.length ? <section className="rounded-xl border border-border bg-background p-4 shadow-xs"><div className="text-xs font-semibold">Recent imports</div><div className="mt-3 space-y-2">{recentImports.map((item) => <Link key={item.id} href={`/settings/integrations/imports/${item.id}`} className="block rounded-lg border border-border px-3 py-2 transition-colors hover:bg-surface"><div className="flex items-center justify-between gap-2"><span className="truncate text-xs font-medium">{item.sourceName ?? item.sourceType}</span><Badge tone={item.status === "completed" ? "success" : item.status === "failed" ? "danger" : "neutral"}>{item.status.replaceAll("_", " ")}</Badge></div><div className="mt-1 text-2xs text-muted-foreground">{item.itemCount} item{item.itemCount === 1 ? "" : "s"} · {relativeTime(item.createdAt)}</div></Link>)}</div></section> : null}
           {recentEarnings.length ? (
             <section className="rounded-xl border border-border bg-background p-4 shadow-xs">
               <div className="text-xs font-semibold">Marketplace earnings</div>
@@ -196,7 +196,7 @@ export default async function IntegrationDetailPage({ params, searchParams }: { 
           ) : null}
           {connection ? <section className="rounded-xl border border-border bg-background p-4 shadow-xs"><div className="text-xs font-semibold">Connection</div><dl className="mt-3 space-y-2 text-xs"><Row label="Created" value={formatDate(connection.createdAt, { day: "numeric", month: "short", year: "numeric" })} /><Row label="Last import" value={connection.lastImportedAt ? relativeTime(connection.lastImportedAt) : "Never"} /></dl></section> : null}
           {legacyConnection ? <section className="rounded-xl border border-border bg-background p-4 shadow-xs"><div className="text-xs font-semibold">Connection history</div><dl className="mt-3 space-y-2 text-xs"><Row label="Status" value={legacyConnection.status} /><Row label="Connected" value={legacyConnection.connectedAt ? formatDate(legacyConnection.connectedAt, { day: "numeric", month: "short", year: "numeric" }) : "Never"} /></dl></section> : null}
-          <ButtonLink href="/integrations" variant="outline" size="sm" className="w-full">Back to catalogue</ButtonLink>
+          <ButtonLink href="/settings/integrations" variant="outline" size="sm" className="w-full">Back to catalogue</ButtonLink>
         </aside>
       </div>
     </div>

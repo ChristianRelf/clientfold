@@ -39,6 +39,13 @@ const features = [
     title: "Your client always knows what comes next.",
     body: "One branded link shows progress, recent updates and the next action—without exposing internal clutter.",
   },
+  {
+    id: "integrations",
+    number: "06",
+    eyebrow: "Integrations",
+    title: "Your other tools stay in the loop.",
+    body: "Bring in reviewed marketplace work, take payments through Stripe and send signed events to the systems you already use.",
+  },
 ] as const;
 
 type FeatureId = (typeof features)[number]["id"];
@@ -138,6 +145,58 @@ function PortalScene() {
   );
 }
 
+const integrationItems = [
+  { name: "Fiverr", logo: "/integrations/fiverr.svg", status: "Reviewed import", side: "in" },
+  { name: "Upwork", logo: "/integrations/upwork.svg", status: "Reviewed import", side: "in" },
+  { name: "Stripe", logo: "/integrations/stripe.svg", status: "Connected", side: "out" },
+  { name: "Webhooks", logo: null, status: "Connected", side: "out" },
+] as const;
+
+function IntegrationTile({ item }: { item: (typeof integrationItems)[number] }) {
+  return <div className="flex items-center gap-2.5 rounded-lg border border-[#d7d6cf] bg-white p-2.5 shadow-[0_8px_22px_-18px_rgba(35,39,31,.5)]">
+    <span className="grid size-8 shrink-0 place-items-center rounded-lg border border-[#e1e0da] bg-[#fbfbf7] p-1.5">
+      {item.logo ? <img src={item.logo} alt="" aria-hidden className="max-h-full max-w-full object-contain" /> : <span className="text-[10px] font-semibold text-[#596453]">{'{}'}</span>}
+    </span>
+    <span className="min-w-0"><span className="block truncate text-[9px] font-medium text-[#3e4139]">{item.name}</span><span className="mt-0.5 block text-[7px] text-[#8d8f87]">{item.status}</span></span>
+    <span className={cn("ml-auto size-1.5 shrink-0 rounded-full", item.status === "Connected" ? "bg-[#6f9565]" : "bg-[#de7044]")} />
+  </div>;
+}
+
+function IntegrationsScene() {
+  const incoming = integrationItems.filter((item) => item.side === "in");
+  const outgoing = integrationItems.filter((item) => item.side === "out");
+  return (
+    <div className="relative h-full overflow-hidden bg-[#ebeae4] p-4 sm:p-6" aria-label="ClientFold integration flow">
+      <div className="flex items-center justify-between"><div><p className="text-[8px] uppercase tracking-[0.14em] text-[#8b8d84]">Connected workflow</p><p className="mt-1 text-[11px] font-medium text-[#3d4038]">Northline Studio</p></div><span className="rounded-full border border-[#d1d4cb] bg-[#f5f6f1] px-2.5 py-1 text-[7px] text-[#60705b]">2 live · 2 reviewed imports</span></div>
+
+      <div className="relative mt-5 grid grid-cols-[1fr_0.92fr_1fr] items-center gap-3 sm:gap-5">
+        <div className="space-y-2"><p className="mb-3 text-[7px] uppercase tracking-[0.14em] text-[#96988f]">Work comes in</p>{incoming.map((item) => <IntegrationTile key={item.name} item={item} />)}</div>
+
+        <div className="relative z-10 flex min-h-44 flex-col items-center justify-center rounded-xl border border-[#c9cec3] bg-[#f6f7f2] p-3 text-center shadow-[0_18px_35px_-26px_rgba(35,39,31,.75)]">
+          <span className="grid size-10 place-items-center rounded-xl bg-[#596453] text-sm font-semibold text-white shadow-sm">C</span>
+          <p className="mt-3 text-[10px] font-semibold text-[#363a32]">ClientFold</p>
+          <p className="mt-1 text-[7px] leading-3 text-[#85877f]">Northstar website<br/>Project record</p>
+          <span className="integration-hub-pulse absolute inset-3 rounded-lg border border-[#778371]/20" aria-hidden />
+        </div>
+
+        <div className="space-y-2"><p className="mb-3 text-right text-[7px] uppercase tracking-[0.14em] text-[#96988f]">Updates go out</p>{outgoing.map((item) => <IntegrationTile key={item.name} item={item} />)}</div>
+
+        <div className="pointer-events-none absolute left-[27%] right-[27%] top-1/2 -z-0 h-px bg-[#bfc3b9]" aria-hidden><span className="integration-flow-dot absolute top-1/2 size-2 -translate-y-1/2 rounded-full bg-[#de7044] shadow-[0_0_0_4px_rgba(222,112,68,.12)]" /></div>
+      </div>
+
+      <div className="mt-5 overflow-hidden rounded-lg border border-[#d5d4cd] bg-[#fbfbf7]">
+        {[
+          ["Fiverr", "Order metadata reviewed and added", "Import"],
+          ["Stripe", "INV-108 paid · Waiting item cleared", "Live"],
+          ["Webhook", "invoice.paid delivered · 200 OK", "Live"],
+        ].map(([source, event, status], index) => <div key={source} className={cn("integration-event flex items-center gap-3 border-b border-[#e3e2dc] px-3 py-2.5 last:border-0", `integration-event--${index + 1}`)}><span className="grid size-5 place-items-center rounded-full bg-[#e6e9e1] text-[7px] font-semibold text-[#596453]">{index + 1}</span><span className="min-w-0 flex-1"><span className="block text-[8px] font-medium text-[#45483f]">{event}</span><span className="mt-0.5 block text-[7px] text-[#979990]">via {source}</span></span><span className="text-[7px] font-medium text-[#65715f]">{status}</span></div>)}
+      </div>
+
+      <p className="mt-3 text-center text-[7px] text-[#8d8f87]">Drive, Dropbox, Slack and Discord are clearly marked coming soon in the catalogue.</p>
+    </div>
+  );
+}
+
 function ProductScene({ active, onSelect }: { active: FeatureId; onSelect?: (id: FeatureId) => void }) {
   const activeIndex = features.findIndex((feature) => feature.id === active);
   const current = features[activeIndex];
@@ -149,7 +208,7 @@ function ProductScene({ active, onSelect }: { active: FeatureId; onSelect?: (id:
         <span className="ml-auto flex items-center gap-2 text-[8px] text-[#777a71]"><span className="size-1.5 rounded-full bg-[#de7044]" /> Live preview</span>
       </div>
       <div key={active} className="showcase-scene h-[410px] bg-[#f7f6f1] sm:h-[490px]">
-        {active === "approvals" && <ApprovalScene />}{active === "files" && <FilesScene />}{active === "invoices" && <InvoiceScene />}{active === "messages" && <MessagingScene />}{active === "portal" && <PortalScene />}
+        {active === "approvals" && <ApprovalScene />}{active === "files" && <FilesScene />}{active === "invoices" && <InvoiceScene />}{active === "messages" && <MessagingScene />}{active === "portal" && <PortalScene />}{active === "integrations" && <IntegrationsScene />}
       </div>
       <div className="flex min-h-14 items-center justify-between gap-4 border-t border-[#d8d7d0] bg-[#fbfbf7] px-4">
         <div><p className="text-[7px] uppercase tracking-[0.14em] text-[#999b93]">Now showing</p><p className="mt-0.5 text-[9px] font-medium text-[#4a4e45]">{current.eyebrow}</p></div>
@@ -190,7 +249,7 @@ export function ScrollFeatureStory() {
       <div className="container border-b border-[#d5d4cd] py-16 sm:py-20">
         <div className="grid gap-6 lg:grid-cols-[0.62fr_1.38fr] lg:items-end">
           <div><p className="text-[10px] uppercase tracking-[0.16em] text-[#697363]">Watch the work move</p><p className="mt-4 max-w-xs text-xs leading-5 text-[#777970]">Scroll through a real client loop. The product changes with every action.</p></div>
-          <h2 className="max-w-3xl text-balance text-4xl font-medium leading-[1.02] tracking-[-0.045em] sm:text-5xl">Five tiny client actions. <span className="font-editorial font-normal italic text-[#5d6857]">One project suddenly moving again.</span></h2>
+          <h2 className="max-w-3xl text-balance text-4xl font-medium leading-[1.02] tracking-[-0.045em] sm:text-5xl">Six connected moments. <span className="font-editorial font-normal italic text-[#5d6857]">One project suddenly moving again.</span></h2>
         </div>
       </div>
       <div className="container grid gap-12 pb-20 lg:grid-cols-[0.58fr_1.42fr] lg:gap-16 lg:pb-28">

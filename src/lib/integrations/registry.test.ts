@@ -18,5 +18,5 @@ test("every configured integration logo is committed locally", () => {
 test("provider detail paths are unique and top-level", () => {
   const paths = integrationRegistry.map((integration) => integration.detailPath);
   assert.equal(new Set(paths).size, paths.length);
-  assert.equal(paths.every((path) => path.startsWith("/integrations/")), true);
+  assert.equal(paths.every((path) => path.startsWith("/settings/integrations/")), true);
 });

@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
     });
     await db.marketplaceConnection.update({ where: { id: connection.id }, data: { status: "connected", lastImportedAt: new Date(), lastError: null } });
     const members = await db.organisationMember.findMany({ where: { organisationId: connection.organisationId }, select: { userId: true } });
-    if (members.length) await db.notification.createMany({ data: members.map((member) => ({ organisationId: connection.organisationId, userId: member.userId, type: "marketplace.import_ready", title: `Review ${connection.provider} import`, body: subject.slice(0, 180), href: `/integrations/imports/${imported.id}` })) });
+    if (members.length) await db.notification.createMany({ data: members.map((member) => ({ organisationId: connection.organisationId, userId: member.userId, type: "marketplace.import_ready", title: `Review ${connection.provider} import`, body: subject.slice(0, 180), href: `/settings/integrations/imports/${imported.id}` })) });
     return NextResponse.json({ received: true });
   } catch (error) {
     if (typeof error === "object" && error && "code" in error && error.code === "P2002") {
