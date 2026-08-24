@@ -27,12 +27,20 @@ export function WaitlistForm({ source, referral }: { source?: string; referral?:
   const [state, action] = useActionState<WaitlistState, FormData>(joinWaitlistAction, undefined);
   const started = useRef(false);
 
-  if (state?.success) {
+  if (state?.status) {
+    const alreadyVerified = state.status === "already_verified";
     return (
       <div className="border border-[#cdd5c8] bg-[#eef2ea] p-6" role="status" aria-live="polite">
         <span className="flex size-9 items-center justify-center rounded-full bg-[#596453] text-sm text-white">✓</span>
-        <h2 className="mt-5 text-2xl font-medium tracking-[-0.03em]">You’re on the list.</h2>
-        <p className="mt-3 text-[12px] leading-6 text-[#656a61]">We’ll send early-access details to your inbox when your place is ready.</p>
+        <h2 className="mt-5 text-2xl font-medium tracking-[-0.03em]">
+          {alreadyVerified ? "You’re already confirmed." : "Check your inbox."}
+        </h2>
+        <p className="mt-3 text-[12px] leading-6 text-[#656a61]">
+          {alreadyVerified
+            ? "Your place on the ClientFold waitlist is confirmed. We’ll be in touch when early access is ready."
+            : <>We sent a confirmation link to <strong className="font-medium text-[#42473f]">{state.email}</strong>. Open it within 24 hours to secure your place.</>}
+        </p>
+        {!alreadyVerified ? <p className="mt-3 text-[10px] leading-5 text-[#7d8178]">It may take a minute to arrive. Check your spam folder if you don’t see it.</p> : null}
         <Link href="/demo" className="mt-7 inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.12em] text-[#596453] hover:text-[#394235]">
           Explore the interactive demo <span aria-hidden>→</span>
         </Link>

@@ -1,4 +1,7 @@
+import { createElement } from "react";
+import { render, toPlainText } from "react-email";
 import type { ReminderDeliveryResult } from "@/lib/autopilot";
+import { WaitlistVerificationEmail } from "@/emails/waitlist-verification-email";
 
 const FROM = process.env.EMAIL_FROM ?? "ClientFold <hello@useclientfold.com>";
 
@@ -14,7 +17,7 @@ async function send(
   to: string,
   subject: string,
   html: string,
-  options: { idempotencyKey?: string; replyTo?: string; from?: string } = {},
+  options: { idempotencyKey?: string; replyTo?: string; from?: string; text?: string } = {},
 ): Promise<ReminderDeliveryResult> {
   const key = process.env.RESEND_API_KEY;
   if (!key) return { accepted: false, errorCode: "email_not_configured" };
@@ -31,6 +34,7 @@ async function send(
         to,
         subject,
         html,
+        ...(options.text ? { text: options.text } : {}),
         ...(options.replyTo ? { reply_to: options.replyTo } : {}),
       }),
     });
@@ -41,6 +45,25 @@ async function send(
   } catch {
     return { accepted: false, errorCode: "network_error" };
   }
+}
+
+export async function buildWaitlistVerificationEmail(name: string, url: string): Promise<{ subject: string; html: string; text: string }> {
+  const subject = "Confirm your place on the ClientFold waitlist";
+  const html = await render(createElement(WaitlistVerificationEmail, {
+    name,
+    verificationUrl: url,
+    year: new Date().getUTCFullYear(),
+  }));
+  const text = toPlainText(html);
+  return { subject, html, text };
+}
+
+export async function sendWaitlistVerification(to: string, name: string, url: string, tokenHash: string): Promise<ReminderDeliveryResult> {
+  const message = await buildWaitlistVerificationEmail(name, url);
+  return send(to, message.subject, message.html, {
+    text: message.text,
+    idempotencyKey: `waitlist-verification-${tokenHash}`,
+  });
 }
 
 export function sendMagicLink(to: string, url: string): Promise<ReminderDeliveryResult> {

@@ -33,10 +33,16 @@ the Resend `email.received` webhook at `/api/integrations/email/received`. The
 handler verifies signatures and replay windows, retrieves content only long enough
 to normalize allowed metadata, and does not persist raw email or attachments.
 
-New waitlist entries can also notify a Discord channel. Create an incoming
+Waitlist signups are verified through Resend before they enter the growth funnel.
+Set `RESEND_API_KEY`, use a Resend-verified sending domain in `EMAIL_FROM`, and set
+`APP_URL` to the public site origin. ClientFold sends a branded confirmation email
+rendered with React Email, a hashed 24-hour token, and repeat-send throttling for
+the same address. Run `pnpm email:dev` to preview templates at `http://localhost:3001`.
+
+Verified waitlist entries can also notify a Discord channel. Create an incoming
 webhook for the destination channel and set `DISCORD_WAITLIST_WEBHOOK_URL` in the
-runtime environment. The signup is saved before notification delivery, so a
-temporary Discord failure does not lose the entry.
+runtime environment. Referral capture, conversion tracking, and Discord delivery
+only run after email ownership is confirmed.
 
 ## Quick start
 
