@@ -15,7 +15,7 @@ export async function confirmWaitlistEmail(token: string): Promise<WaitlistVerif
   if (!isValidWaitlistToken(token)) return "invalid";
 
   const tokenHash = hashToken(token);
-  const entry = await db.waitlistEntry.findUnique({ where: { verificationTokenHash: tokenHash } });
+  const entry = await db.waitlistEntry.findFirst({ where: { verificationTokenHash: tokenHash } });
   if (!entry) return "invalid";
   if (entry.verifiedAt) return "already_verified";
 

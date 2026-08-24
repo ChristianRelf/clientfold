@@ -1000,12 +1000,14 @@ model WaitlistEntry {
   source                String?
   referralCode          String?
   visitorId             String?
-  verificationTokenHash String?   @unique
+  verificationTokenHash String?
   verificationExpiresAt DateTime?
   verificationSentAt    DateTime?
   verifiedAt            DateTime?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
+
+  @@index([verificationTokenHash])
 }
 
 model Campaign {
