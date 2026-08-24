@@ -4,6 +4,7 @@ import { getPortalClient } from "@/lib/auth/portal-session";
 import { assertClientProject } from "@/lib/portal";
 import { storage, validateUpload, buildKey } from "@/lib/storage";
 import { trackEvent } from "@/lib/marketing/events";
+import { notifyMembers } from "@/lib/notifications";
 
 /**
  * Client file upload against a FileRequest. Verifies the portal session AND that
@@ -107,6 +108,7 @@ export async function POST(request: Request) {
     await trackEvent("waiting.item_resolved", { organisationId: orgId }, { type: "file_request" });
   }
   await trackEvent("client.action_completed", { organisationId: orgId }, { type: "file_upload" });
+  await notifyMembers({ organisationId: orgId, type: "file.uploaded", title: `${client.name} uploaded ${created.length} file${created.length === 1 ? "" : "s"}`, body: fileRequest.title, href: `/projects/${fileRequest.project.slug}` });
 
   return NextResponse.json({ ok: true, complete, files: created });
 }

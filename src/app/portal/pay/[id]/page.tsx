@@ -23,8 +23,8 @@ export default async function SimulatedCheckout({ params }: { params: Promise<{ 
   const client = await getPortalClient();
   if (!client) redirect("/portal/enter");
 
-  const invoice = await db.invoice.findUnique({ where: { id }, include: { organisation: true } });
-  if (!invoice || invoice.clientId !== client!.id) notFound();
+  const invoice = await db.invoice.findUnique({ where: { id }, include: { organisation: true, project: { include: { marketplaceLinks: { where: { engagementMode: "marketplace_only" }, select: { id: true }, take: 1 } } } } });
+  if (!invoice || invoice.clientId !== client!.id || invoice.project?.marketplaceLinks.length) notFound();
   if (invoice.status === "paid") redirect("/portal/invoices");
 
   const due = invoice.total - invoice.amountPaid;

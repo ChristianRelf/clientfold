@@ -12,4 +12,4 @@ const sections: LegalSection[] = [
   { title: "Enforcement and reporting", content: <><p>We may investigate suspected breaches and remove content, restrict features or suspend accounts where reasonably necessary. We consider context, severity, repetition and risk when responding. Where practical, we will notify the account owner and allow an opportunity to address the issue.</p><p>Report abuse or security concerns to <a href="mailto:security@clientfold.com">security@clientfold.com</a>.</p></> },
 ];
 
-export default function AcceptableUsePage() { return <LegalPage title="Acceptable Use Policy" summary="Simple boundaries for using ClientFold safely, lawfully and respectfully." sections={sections}/>; }
+export default function AcceptableUsePage() { return <LegalPage activeHref="/acceptable-use" documentNumber="04" title="Acceptable Use Policy" summary="Simple boundaries for using ClientFold safely, lawfully and respectfully." sections={sections}/>; }

@@ -1,6 +1,8 @@
 import { db } from "@/lib/db";
 import { trackEvent } from "@/lib/marketing/events";
 import { getPlan } from "@/lib/pricing";
+import { markReferralPaid } from "@/lib/marketing/referrals";
+import { notifyMembers } from "@/lib/notifications";
 
 /**
  * Single source of truth for applying a plan change — called by both the Stripe
@@ -58,9 +60,11 @@ export async function applyPlanChange(
   if (plan === "free") {
     await trackEvent("subscription.cancelled", { organisationId }, { fromPlan: previous });
   } else if (previous === "free") {
+    await markReferralPaid(organisationId);
     await trackEvent("subscription.started", { organisationId }, { plan });
   } else {
     await trackEvent("subscription.upgraded", { organisationId }, { fromPlan: previous, toPlan: plan });
   }
+  await notifyMembers({ organisationId, roles: ["owner", "admin"], type: "subscription.changed", title: plan === "free" ? "Subscription moved to Free" : `Plan changed to ${getPlan(plan)?.name ?? plan}`, href: "/settings/billing" });
   return { ok: true };
 }

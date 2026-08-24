@@ -44,6 +44,7 @@ export type PortalMessage = {
   authorName: string;
   authorType: string;
   createdAt: string;
+  attachments?: { id: string; name: string; mimeType: string; size: number }[];
 };
 
 export type PortalMilestone = { id: string; title: string; status: string };

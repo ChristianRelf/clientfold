@@ -111,7 +111,7 @@ export async function createProjectWizardAction(input: unknown): Promise<WizardR
   // Optionally invite the client to their portal.
   if (data.sendInvite && clientId) {
     const client = await db.client.findUnique({ where: { id: clientId }, select: { email: true } });
-    if (client) {
+    if (client?.email) {
       const invite = await createClientInvitation({ organisationId: ctx.org.id, clientId, email: client.email });
       await sendClientInvite(client.email, invite.url, ctx.org.name, project.name);
       await trackEvent("client.invited", { visitorId, userId: ctx.user.id, organisationId: ctx.org.id }, {});

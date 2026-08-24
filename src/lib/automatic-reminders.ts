@@ -67,18 +67,31 @@ export async function runAutomaticReminderJob(limit = 50, now = new Date()): Pro
     take: Math.max(1, Math.min(limit, 100)),
     include: {
       client: true,
-      project: true,
+      project: { include: { marketplaceLinks: { where: { engagementMode: "marketplace_only" }, select: { id: true }, take: 1 } } },
       organisation: { include: { members: { where: { role: "owner" }, include: { user: { select: { email: true } } }, take: 1 } } },
     },
   });
   result.scanned = due.length;
 
   for (const item of due) {
+    if (item.project?.marketplaceLinks.length) {
+      await db.waitingItem.update({
+        where: { id: item.id },
+        data: { automaticReminderState: "paused", nextAutomaticReminderAt: null, automaticReminderClaimedAt: null },
+      });
+      result.skipped += 1;
+      continue;
+    }
     const claimed = await db.waitingItem.updateMany({
       where: { id: item.id, status: "waiting", automaticReminderState: "inherit", nextAutomaticReminderAt: { lte: now }, OR: [{ automaticReminderClaimedAt: null }, { automaticReminderClaimedAt: { lt: lockExpiredBefore } }] },
       data: { automaticReminderClaimedAt: now },
     });
-    if (claimed.count !== 1 || !item.client || !item.organisation.automaticRemindersEnabled || !isAutopilotPlan(item.organisation.plan)) {
+    if (
+      claimed.count !== 1
+      || !item.client?.email
+      || !item.organisation.automaticRemindersEnabled
+      || !isAutopilotPlan(item.organisation.plan)
+    ) {
       result.skipped += 1;
       continue;
     }

@@ -15,7 +15,11 @@ export async function sendReminderAction(waitingItemId: string): Promise<RemindR
   const ctx = await getAppContext();
   const item = await db.waitingItem.findFirst({
     where: { id: waitingItemId, organisationId: ctx.org.id },
-    include: { client: true, project: true, organisation: true },
+    include: {
+      client: true,
+      project: { include: { marketplaceLinks: { where: { engagementMode: "marketplace_only" }, select: { id: true }, take: 1 } } },
+      organisation: true,
+    },
   });
   if (!item) return { ok: false, error: "Item not found" };
   if (item.status !== "waiting") return { ok: false, error: "This item is already resolved" };
@@ -23,7 +27,10 @@ export async function sendReminderAction(waitingItemId: string): Promise<RemindR
     const hoursSince = (Date.now() - item.lastRemindedAt.getTime()) / 3_600_000;
     if (hoursSince < COOLDOWN_HOURS) return { ok: false, error: `Already reminded recently. Try again in ${Math.ceil(COOLDOWN_HOURS - hoursSince)}h.` };
   }
-  if (!item.client) return { ok: false, error: "No client to remind" };
+  if (!item.client?.email) return { ok: false, error: "This client has no portal email address" };
+  if (item.project?.marketplaceLinks.length) {
+    return { ok: false, error: "Marketplace buyers must be contacted on the marketplace" };
+  }
 
   const now = new Date();
   const idempotencyKey = `manual-reminder/${item.id}/${randomUUID()}`;

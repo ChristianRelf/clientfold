@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export default async function NewClientPage() {
   const ctx = await getAppContext();
   const projects = await db.project.findMany({
-    where: { organisationId: ctx.org.id, status: { not: "archived" } },
+    where: { organisationId: ctx.org.id, status: { not: "archived" }, marketplaceLinks: { none: { engagementMode: "marketplace_only" } } },
     orderBy: { updatedAt: "desc" },
     select: { id: true, name: true },
   });

@@ -5,12 +5,15 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Sidebar } from "@/components/app/sidebar";
 import { cn } from "@/lib/utils";
+import type { NotificationView } from "@/lib/notifications";
+import { NotificationCenter } from "@/components/app/notification-center";
 
 type ShellProps = {
   org: { name: string; slug: string };
   user: { name: string | null; email: string };
   waitingCount: number;
   inboxUnread: number;
+  notifications: NotificationView[];
   children: React.ReactNode;
 };
 
@@ -24,6 +27,7 @@ const destinations: CommandItem[] = [
   { label: "Invoices", detail: "Sent, viewed and paid", href: "/invoices", shortcut: "V" },
   { label: "Files", detail: "Shared project files", href: "/files", shortcut: "F" },
   { label: "Clients", detail: "People and companies", href: "/clients", shortcut: "C" },
+  { label: "Integrations", detail: "Plugins, marketplaces and connected tools", href: "/integrations", shortcut: "G" },
 ];
 
 const createActions: CommandItem[] = [
@@ -31,7 +35,7 @@ const createActions: CommandItem[] = [
   { label: "Add a client", detail: "Create a new client record", href: "/clients/new" },
 ];
 
-export function AppShell({ org, user, waitingCount, inboxUnread, children }: ShellProps) {
+export function AppShell({ org, user, waitingCount, inboxUnread, notifications, children }: ShellProps) {
   const router = useRouter();
   const pathname = usePathname();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -104,7 +108,7 @@ export function AppShell({ org, user, waitingCount, inboxUnread, children }: She
   return (
     <div className="flex h-dvh overflow-hidden bg-background">
       <div className="hidden shrink-0 lg:block">
-        <Sidebar org={org} user={user} waitingCount={waitingCount} inboxUnread={inboxUnread} theme={theme} onToggleTheme={toggleTheme} />
+        <Sidebar org={org} user={user} waitingCount={waitingCount} inboxUnread={inboxUnread} notifications={notifications} theme={theme} onToggleTheme={toggleTheme} />
       </div>
 
       <div
@@ -122,12 +126,14 @@ export function AppShell({ org, user, waitingCount, inboxUnread, children }: She
           )}
           onClick={(event) => event.stopPropagation()}
         >
-          <Sidebar org={org} user={user} waitingCount={waitingCount} inboxUnread={inboxUnread} onNavigate={() => setMobileOpen(false)} theme={theme} onToggleTheme={toggleTheme} />
+          <Sidebar org={org} user={user} waitingCount={waitingCount} inboxUnread={inboxUnread} notifications={notifications} onNavigate={() => setMobileOpen(false)} theme={theme} onToggleTheme={toggleTheme} />
         </div>
       </div>
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="flex h-14 shrink-0 items-center justify-between border-b border-border/80 bg-background/95 px-4 lg:hidden">
+          <div className="flex items-center gap-1">
+          <NotificationCenter notifications={notifications} />
           <button
             type="button"
             className="grid size-9 place-items-center rounded-md border border-border bg-surface"
@@ -138,6 +144,7 @@ export function AppShell({ org, user, waitingCount, inboxUnread, children }: She
               <path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
             </svg>
           </button>
+          </div>
           <span className="text-sm font-semibold tracking-tight">ClientFold</span>
           <button
             type="button"

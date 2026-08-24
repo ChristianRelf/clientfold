@@ -3,13 +3,14 @@ import { headers } from "next/headers";
 import "./globals.css";
 import { ConsentBanner } from "@/components/marketing/consent-banner";
 import { MotionLayer } from "@/components/marketing/motion-layer";
+import { AttributionCapture } from "@/components/marketing/attribution-capture";
 
 export async function generateMetadata(): Promise<Metadata> {
   const requestHeaders = await headers();
   const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
   const protocol = requestHeaders.get("x-forwarded-proto") ?? (host?.includes("localhost") ? "http" : "https");
   const appUrl = host ? `${protocol}://${host}` : process.env.APP_URL ?? "https://clientfold.com";
-  const socialImage = new URL("/og.png", appUrl).toString();
+  const socialImage = new URL("/opengraph-image", appUrl).toString();
   return {
   metadataBase: new URL(appUrl),
   title: {
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <body>
+        <AttributionCapture />
         <MotionLayer />
         {children}
         <ConsentBanner />

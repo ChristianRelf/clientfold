@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { FoldGlyph, FoldMascot } from "@/components/brand/fold-mascot";
+import { MarketingGlyph } from "@/components/brand/marketing-glyph";
 import { AutopilotHero } from "@/components/marketing/autopilot-hero";
 import { HeroWorkspace } from "@/components/marketing/hero-workspace";
 import { ProductTour } from "@/components/marketing/product-tour";
@@ -8,6 +8,8 @@ import { ScrollFeatureStory } from "@/components/marketing/scroll-feature-story"
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { SiteNav } from "@/components/marketing/site-nav";
 import { TrackedButtonLink } from "@/components/marketing/tracked-button-link";
+import { getVisitorId } from "@/lib/marketing/attribution";
+import { getVariant } from "@/lib/marketing/experiments";
 
 export const metadata: Metadata = {
   title: "ClientFold — The client portal that follows up for you",
@@ -35,7 +37,15 @@ const softwareJsonLd = {
 };
 const faqJsonLd = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faq.map(([question, answer]) => ({ "@type": "Question", name: question, acceptedAnswer: { "@type": "Answer", text: answer } })) };
 
-export default function HomePage() {
+export default async function HomePage() {
+  const heroVariant = await getVariant(await getVisitorId(), "hero_copy", {
+    key: "control",
+    name: "Control",
+    payload: { headline: "Do the work.", emphasis: "ClientFold does the chasing.", description: "A client portal for approvals, files and invoices—with polite follow-ups that send themselves." },
+  });
+  const headline = typeof heroVariant.payload.headline === "string" ? heroVariant.payload.headline : "Do the work.";
+  const emphasis = typeof heroVariant.payload.emphasis === "string" ? heroVariant.payload.emphasis : "ClientFold does the chasing.";
+  const heroDescription = typeof heroVariant.payload.description === "string" ? heroVariant.payload.description : "A client portal for approvals, files and invoices—with polite follow-ups that send themselves.";
   return (
     <div className="min-h-screen bg-[#f7f6f1] text-[#292b26]">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }} />
@@ -46,13 +56,18 @@ export default function HomePage() {
           <div className="container pb-20 pt-12 lg:pb-24 lg:pt-16">
             <div className="grid gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:items-center lg:gap-14">
               <div data-reveal="soft">
-                <span className="inline-flex items-center gap-2 border-b border-[#949c8d] pb-1 text-[10px] font-medium uppercase tracking-[0.15em] text-[#56604f]"><span className="size-1.5 rounded-full bg-[#de7044]" /> Fold is here to help</span>
-                <h1 className="mt-7 max-w-xl text-balance text-[3.45rem] font-medium leading-[0.91] tracking-[-0.065em] text-[#242620] sm:text-[5.3rem] lg:text-[5.7rem]">Do the work.<br /><span className="font-editorial font-normal italic tracking-[-0.05em] text-[#5d6857]">ClientFold does the chasing.</span></h1>
-                <p className="mt-7 max-w-md text-pretty text-[15px] leading-7 text-[#666860]">A client portal for approvals, files and invoices—with polite follow-ups that send themselves.</p>
+                <span className="inline-flex items-center gap-2 border-b border-[#949c8d] pb-1 text-[10px] font-medium uppercase tracking-[0.15em] text-[#56604f]"><span className="hero-live-dot size-1.5 rounded-full bg-[#de7044]" /> The calm layer for client work</span>
+                <h1 className="mt-7 max-w-xl text-balance text-[3.45rem] font-medium leading-[0.91] tracking-[-0.065em] text-[#242620] sm:text-[5.3rem] lg:text-[5.7rem]">{headline}<br /><span className="font-editorial font-normal italic tracking-[-0.05em] text-[#5d6857]">{emphasis}</span></h1>
+                <p className="mt-7 max-w-md text-pretty text-[15px] leading-7 text-[#666860]">{heroDescription}</p>
                 <div className="mt-7 flex flex-wrap items-center gap-3"><TrackedButtonLink placement="homepage_hero" href="/waitlist" size="lg" className="bg-[#242620] px-6 hover:bg-[#3b3d36]">Join early access</TrackedButtonLink><Link href="#autopilot" className="inline-flex h-11 items-center border-b border-[#8f9388] px-1 text-[11px] font-medium text-[#4f584b]">See how it works <span className="ml-2" aria-hidden>↓</span></Link></div>
                 <p className="mt-5 text-[9px] uppercase tracking-[0.13em] text-[#8a8c83]">Private beta · No card · Clients need no account</p>
               </div>
               <div data-reveal><HeroWorkspace /></div>
+            </div>
+            <div className="momentum-rail mt-12 overflow-hidden border-y border-[#d7d6cf] py-3" aria-label="ClientFold activity">
+              <div className="momentum-track flex w-max items-center text-[9px] uppercase tracking-[0.13em] text-[#767970]">
+                {[0, 1].map((copy) => <div key={copy} className="flex items-center" aria-hidden={copy === 1}>{["Approval received", "Brand files uploaded", "Invoice paid", "Feedback resolved", "Project moved forward"].map((item) => <span key={item} className="flex items-center gap-5 px-6"><span className="size-1.5 rounded-full bg-[#74806b]" />{item}</span>)}</div>)}
+              </div>
             </div>
           </div>
         </section>
@@ -61,7 +76,7 @@ export default function HomePage() {
           <div className="container grid gap-10 py-16 sm:py-20 lg:grid-cols-[0.7fr_1.3fr] lg:items-center">
             <div><p className="text-[10px] uppercase tracking-[0.16em] text-[#697363]">The shared picture</p><h2 className="mt-4 max-w-md text-balance text-3xl font-medium leading-tight tracking-[-0.04em] sm:text-4xl">A kinder way to keep work moving.</h2></div>
             <div className="grid border-l border-t border-[#d5d4cd] sm:grid-cols-3">
-              {[["approval", "Clients always know what needs them."], ["file", "You spend less time writing follow-ups."], ["invoice", "Every decision stays with the project."]].map(([glyph, body], index) => <article key={body} className="relative min-h-48 border-b border-r border-[#d5d4cd] p-5"><span className="font-mono text-[9px] text-[#999b93]">0{index + 1}</span><FoldGlyph type={glyph as "approval" | "file" | "invoice"} className="mt-8 text-[#596453]" /><p className="mt-5 max-w-[13rem] text-sm font-medium leading-6 text-[#41443d]">{body}</p>{index === 1 ? <FoldMascot pose="resting" size="sm" className="absolute -right-3 -top-5 hidden sm:block" /> : null}</article>)}
+              {[["approval", "Clients always know what needs them."], ["file", "You spend less time writing follow-ups."], ["invoice", "Every decision stays with the project."]].map(([glyph, body], index) => <article key={body} data-reveal="soft" style={{ transitionDelay: `${index * 80}ms` }} className="benefit-card min-h-48 border-b border-r border-[#d5d4cd] p-5"><span className="font-mono text-[9px] text-[#999b93]">0{index + 1}</span><MarketingGlyph type={glyph as "approval" | "file" | "invoice"} className="mt-8 text-[#596453]" /><p className="mt-5 max-w-[13rem] text-sm font-medium leading-6 text-[#41443d]">{body}</p></article>)}
             </div>
           </div>
         </section>
@@ -73,8 +88,8 @@ export default function HomePage() {
         <ScrollFeatureStory />
 
         <section id="workflow" className="border-b border-[#d9d8d2] py-20 sm:py-28">
-          <div className="container"><div className="grid gap-8 lg:grid-cols-[0.62fr_1.38fr] lg:items-end"><div><p className="text-[10px] uppercase tracking-[0.16em] text-[#697363]">A connected workflow</p><h2 className="mt-4 max-w-sm text-balance text-3xl font-medium leading-tight tracking-[-0.04em] sm:text-4xl">One clear action keeps the whole project moving.</h2></div><p className="max-w-md border-l border-[#d5d4cd] pl-5 text-sm leading-6 text-[#73756d]">Fold helps each action find the next place it needs to go—from your desk, to your client, and back again.</p></div>
-            <div className="relative mt-12 grid border-l border-t border-[#d5d4cd] sm:grid-cols-2 lg:grid-cols-4"><div className="fold-workflow-travel absolute -top-8 left-[8%] hidden lg:block"><FoldMascot pose="helping" size="sm" /></div>{[["01", "Send", "Share a design, file request or invoice."], ["02", "Surface", "Your client sees one focused next action."], ["03", "Record", "Their approval, upload or payment is captured."], ["04", "Move", "The timeline updates and the next step opens."]].map(([number, title, body], index) => <article key={title} className="relative min-h-52 border-b border-r border-[#d5d4cd] p-5"><div className="flex items-center justify-between"><span className="font-mono text-[9px] text-[#92948c]">{number}</span><span className={`size-2 ${index === 3 ? "bg-[#667260]" : "border border-[#aeb0a7] bg-[#f7f6f1]"}`} /></div><h3 className="mt-16 text-sm font-medium text-[#31342d]">{title}</h3><p className="mt-2 text-[11px] leading-5 text-[#777970]">{body}</p>{index < 3 ? <span className="absolute -right-1.5 top-5 z-10 hidden bg-[#f7f6f1] px-1 text-[#8a8c83] lg:block">→</span> : null}</article>)}</div></div>
+          <div className="container"><div className="grid gap-8 lg:grid-cols-[0.62fr_1.38fr] lg:items-end"><div><p className="text-[10px] uppercase tracking-[0.16em] text-[#697363]">A connected workflow</p><h2 className="mt-4 max-w-sm text-balance text-3xl font-medium leading-tight tracking-[-0.04em] sm:text-4xl">One clear action keeps the whole project moving.</h2></div><p className="max-w-md border-l border-[#d5d4cd] pl-5 text-sm leading-6 text-[#73756d]">Every client action updates the project automatically—from your desk, to your client, and back again.</p></div>
+            <div className="workflow-sequence relative mt-16 grid border-l border-t border-[#d5d4cd] sm:grid-cols-2 lg:grid-cols-4"><div className="workflow-progress absolute -top-px left-0 hidden h-px w-full bg-[#d5d4cd] lg:block" aria-hidden />{[["01", "Send", "Share a design, file request or invoice."], ["02", "Surface", "Your client sees one focused next action."], ["03", "Record", "Their approval, upload or payment is captured."], ["04", "Move", "The timeline updates and the next step opens."]].map(([number, title, body], index) => <article key={title} data-reveal="soft" style={{ transitionDelay: `${index * 90}ms` }} className="workflow-card relative min-h-52 border-b border-r border-[#d5d4cd] p-5"><div className="flex items-center justify-between"><span className="font-mono text-[9px] text-[#92948c]">{number}</span><span className={`grid size-7 place-items-center rounded-full text-[10px] ${index === 3 ? "bg-[#667260] text-white" : "border border-[#aeb0a7] bg-[#f7f6f1] text-[#73766d]"}`}>{index === 3 ? "✓" : "→"}</span></div><h3 className="mt-14 text-sm font-medium text-[#31342d]">{title}</h3><p className="mt-2 text-[11px] leading-5 text-[#777970]">{body}</p></article>)}</div></div>
         </section>
 
         <section id="product" className="border-b border-[#d9d8d2] bg-[#f3f2ed] py-20 sm:py-28"><div className="container"><div className="mb-10 flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><p className="text-[10px] uppercase tracking-[0.16em] text-[#697363]">Inside ClientFold</p><h2 className="mt-4 max-w-xl text-balance text-3xl font-medium tracking-[-0.035em] sm:text-4xl">The right view for the moment you are in.</h2></div><p className="max-w-xs text-xs leading-5 text-[#74766e]">Explore the workspace your team uses and the calmer experience your clients receive.</p></div><div data-reveal><ProductTour /></div></div></section>
@@ -85,7 +100,7 @@ export default function HomePage() {
 
         <section className="border-b border-[#d9d8d2] py-20 sm:py-28"><div className="container grid gap-10 lg:grid-cols-[0.62fr_1.38fr]"><div><p className="text-[10px] uppercase tracking-[0.16em] text-[#697363]">Before you hand over the chase</p><h2 className="mt-4 text-3xl font-medium tracking-[-0.04em]">Questions, answered.</h2></div><div className="border-t border-[#d5d4cd]">{faq.map(([question, answer], index) => <article key={question} className="grid gap-3 border-b border-[#d5d4cd] py-6 sm:grid-cols-[32px_0.8fr_1.2fr]"><span className="font-mono text-[9px] text-[#999b93]">0{index + 1}</span><h3 className="text-sm font-medium">{question}</h3><p className="text-[11px] leading-5 text-[#777970]">{answer}</p></article>)}</div></div></section>
 
-        <section className="overflow-hidden bg-[#2d302a] text-white"><div className="container relative grid min-h-[420px] lg:grid-cols-2"><div className="flex flex-col justify-between border-white/10 py-16 lg:border-r lg:pr-16"><p className="text-[10px] uppercase tracking-[0.16em] text-white/45">A warmer client experience</p><h2 className="mt-16 max-w-xl text-balance text-4xl font-medium leading-[1.05] tracking-[-0.04em] sm:text-5xl">Come make client work feel <span className="font-editorial font-normal italic text-[#c7d0c1]">lighter.</span></h2></div><div className="flex flex-col justify-end py-16 lg:pl-16"><p className="max-w-sm text-sm leading-6 text-white/60">Join the early-access list and help shape a client workspace built around momentum, clarity, and a little more kindness.</p><div className="mt-7 flex flex-wrap gap-3"><TrackedButtonLink placement="homepage_final" href="/waitlist" size="lg" className="bg-[#f3f2ed] text-[#2d302a] hover:bg-white">Join the waitlist</TrackedButtonLink><TrackedButtonLink placement="homepage_final_demo" href="/demo" size="lg" variant="ghost" className="border border-white/20 text-white hover:bg-white/10">View demo</TrackedButtonLink></div></div><FoldMascot pose="celebrating" size="lg" className="absolute bottom-4 right-4 text-white sm:bottom-8 sm:right-12" /></div></section>
+        <section className="overflow-hidden bg-[#2d302a] text-white"><div className="container relative grid min-h-[420px] lg:grid-cols-2"><div className="cta-fold-mark pointer-events-none absolute right-6 top-8 hidden size-36 border border-white/10 lg:block" aria-hidden><span className="absolute right-0 top-0 size-12 border-b border-l border-white/15 bg-white/[0.03]" /></div><div className="flex flex-col justify-between border-white/10 py-16 lg:border-r lg:pr-16"><p className="text-[10px] uppercase tracking-[0.16em] text-white/45">A warmer client experience</p><h2 className="mt-16 max-w-xl text-balance text-4xl font-medium leading-[1.05] tracking-[-0.04em] sm:text-5xl">Come make client work feel <span className="font-editorial font-normal italic text-[#c7d0c1]">lighter.</span></h2></div><div className="relative z-10 flex flex-col justify-end py-16 lg:pl-16"><p className="max-w-sm text-sm leading-6 text-white/60">Join the early-access list and help shape a client workspace built around momentum, clarity, and a little more kindness.</p><div className="mt-7 flex flex-wrap gap-3"><TrackedButtonLink placement="homepage_final" href="/waitlist" size="lg" className="bg-[#f3f2ed] text-[#2d302a] hover:bg-white">Join the waitlist</TrackedButtonLink><TrackedButtonLink placement="homepage_final_demo" href="/demo" size="lg" variant="ghost" className="border border-white/20 text-white hover:bg-white/10">View demo</TrackedButtonLink></div></div></div></section>
       </main>
       <SiteFooter />
     </div>

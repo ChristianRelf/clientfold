@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { getVisitorId } from "@/lib/marketing/attribution";
+import { ensureVisitorId, getVisitorId } from "@/lib/marketing/attribution";
 
 const schema = z.object({
   analytics: z.boolean(),
@@ -14,8 +14,8 @@ export async function POST(request: Request) {
   const parsed = schema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ ok: false }, { status: 422 });
 
-  const visitorId = await getVisitorId();
   const { analytics, advertising, region } = parsed.data;
+  const visitorId = analytics || advertising ? await ensureVisitorId() : await getVisitorId();
 
   if (visitorId) {
     try {
@@ -34,6 +34,6 @@ export async function POST(request: Request) {
   res.cookies.set("cf_consent_analytics", analytics ? "1" : "0", opts);
   res.cookies.set("cf_consent_advertising", advertising ? "1" : "0", opts);
   res.cookies.set("cf_consent_set", "1", opts);
-  if (!analytics) res.cookies.set("cf_attrib", "", { ...opts, maxAge: 0 });
+  if (!analytics && !advertising) res.cookies.set("cf_attrib", "", { ...opts, maxAge: 0 });
   return res;
 }

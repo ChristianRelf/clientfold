@@ -55,6 +55,9 @@ export async function getPortalClient(): Promise<PortalClient | null> {
   if (!session || session.expiresAt < new Date()) return null;
 
   const { client } = session;
+  // Marketplace-only clients have no email identity and can never enter the
+  // client portal until the agency explicitly adds one.
+  if (!client.email) return null;
   return {
     id: client.id,
     name: client.name,

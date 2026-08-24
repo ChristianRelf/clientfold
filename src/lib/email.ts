@@ -51,6 +51,14 @@ export function sendClientInvite(to: string, url: string, orgName: string, proje
   return send(to, `${orgName} invited you to ${projectName}`, `<p>${escapeHtml(orgName)} has set up a portal for <strong>${escapeHtml(projectName)}</strong>.</p><p><a href="${escapeHtml(url)}">Open your portal</a></p><p>You can review approvals, share files and see invoices—no account needed.</p>`);
 }
 
+export function sendTeamInvitation(to: string, url: string, orgName: string, role: string): Promise<ReminderDeliveryResult> {
+  return send(
+    to,
+    `Join ${orgName} on ClientFold`,
+    `<p>You have been invited to join <strong>${escapeHtml(orgName)}</strong> as ${escapeHtml(role)}.</p><p><a href="${escapeHtml(url)}">Accept team invitation</a></p><p>This secure link expires in 14 days. If you were not expecting it, you can ignore this email.</p>`,
+  );
+}
+
 export function sendClientMessageNotification(to: string, params: { orgName: string; projectName: string; clientName: string; preview: string; inboxUrl: string }): Promise<ReminderDeliveryResult> {
   return send(to, `New message from ${params.clientName} — ${params.projectName}`, `<p><strong>${escapeHtml(params.clientName)}</strong> sent a message on <strong>${escapeHtml(params.projectName)}</strong>:</p><blockquote style="border-left:3px solid #e2e8f0;padding-left:12px;color:#4b5563;">${escapeHtml(params.preview)}</blockquote><p><a href="${escapeHtml(params.inboxUrl)}">View in inbox</a></p>`);
 }

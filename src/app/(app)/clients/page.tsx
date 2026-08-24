@@ -35,7 +35,7 @@ export default async function ClientsPage() {
                 </span>
                 <div className="min-w-0 flex-1">
                   <div className="truncate text-sm font-medium">{c.company ?? c.name}</div>
-                  <div className="truncate text-2xs text-muted-foreground">{c.email}</div>
+                  <div className="truncate text-2xs text-muted-foreground">{c.email ?? "Marketplace-only client"}</div>
                 </div>
                 <div className="hidden text-2xs text-muted-foreground sm:block">
                   {c.projectLinks.length} project{c.projectLinks.length === 1 ? "" : "s"}

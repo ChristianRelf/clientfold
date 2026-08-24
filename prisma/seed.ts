@@ -327,18 +327,34 @@ async function main() {
     });
   }
 
-  // Growth: keep the previous hero-copy experiment paused while the new hook establishes a baseline.
+  // Growth: active copy experiments are rendered by the homepage and pricing page.
   await db.experiment.upsert({
     where: { key: "hero_copy" },
-    update: { status: "paused" },
+    update: { status: "running" },
     create: {
       key: "hero_copy",
       name: "Homepage hero copy",
-      status: "paused",
+      status: "running",
       variants: {
         create: [
           { key: "pain", name: "Pain-led", weight: 50, payload: JSON.stringify({ headline: "Stop chasing your clients." }) },
           { key: "outcome", name: "Outcome-led", weight: 50, payload: JSON.stringify({ headline: "Give clients somewhere to look." }) },
+        ],
+      },
+    },
+  });
+
+  await db.experiment.upsert({
+    where: { key: "pricing_presentation" },
+    update: { status: "running" },
+    create: {
+      key: "pricing_presentation",
+      name: "Pricing page presentation",
+      status: "running",
+      variants: {
+        create: [
+          { key: "control", name: "Autopilot-led", weight: 50, payload: JSON.stringify({ headline: "Start free. Pay when you want the chasing handled.", description: "Manual reminders are free. Follow-up Autopilot starts with Solo at £12 a month." }) },
+          { key: "outcome", name: "Time-led", weight: 50, payload: JSON.stringify({ headline: "Buy back the hours you spend chasing clients.", description: "Start free, then add polite automatic follow-ups from £12 a month." }) },
         ],
       },
     },

@@ -18,6 +18,21 @@ mockup. See **[Status](#status)** for exactly what is implemented vs. scaffolded
 - **Zod** validation
 - Zero-dependency auth crypto (scrypt password hashing, HMAC-signed sessions)
 
+## Plugins & integrations
+
+`/integrations` is the built-in connector catalogue. It includes provider detail
+pages, locally stored brand assets, Stripe Connect setup, and reviewed marketplace
+imports for Fiverr, Freelancer.com, Upwork, Contra, and generic CSV data. Imports
+stage metadata for per-item review and keep marketplace earnings separate from
+ClientFold invoices. Marketplace-origin projects do not expose ClientFold portal,
+messaging, or reminder flows.
+
+Fiverr notification forwarding uses Resend Receiving. Configure
+`INBOUND_EMAIL_DOMAIN`, `RESEND_API_KEY`, and `RESEND_WEBHOOK_SECRET`, then point
+the Resend `email.received` webhook at `/api/integrations/email/received`. The
+handler verifies signatures and replay windows, retrieves content only long enough
+to normalize allowed metadata, and does not persist raw email or attachments.
+
 ## Quick start
 
 ```bash
@@ -154,11 +169,20 @@ When staff reply from the inbox, the project's client contacts receive a preview
 with a portal link. Both paths are best-effort (via the Resend abstraction) and
 never block the send action.
 
-**Scaffolded (schema + architecture present, flows to complete next):**
-automatic scheduled reminders (manual is live), PDF preview/annotation (the
-comment model is ready; only images render today), message attachments (the
-`attachments` column exists), @mentions, and advertising-network server-side
-conversion forwarding.
+The next workflow layer is live as well: the authenticated reminder worker runs
+the automatic day-3/day-7 schedule; PDFs render in-browser with page-specific
+comment threads; agency and portal messages accept up to five validated file
+attachments; workspace @mentions create in-app notifications; and consent-gated
+server-side conversions can be forwarded to Meta, Google Ads, or a signed custom
+webhook.
+
+The collaboration and growth surfaces now also include team invitations with
+role controls, a notification centre, command search, organisation referral
+tracking, and the reviewed marketplace-import catalogue described above.
+
+**Next:** replace the reviewed import paths with approved provider OAuth/API
+connections as commercial access permits, add native Drive/Dropbox storage
+connections, and ship signed outbound product webhooks.
 
 > Demo figures (e.g. "£8,420 outstanding") are **sample data** and must never be
 > presented as real customer metrics.

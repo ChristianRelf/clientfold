@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { redeemInvitation } from "@/lib/auth/invitations";
 import { createPortalSession } from "@/lib/auth/portal-session";
 import { trackEvent } from "@/lib/marketing/events";
+import { markReferralActivated } from "@/lib/marketing/referrals";
 
 /**
  * Magic-link redemption. Validates the token, opens a client portal session and
@@ -42,6 +43,7 @@ async function maybeActivate(organisationId: string) {
     ]);
     if (projects > 0 && clients > 0) {
       await db.organisation.update({ where: { id: organisationId }, data: { activatedAt: new Date() } });
+      await markReferralActivated(organisationId);
       await trackEvent("client.action_completed", { organisationId }, { type: "portal_opened" });
     }
   } catch {

@@ -34,6 +34,7 @@ export function ConsentBanner() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ analytics, advertising }),
       });
+      window.dispatchEvent(new Event("clientfold:consent-changed"));
     } catch {
       /* noop */
     }

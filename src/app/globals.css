@@ -108,29 +108,78 @@
     50% { transform: translateY(-7px); }
   }
 
-  @keyframes fold-float {
-    0%, 100% { transform: translateY(0) rotate(-1deg); }
-    50% { transform: translateY(-6px) rotate(1deg); }
+  @keyframes hero-glow {
+    0%, 100% { opacity: 0.55; transform: translate3d(0, 0, 0) scale(1); }
+    50% { opacity: 0.85; transform: translate3d(-28px, 24px, 0) scale(1.12); }
   }
 
-  @keyframes fold-travel {
-    0%, 18% { transform: translateX(0) rotate(-4deg); }
-    44% { transform: translateX(180px) rotate(3deg); }
-    72% { transform: translateX(390px) rotate(-3deg); }
-    100% { transform: translateX(590px) rotate(2deg); }
+  @keyframes hero-card-breathe {
+    0%, 100% { transform: translateY(0); box-shadow: 0 24px 50px -36px rgba(38, 41, 34, 0.55); }
+    50% { transform: translateY(-4px); box-shadow: 0 30px 58px -34px rgba(38, 41, 34, 0.68); }
   }
 
-  .fold-float {
-    animation: fold-float 5.5s ease-in-out infinite;
+  @keyframes hero-step-cycle {
+    0%, 100% { opacity: 0.52; transform: translateX(0); }
+    12%, 34% { opacity: 1; transform: translateX(4px); }
+    46%, 90% { opacity: 0.7; transform: translateX(0); }
   }
 
-  .fold-workflow-travel {
-    animation: fold-travel 9s ease-in-out infinite;
+  @keyframes hero-approved-cycle {
+    0%, 48%, 100% { opacity: 0; transform: translateY(6px); }
+    58%, 90% { opacity: 1; transform: translateY(0); }
   }
 
-  .fold-mascot--celebrating {
-    animation: fold-float 3.8s ease-in-out infinite;
+  @keyframes momentum-scroll {
+    to { transform: translateX(-50%); }
   }
+
+  @keyframes workflow-line {
+    0% { transform: scaleX(0); }
+    46%, 100% { transform: scaleX(1); }
+  }
+
+  @keyframes workflow-dot {
+    0% { left: 0; opacity: 0; }
+    6% { opacity: 1; }
+    46%, 82% { left: calc(100% - 8px); opacity: 1; }
+    100% { left: calc(100% - 8px); opacity: 0; }
+  }
+
+  @keyframes fold-mark-drift {
+    0%, 100% { transform: translate3d(0, 0, 0) rotate(0); }
+    50% { transform: translate3d(-10px, 8px, 0) rotate(-2deg); }
+  }
+
+  .hero-glow { animation: hero-glow 8s ease-in-out infinite; }
+  .hero-action-card { animation: hero-card-breathe 7s ease-in-out infinite; }
+  .hero-live-dot { animation: pulse 2.2s ease-in-out infinite; }
+  .hero-timeline-step { animation: hero-step-cycle 9s ease-in-out infinite; }
+  .hero-timeline-step--2 { animation-delay: 2.2s; }
+  .hero-timeline-step--3 { animation-delay: 4.4s; }
+  .hero-approved-note { animation: hero-approved-cycle 9s ease-in-out infinite; }
+  .momentum-track { animation: momentum-scroll 28s linear infinite; }
+  .workflow-progress::before {
+    position: absolute;
+    inset: 0;
+    background: #667260;
+    content: "";
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: workflow-line 7s ease-in-out infinite;
+  }
+  .workflow-progress::after {
+    position: absolute;
+    top: -3px;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: #de7044;
+    box-shadow: 0 0 0 5px rgba(222, 112, 68, 0.12);
+    content: "";
+    animation: workflow-dot 7s ease-in-out infinite;
+  }
+  .cta-fold-mark { animation: fold-mark-drift 8s ease-in-out infinite; }
 }
 
 @layer components {
@@ -154,6 +203,17 @@
     transform: rotate(-1.5deg);
   }
 
+  .benefit-card,
+  .workflow-card {
+    transition: background-color 220ms ease, transform 220ms ease;
+  }
+
+  .benefit-card:hover,
+  .workflow-card:hover {
+    background: #f0efe9;
+    transform: translateY(-3px);
+  }
+
   /* A quiet drafting-table texture used inside the product workspace. */
   .bg-workbench {
     background-color: hsl(var(--background));
@@ -173,8 +233,24 @@
 
   .legal-copy p + p,
   .legal-copy p + ul,
-  .legal-copy ul + p {
+  .legal-copy ul + p,
+  .legal-copy p + .overflow-x-auto,
+  .legal-copy .overflow-x-auto + p,
+  .legal-copy .legal-callout + p {
     margin-top: 0.75rem;
+  }
+
+  .legal-copy h3 {
+    margin-top: 1.5rem;
+    color: #3c4038;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .legal-copy h3 + p,
+  .legal-copy h3 + ul {
+    margin-top: 0.45rem;
   }
 
   .legal-copy ul {
@@ -191,12 +267,60 @@
     text-decoration: underline;
     text-underline-offset: 3px;
   }
+
+  .legal-copy table {
+    width: 100%;
+    min-width: 640px;
+    border-collapse: collapse;
+    border-top: 1px solid #d4d3cc;
+    border-left: 1px solid #d4d3cc;
+    font-size: 0.6875rem;
+    line-height: 1.25rem;
+  }
+
+  .legal-copy th,
+  .legal-copy td {
+    border-right: 1px solid #d4d3cc;
+    border-bottom: 1px solid #d4d3cc;
+    padding: 0.75rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .legal-copy th {
+    background: #eeede7;
+    color: #41443d;
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .legal-copy td {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .legal-callout {
+    margin-top: 1rem;
+    border-left: 2px solid #697363;
+    background: #efeee8;
+    padding: 1rem 1.1rem;
+    color: #4e5249;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fold-float,
-  .fold-workflow-travel,
-  .fold-mascot--celebrating {
+  .hero-glow,
+  .hero-action-card,
+  .hero-live-dot,
+  .hero-timeline-step,
+  .hero-approved-note,
+  .momentum-track,
+  .workflow-progress::before,
+  .workflow-progress::after,
+  .cta-fold-mark {
     animation: none;
   }
+
+  .hero-approved-note { opacity: 1; transform: none; }
 }

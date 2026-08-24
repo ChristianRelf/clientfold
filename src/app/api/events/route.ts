@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { db } from "@/lib/db";
-import { MARKETING_EVENTS, sanitiseMetadata, type MarketingEventName } from "@/lib/marketing/events";
+import { MARKETING_EVENTS, trackEvent, type MarketingEventName } from "@/lib/marketing/events";
 import { getVisitorId } from "@/lib/marketing/attribution";
 
 const schema = z.object({
@@ -31,20 +30,6 @@ export async function POST(request: Request) {
 
   const visitorId = (await getVisitorId()) ?? undefined;
 
-  try {
-    await db.marketingEvent.create({
-      data: {
-        name: parsed.data.name,
-        visitorId,
-        path: parsed.data.path,
-        campaign: parsed.data.campaign,
-        source: parsed.data.source,
-        medium: parsed.data.medium,
-        metadata: sanitiseMetadata(parsed.data.metadata),
-      },
-    });
-  } catch {
-    // Swallow — analytics never breaks the client.
-  }
+  await trackEvent(parsed.data.name, { visitorId, path: parsed.data.path, campaign: parsed.data.campaign, source: parsed.data.source, medium: parsed.data.medium }, parsed.data.metadata);
   return NextResponse.json({ ok: true });
 }

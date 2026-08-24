@@ -8,6 +8,7 @@ import { assertClientProject } from "@/lib/portal";
 import { hashIp } from "@/lib/auth/crypto";
 import { trackEvent } from "@/lib/marketing/events";
 import { clientIpHint } from "@/lib/marketing/attribution";
+import { notifyMembers } from "@/lib/notifications";
 
 export type ApprovalActionState = { ok: true; decision: "approved" | "changes_requested" } | { ok?: false; error: string };
 
@@ -105,6 +106,13 @@ export async function respondToApproval(input: z.infer<typeof schema>): Promise<
     { type: "approval" },
   );
   await trackEvent("client.action_completed", { organisationId: approval.project.organisationId }, { type: "approval" });
+  await notifyMembers({
+    organisationId: approval.project.organisationId,
+    type: decision === "approved" ? "approval.approved" : "approval.changes_requested",
+    title: decision === "approved" ? `${client.name} approved ${approval.title}` : `${client.name} requested changes`,
+    body: decision === "changes_requested" ? approval.title : null,
+    href: `/projects/${approval.project.slug}`,
+  });
 
   revalidatePath("/portal");
   revalidatePath("/portal/approvals");

@@ -16,8 +16,8 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
   const client = await getPortalClient();
   if (!client) return NextResponse.redirect(new URL("/portal/enter", request.url));
 
-  const invoice = await db.invoice.findUnique({ where: { id }, include: { organisation: true } });
-  if (!invoice || invoice.clientId !== client.id) {
+  const invoice = await db.invoice.findUnique({ where: { id }, include: { organisation: true, project: { include: { marketplaceLinks: { where: { engagementMode: "marketplace_only" }, select: { id: true }, take: 1 } } } } });
+  if (!invoice || invoice.clientId !== client.id || invoice.project?.marketplaceLinks.length) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
   if (invoice.status === "paid") {

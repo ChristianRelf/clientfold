@@ -3,14 +3,12 @@ import { db } from "@/lib/db";
 import { PageHeader } from "@/components/app/page-header";
 import { getPlan } from "@/lib/pricing";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { connectStripeAction } from "./actions";
 import Link from "next/link";
 
 export const metadata = { title: "Settings" };
 export const dynamic = "force-dynamic";
 
-const SECTIONS = ["General", "Branding", "Members", "Billing", "Notifications", "Integrations", "Client Portal"];
+const SECTIONS = ["General", "Branding", "Members", "Referrals", "Billing", "Notifications", "Integrations", "Client Portal"];
 
 export default async function SettingsPage() {
   const ctx = await getAppContext();
@@ -26,8 +24,8 @@ export default async function SettingsPage() {
       <PageHeader title="Settings" description="Organisation and workspace configuration." />
       <div className="grid gap-6 p-6 lg:grid-cols-[180px_1fr]">
         <nav className="space-y-0.5">
-          {SECTIONS.map((s, i) => s === "Notifications" ? (
-            <Link key={s} href="/settings/notifications" className="block rounded-md px-3 py-1.5 text-[13px] text-muted-foreground hover:bg-muted hover:text-foreground">{s}</Link>
+          {SECTIONS.map((s, i) => s === "Members" || s === "Referrals" || s === "Notifications" || s === "Integrations" ? (
+            <Link key={s} href={s === "Integrations" ? "/integrations" : s === "Members" ? "/settings/members" : s === "Referrals" ? "/settings/referrals" : "/settings/notifications"} className="block rounded-md px-3 py-1.5 text-[13px] text-muted-foreground hover:bg-muted hover:text-foreground">{s}</Link>
           ) : (
             <span
               key={s}
@@ -82,14 +80,19 @@ export default async function SettingsPage() {
               )}
             </div>
             {!org.stripeConnectComplete ? (
-              <form action={connectStripeAction} className="mt-3">
-                <Button size="sm">Connect Stripe</Button>
-              </form>
+              <Link href="/integrations/stripe" className="mt-3 inline-flex rounded-md bg-foreground px-3 py-1.5 text-xs font-semibold text-background">
+                Set up in integrations
+              </Link>
             ) : (
               <p className="mt-3 text-2xs text-muted-foreground">
                 Payouts go directly to your connected account. Clients can pay invoices from their portal.
               </p>
             )}
+            {org.stripeConnectComplete ? (
+              <Link href="/integrations/stripe" className="mt-3 inline-block text-2xs font-medium text-accent hover:underline">
+                Manage Stripe integration
+              </Link>
+            ) : null}
           </div>
         </div>
       </div>

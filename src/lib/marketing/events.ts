@@ -1,4 +1,6 @@
 import { db } from "@/lib/db";
+import { dispatchAdConversions } from "@/lib/marketing/conversions";
+import { dispatchWebhookEvent } from "@/lib/integrations/webhooks";
 
 /**
  * Consistent marketing event taxonomy. Events power the funnel, activation
@@ -93,7 +95,8 @@ export async function trackEvent(
   metadata?: Record<string, unknown>,
 ): Promise<void> {
   try {
-    await db.marketingEvent.create({
+    const safeMetadata = sanitiseMetadata(metadata);
+    const event = await db.marketingEvent.create({
       data: {
         name,
         visitorId: ctx.visitorId,
@@ -105,9 +108,13 @@ export async function trackEvent(
         medium: ctx.medium,
         landingPage: ctx.landingPage,
         path: ctx.path,
-        metadata: sanitiseMetadata(metadata),
+        metadata: safeMetadata,
       },
     });
+    await Promise.all([
+      dispatchAdConversions({ eventId: event.id, name, visitorId: ctx.visitorId, userId: ctx.userId, organisationId: ctx.organisationId, path: ctx.path, metadata, occurredAt: event.createdAt }),
+      dispatchWebhookEvent({ eventId: event.id, type: name, organisationId: ctx.organisationId, occurredAt: event.createdAt, data: safeMetadata ? JSON.parse(safeMetadata) as Record<string, unknown> : {} }),
+    ]);
   } catch {
     // Analytics must never break a user-facing flow.
   }

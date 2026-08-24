@@ -19,7 +19,7 @@ export default async function NewProjectPage() {
       <PageHeader title="New project" description="Set up a project, add milestones, and invite your client." />
       <div className="max-w-2xl p-6">
         <ProjectWizard
-          clients={clients.map((c) => ({ id: c.id, label: c.company ?? c.name, email: c.email }))}
+          clients={clients.flatMap((client) => client.email ? [{ id: client.id, label: client.company ?? client.name, email: client.email }] : [])}
         />
       </div>
     </div>

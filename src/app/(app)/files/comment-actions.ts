@@ -11,6 +11,7 @@ const addSchema = z.object({
   body: z.string().min(1).max(2000),
   x: z.number().min(0).max(1).nullable().optional(),
   y: z.number().min(0).max(1).nullable().optional(),
+  page: z.number().int().min(1).max(10000).nullable().optional(),
   parentId: z.string().nullable().optional(),
 });
 
@@ -39,6 +40,7 @@ export async function addAgencyFileComment(input: z.infer<typeof addSchema>): Pr
     body: parsed.data.body,
     x: parsed.data.x ?? null,
     y: parsed.data.y ?? null,
+    page: parsed.data.page ?? null,
     parentId: parsed.data.parentId ?? null,
   });
   revalidatePath(`/files/${parsed.data.fileId}`);

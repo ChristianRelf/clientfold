@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { trackEvent } from "@/lib/marketing/events";
+import { notifyMembers } from "@/lib/notifications";
 
 /**
  * Single source of truth for marking an invoice paid — called by the Stripe
@@ -52,6 +53,7 @@ export async function markInvoicePaid(
     value: invoice.total,
     currency: invoice.currency,
   });
+  await notifyMembers({ organisationId: invoice.organisationId, type: "invoice.paid", title: `${invoice.number} was paid`, body: invoice.client?.name ?? null, href: "/invoices" });
   return { ok: true };
 }
 

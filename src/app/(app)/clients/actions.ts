@@ -48,8 +48,9 @@ export async function createClientAction(_prev: ClientFormState, formData: FormD
   if (projectId) {
     const project = await db.project.findFirst({
       where: { id: projectId, organisationId: ctx.org.id },
-      select: { id: true, name: true },
+      select: { id: true, name: true, marketplaceLinks: { where: { engagementMode: "marketplace_only" }, select: { id: true }, take: 1 } },
     });
+    if (project?.marketplaceLinks.length) return { error: "Marketplace buyers must be managed and contacted on the marketplace" };
     safeProjectId = project?.id;
   }
 

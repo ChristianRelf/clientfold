@@ -5,6 +5,7 @@ import { getPortalClient } from "@/lib/auth/portal-session";
 import { assertClientProject } from "@/lib/portal";
 import { listFileComments } from "@/lib/file-comments";
 import { ImageAnnotator } from "@/components/files/image-annotator";
+import { PdfAnnotator } from "@/components/files/pdf-annotator";
 import { addPortalFileComment, resolvePortalFileComment } from "../../comment-actions";
 
 export const dynamic = "force-dynamic";
@@ -19,6 +20,7 @@ export default async function PortalFileView({ params }: { params: Promise<{ id:
   if (!file?.projectId || !(await assertClientProject(client!.id, file.projectId))) notFound();
 
   const isImage = file.mimeType.startsWith("image/");
+  const isPdf = file.mimeType === "application/pdf";
   const comments = await listFileComments(file.id);
 
   return (
@@ -47,6 +49,8 @@ export default async function PortalFileView({ params }: { params: Promise<{ id:
             addAction={addPortalFileComment}
             resolveAction={resolvePortalFileComment}
           />
+        ) : isPdf ? (
+          <PdfAnnotator fileId={file.id} src={`/api/portal/files/${file.id}`} comments={comments} addAction={addPortalFileComment} resolveAction={resolvePortalFileComment} />
         ) : (
           <div className="rounded-lg border border-dashed border-border bg-surface px-6 py-16 text-center">
             <p className="text-sm font-medium">This file can&apos;t be previewed.</p>

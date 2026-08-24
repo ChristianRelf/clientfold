@@ -13,4 +13,4 @@ const sections: LegalSection[] = [
   { title: "Updates and contact", content: <><p>We review this notice when our technology or legal obligations change. Questions can be sent to <a href="mailto:privacy@clientfold.com">privacy@clientfold.com</a>.</p></> },
 ];
 
-export default function CookiesPage() { return <LegalPage title="Cookie Notice" summary="A practical list of the cookies ClientFold uses, what each one does and how long it remains on your device." sections={sections}/>; }
+export default function CookiesPage() { return <LegalPage activeHref="/cookies" documentNumber="03" title="Cookie Notice" summary="A practical list of the cookies ClientFold uses, what each one does and how long it remains on your device." contactEmail="privacy@clientfold.com" sections={sections}/>; }

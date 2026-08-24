@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "*",
         allow: "/",
         // Never index the private app, client portals, internal tools or auth.
-        disallow: ["/home", "/waiting", "/projects", "/clients", "/inbox", "/invoices", "/files", "/settings", "/internal", "/portal", "/login", "/signup", "/api"],
+        disallow: ["/home", "/waiting", "/projects", "/clients", "/inbox", "/invoices", "/files", "/integrations", "/settings", "/internal", "/portal", "/login", "/signup", "/api"],
       },
     ],
     sitemap: `${APP_URL}/sitemap.xml`,

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { FoldMascot } from "@/components/brand/fold-mascot";
 import { Wordmark } from "@/components/brand/logo";
 import { ButtonLink } from "@/components/ui/button";
 import { Track } from "./track";
@@ -35,7 +34,6 @@ export function SiteNav() {
         </div>
         <div className="flex items-center gap-4">
           <Link href="/login" className="hidden text-xs text-[#73756d] hover:text-[#2c2f28] sm:inline">Log in</Link>
-          <FoldMascot pose="greeting" size="sm" className="-mr-2 hidden md:block" />
           <ButtonLink href="/waitlist" size="sm" className="bg-[#2c2f28] px-4 hover:bg-[#44473f]">
             Join the waitlist
           </ButtonLink>

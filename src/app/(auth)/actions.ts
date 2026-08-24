@@ -8,6 +8,7 @@ import { createSession, destroySession } from "@/lib/auth/session";
 import { slugify, uniqueSlug } from "@/lib/slug";
 import { trackEvent } from "@/lib/marketing/events";
 import { getVisitorId, linkAttribution } from "@/lib/marketing/attribution";
+import { captureReferral } from "@/lib/marketing/referrals";
 
 const signupSchema = z.object({
   name: z.string().min(1).max(120),
@@ -25,7 +26,7 @@ export async function signupAction(_prev: ActionState, formData: FormData): Prom
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? "Invalid details" };
   }
-  const { name, email, password, organisation, plan } = parsed.data;
+  const { name, email, password, organisation, plan, ref } = parsed.data;
 
   const existing = await db.user.findUnique({ where: { email } });
   if (existing) return { error: "An account with that email already exists" };
@@ -61,6 +62,7 @@ export async function signupAction(_prev: ActionState, formData: FormData): Prom
 
   const org = user.memberships[0]?.organisation;
   if (visitorId && org) await linkAttribution(visitorId, { userId: user.id, organisationId: org.id });
+  await captureReferral({ code: ref, email, signupUserId: user.id, convertedOrgId: org?.id });
 
   await trackEvent(
     "auth.signup_completed",

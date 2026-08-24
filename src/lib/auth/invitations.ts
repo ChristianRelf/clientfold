@@ -11,6 +11,30 @@ const INVITE_TTL_MS = 1000 * 60 * 60 * 24 * 14; // 14 days
 
 export type CreatedInvitation = { id: string; token: string; url: string };
 
+export async function createTeamInvitation(params: {
+  organisationId: string;
+  email: string;
+  role: "member" | "admin";
+}): Promise<CreatedInvitation> {
+  const token = generateToken(32);
+  await db.invitation.updateMany({
+    where: { organisationId: params.organisationId, email: params.email, clientId: null, status: "pending" },
+    data: { status: "revoked" },
+  });
+  const invitation = await db.invitation.create({
+    data: {
+      organisationId: params.organisationId,
+      email: params.email,
+      role: params.role,
+      tokenHash: hashToken(token),
+      status: "pending",
+      expiresAt: new Date(Date.now() + INVITE_TTL_MS),
+    },
+  });
+  const base = process.env.APP_URL ?? "http://localhost:3000";
+  return { id: invitation.id, token, url: `${base}/team-invite/${token}` };
+}
+
 export async function createClientInvitation(params: {
   organisationId: string;
   clientId: string;

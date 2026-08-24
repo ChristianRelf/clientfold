@@ -12,7 +12,7 @@ import { NextResponse, type NextRequest } from "next/server";
  * preserving first-touch.
  */
 const VISITOR_COOKIE = "cf_attrib";
-const PRIVATE_PREFIXES = ["/home", "/waiting", "/projects", "/clients", "/inbox", "/invoices", "/files", "/settings", "/internal", "/portal"];
+const PRIVATE_PREFIXES = ["/home", "/waiting", "/projects", "/clients", "/inbox", "/invoices", "/files", "/integrations", "/settings", "/internal", "/portal"];
 
 function randomId() {
   const bytes = new Uint8Array(16);

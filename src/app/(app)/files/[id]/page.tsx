@@ -4,6 +4,7 @@ import { getAppContext } from "@/lib/app";
 import { db } from "@/lib/db";
 import { listFileComments } from "@/lib/file-comments";
 import { ImageAnnotator } from "@/components/files/image-annotator";
+import { PdfAnnotator } from "@/components/files/pdf-annotator";
 import { addAgencyFileComment, resolveAgencyFileComment } from "../comment-actions";
 
 export const dynamic = "force-dynamic";
@@ -20,6 +21,7 @@ export default async function AgencyFileView({ params }: { params: Promise<{ id:
   if (!file) notFound();
 
   const isImage = file.mimeType.startsWith("image/");
+  const isPdf = file.mimeType === "application/pdf";
   const comments = await listFileComments(file.id);
 
   return (
@@ -51,6 +53,8 @@ export default async function AgencyFileView({ params }: { params: Promise<{ id:
             addAction={addAgencyFileComment}
             resolveAction={resolveAgencyFileComment}
           />
+        ) : isPdf ? (
+          <PdfAnnotator fileId={file.id} src={`/api/app/files/${file.id}`} comments={comments} addAction={addAgencyFileComment} resolveAction={resolveAgencyFileComment} />
         ) : (
           <div className="rounded-lg border border-dashed border-border bg-surface px-6 py-16 text-center">
             <p className="text-sm font-medium">Preview not available for this file type.</p>

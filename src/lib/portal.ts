@@ -45,7 +45,10 @@ export async function getPortalContext(): Promise<PortalContext> {
   const [org, links] = await Promise.all([
     db.organisation.findUnique({ where: { id: client.organisationId } }),
     db.projectClient.findMany({
-      where: { clientId: client.id },
+      where: {
+        clientId: client.id,
+        project: { marketplaceLinks: { none: { engagementMode: "marketplace_only" } } },
+      },
       include: { project: true },
     }),
   ]);
@@ -72,7 +75,11 @@ export async function getPortalContext(): Promise<PortalContext> {
 /** Verify a client can access a given project id (throws 404 via notFound path). */
 export async function assertClientProject(clientId: string, projectId: string): Promise<boolean> {
   const link = await db.projectClient.findFirst({
-    where: { clientId, projectId },
+    where: {
+      clientId,
+      projectId,
+      project: { marketplaceLinks: { none: { engagementMode: "marketplace_only" } } },
+    },
     select: { id: true },
   });
   return Boolean(link);

@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { initials } from "@/lib/format";
+import type { NotificationView } from "@/lib/notifications";
+import { NotificationCenter } from "@/components/app/notification-center";
 
 type NavItem = { href: string; label: string; icon: React.ReactNode; badge?: number; emphasis?: boolean };
 
@@ -23,6 +25,7 @@ const ICONS = {
   inbox: "M4 13h4l2 3h4l2-3h4M4 13V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v7M4 13v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5",
   invoices: "M7 3h10a1 1 0 0 1 1 1v17l-3-2-3 2-3-2-3 2V4a1 1 0 0 1 1-1ZM9 8h6M9 12h6",
   files: "M4 5a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5Z",
+  integrations: "M9 8V5m6 3V5M8 11h8v2a4 4 0 0 1-4 4 4 4 0 0 1-4-4v-2Zm4 6v3",
   settings: "M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.3 1a7 7 0 0 0-1.7-1L14.5 3h-5l-.4 2.6a7 7 0 0 0-1.7 1l-2.3-1-2 3.4L5 11a7 7 0 0 0 0 2l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 1.7 1l.4 2.6h5l.4-2.6a7 7 0 0 0 1.7-1l2.3 1 2-3.4L18.9 13c.1-.3.1-.7.1-1Z",
   help: "M9.5 9a2.5 2.5 0 1 1 3.4 2.3c-.8.4-1.4 1-1.4 1.9M12 17h.01M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z",
 };
@@ -32,6 +35,7 @@ export function Sidebar({
   user,
   waitingCount,
   inboxUnread = 0,
+  notifications,
   onNavigate,
   theme = "light",
   onToggleTheme,
@@ -40,6 +44,7 @@ export function Sidebar({
   user: { name: string | null; email: string };
   waitingCount: number;
   inboxUnread?: number;
+  notifications: NotificationView[];
   onNavigate?: () => void;
   theme?: "light" | "dark";
   onToggleTheme?: () => void;
@@ -60,6 +65,7 @@ export function Sidebar({
   const resources: NavItem[] = [
     { href: "/invoices", label: "Invoices", icon: <Icon d={ICONS.invoices} /> },
     { href: "/files", label: "Files", icon: <Icon d={ICONS.files} /> },
+    { href: "/integrations", label: "Integrations", icon: <Icon d={ICONS.integrations} /> },
   ];
 
   const secondary: NavItem[] = [
@@ -109,7 +115,7 @@ export function Sidebar({
             <span className="block truncate text-[13px] font-medium">{org.name}</span>
             <span className="block truncate text-2xs text-muted-foreground">Workspace</span>
           </span>
-          <span className="size-1.5 rounded-full bg-success" title="Workspace online" />
+          <NotificationCenter notifications={notifications} />
         </div>
       </div>
 

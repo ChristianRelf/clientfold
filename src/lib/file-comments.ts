@@ -10,6 +10,7 @@ export type FileCommentView = {
   body: string;
   x: number | null;
   y: number | null;
+  page: number | null;
   resolved: boolean;
   createdAt: string;
 };
@@ -22,6 +23,7 @@ export type NewComment = {
   body: string;
   x?: number | null;
   y?: number | null;
+  page?: number | null;
   parentId?: string | null;
 };
 
@@ -35,6 +37,7 @@ export async function listFileComments(fileId: string): Promise<FileCommentView[
     body: c.body,
     x: c.x,
     y: c.y,
+    page: c.page,
     resolved: c.resolved,
     createdAt: c.createdAt.toISOString(),
   }));
@@ -53,6 +56,7 @@ export async function createFileComment(input: NewComment): Promise<void> {
       body: input.body.trim(),
       x: isReply ? null : input.x ?? null,
       y: isReply ? null : input.y ?? null,
+      page: isReply ? null : input.page ?? null,
     },
   });
 }

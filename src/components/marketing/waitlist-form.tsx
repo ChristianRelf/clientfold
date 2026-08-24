@@ -11,7 +11,7 @@ function SubmitButton() {
   return <button type="submit" disabled={pending} className="mt-2 h-11 w-full bg-[#2d302a] px-5 text-[11px] font-medium text-white transition-colors hover:bg-[#44473f] disabled:opacity-50">{pending ? "Joining…" : "Join the waitlist"}</button>;
 }
 
-export function WaitlistForm({ source }: { source?: string }) {
+export function WaitlistForm({ source, referral }: { source?: string; referral?: string }) {
   const [state, action] = useActionState<WaitlistState, FormData>(joinWaitlistAction, undefined);
   const started = useRef(false);
   if (state?.success) return <div className="border border-[#d1d5ca] bg-[#eef0e9] p-6" role="status"><span className="flex size-8 items-center justify-center rounded-full bg-[#596453] text-sm text-white">✓</span><h2 className="mt-5 text-xl font-medium tracking-tight">You’re on the list.</h2><p className="mt-2 text-[12px] leading-5 text-[#6f716a]">We’ll send early-access details to your inbox when your place is ready.</p><Link href="/demo" className="mt-6 inline-block text-[10px] font-medium uppercase tracking-[0.12em] text-[#596453]">Watch ClientFold follow up →</Link></div>;
@@ -19,6 +19,7 @@ export function WaitlistForm({ source }: { source?: string }) {
   const inputClass = "mt-1.5 h-10 w-full border border-[#cecdc6] bg-[#fbfbf8] px-3 text-sm outline-none transition-colors placeholder:text-[#a0a199] focus:border-[#737d6c] focus:ring-1 focus:ring-[#737d6c]";
   return <form action={action} className="space-y-4" onFocusCapture={() => { if (!started.current) { started.current = true; fireMarketingEvent("waitlist.started", { page: location.pathname }); } }}>
     {source ? <input type="hidden" name="source" value={source}/> : null}
+    {referral ? <input type="hidden" name="ref" value={referral}/> : null}
     <label className="block"><span className="text-[10px] font-medium text-[#555850]">Your name</span><input className={inputClass} name="name" autoComplete="name" placeholder="Sam Rivera" required/></label>
     <label className="block"><span className="text-[10px] font-medium text-[#555850]">Work email</span><input className={inputClass} name="email" type="email" autoComplete="email" placeholder="you@studio.com" required/></label>
     <label className="block"><span className="text-[10px] font-medium text-[#555850]">How do you work?</span><select className={inputClass} name="workType" defaultValue="" required><option value="" disabled>Select one</option><option value="freelancer">Freelancer</option><option value="studio">Studio</option><option value="agency">Agency</option><option value="consultancy">Consultancy</option><option value="other">Something else</option></select></label>

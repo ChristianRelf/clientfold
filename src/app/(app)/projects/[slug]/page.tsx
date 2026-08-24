@@ -7,6 +7,8 @@ import { ButtonLink } from "@/components/ui/button";
 import { formatDate, formatMoney, relativeTime } from "@/lib/format";
 import { HEALTH_LABEL, type Health } from "@/lib/health";
 import { cn } from "@/lib/utils";
+import { getIntegration } from "@/lib/integrations/registry";
+import { IntegrationLogo } from "@/components/integrations/integration-logo";
 
 export const dynamic = "force-dynamic";
 
@@ -48,6 +50,7 @@ export default async function ProjectWorkspace({
       invoices: { orderBy: { createdAt: "desc" } },
       activities: { orderBy: { createdAt: "desc" }, take: 30 },
       waitingItems: { where: { status: "waiting" }, orderBy: { requestedAt: "asc" } },
+      marketplaceLinks: { where: { externalType: "project" }, orderBy: { lastImportedAt: "desc" }, take: 1 },
     },
   });
   if (!project) notFound();
@@ -56,6 +59,8 @@ export default async function ProjectWorkspace({
   const currentStage = project.milestones.find((milestone) => milestone.status === "in_progress");
   const blockingApproval = project.approvals.find((approval) => approval.status === "awaiting_approval");
   const blockingWaiting = project.waitingItems[0];
+  const marketplaceLink = project.marketplaceLinks[0];
+  const marketplaceDefinition = marketplaceLink ? getIntegration(marketplaceLink.provider) : undefined;
   const counts: Record<View, number | null> = {
     overview: null,
     tasks: project.tasks.length,
@@ -73,10 +78,11 @@ export default async function ProjectWorkspace({
           <div>
             <Link href="/projects" className="mb-2 inline-flex items-center gap-1 text-2xs font-medium uppercase tracking-[0.12em] text-muted-foreground hover:text-foreground">← Portfolio</Link>
             <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">{project.name}</h1>
-            <p className="mt-0.5 text-[13px] text-muted-foreground">{client?.company ?? "No client assigned"}</p>
+            <p className="mt-0.5 text-[13px] text-muted-foreground">{client?.company ?? client?.name ?? "No client assigned"}</p>
+            {marketplaceDefinition ? <div className="mt-3 flex items-center gap-2"><IntegrationLogo integration={marketplaceDefinition} className="size-7 rounded-lg p-1" /><Badge tone="neutral">Managed on {marketplaceDefinition.name}</Badge></div> : null}
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <ButtonLink variant="outline" size="sm" href={project.threads[0] ? `/inbox/${project.threads[0].id}` : "/inbox"}>Message client</ButtonLink>
+            {marketplaceLink ? marketplaceLink.externalUrl ? <a href={marketplaceLink.externalUrl} target="_blank" rel="noreferrer" className="inline-flex h-8 items-center justify-center gap-1.5 rounded-md border border-border bg-background px-3 text-[13px] font-medium hover:bg-muted/50">Open on {marketplaceDefinition?.name ?? "marketplace"} ↗</a> : <Badge tone="warning">Marketplace communication only</Badge> : <ButtonLink variant="outline" size="sm" href={project.threads[0] ? `/inbox/${project.threads[0].id}` : "/inbox"}>Message client</ButtonLink>}
             <ButtonLink variant="outline" size="sm" href="/files">Add file</ButtonLink>
             <ButtonLink size="sm" href="/waiting">Waiting room</ButtonLink>
           </div>
@@ -107,7 +113,7 @@ export default async function ProjectWorkspace({
 
       <div className="mx-auto max-w-[1200px] p-4 sm:p-6 lg:p-8">
         {activeView === "overview" ? (
-          <Overview project={project} currentStage={currentStage} blockingApproval={blockingApproval} blockingWaiting={blockingWaiting} />
+          <Overview project={project} currentStage={currentStage} blockingApproval={blockingApproval} blockingWaiting={blockingWaiting} marketplaceName={marketplaceDefinition?.name} marketplaceUrl={marketplaceLink?.externalUrl} />
         ) : activeView === "tasks" ? (
           <ListFrame emptyTitle="No tasks in this project yet." emptyNote="Tasks will appear here as the team builds out the project plan." hasItems={Boolean(project.tasks.length)}>
             {project.tasks.map((task) => (
@@ -181,13 +187,15 @@ type ProjectData = NonNullable<Awaited<ReturnType<typeof db.project.findFirst<{
     invoices: true;
     activities: true;
     waitingItems: true;
+    marketplaceLinks: true;
   };
 }>>>>;
 
-function Overview({ project, currentStage, blockingApproval, blockingWaiting }: { project: ProjectData; currentStage: ProjectData["milestones"][number] | undefined; blockingApproval: ProjectData["approvals"][number] | undefined; blockingWaiting: ProjectData["waitingItems"][number] | undefined }) {
+function Overview({ project, currentStage, blockingApproval, blockingWaiting, marketplaceName, marketplaceUrl }: { project: ProjectData; currentStage: ProjectData["milestones"][number] | undefined; blockingApproval: ProjectData["approvals"][number] | undefined; blockingWaiting: ProjectData["waitingItems"][number] | undefined; marketplaceName?: string; marketplaceUrl?: string | null }) {
   return (
     <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
       <div className="space-y-5">
+        {marketplaceName ? <section className="rounded-xl border border-accent/20 bg-accent/[0.045] p-5"><div className="text-2xs font-medium uppercase tracking-[0.12em] text-accent">Marketplace-managed engagement</div><p className="mt-2 text-[13px] leading-5 text-muted-foreground">Communication, delivery, disputes and payment stay on {marketplaceName}. ClientFold keeps an internal metadata view and will not send portal invitations or payment requests for this project.</p>{marketplaceUrl ? <a href={marketplaceUrl} target="_blank" rel="noreferrer" className="mt-3 inline-block text-xs font-semibold text-foreground hover:text-accent">Open source engagement ↗</a> : null}</section> : null}
         <section className="rounded-xl border border-border bg-background p-5 shadow-xs">
           <div className="text-2xs font-medium uppercase tracking-[0.12em] text-muted-foreground">Current stage</div>
           <div className="mt-2 text-lg font-semibold">{currentStage?.title ?? "No active stage"}</div>

@@ -93,20 +93,25 @@ model Organisation {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-  members        OrganisationMember[]
-  clients        Client[]
-  projects       Project[]
-  invoices       Invoice[]
-  files          File[]
-  invitations    Invitation[]
-  integrations   Integration[]
-  subscription   Subscription?
-  activities     Activity[]
-  auditLogs      AuditLog[]
-  waitingItems   WaitingItem[]
-  messageThreads MessageThread[]
-  notifications  Notification[]
-  attributions   Attribution[]
+  members                OrganisationMember[]
+  clients                Client[]
+  projects               Project[]
+  invoices               Invoice[]
+  files                  File[]
+  invitations            Invitation[]
+  integrations           Integration[]
+  subscription           Subscription?
+  activities             Activity[]
+  auditLogs              AuditLog[]
+  waitingItems           WaitingItem[]
+  messageThreads         MessageThread[]
+  notifications          Notification[]
+  attributions           Attribution[]
+  marketplaceConnections MarketplaceConnection[]
+  marketplaceImports     MarketplaceImport[]
+  marketplaceLinks       MarketplaceLink[]
+  marketplaceEarnings    MarketplaceEarning[]
+  webhookEndpoints       WebhookEndpoint[]
 
   @@index([customDomain])
 }
@@ -133,7 +138,7 @@ model Client {
   organisationId String
   organisation   Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
   name           String
-  email          String
+  email          String?
   company        String?
   phone          String?
   avatarUrl      String?
@@ -143,12 +148,14 @@ model Client {
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
 
-  contacts     ClientContact[]
-  projectLinks ProjectClient[]
-  invoices     Invoice[]
-  invitations  Invitation[]
-  waitingItems WaitingItem[]
-  sessions     ClientSession[]
+  contacts            ClientContact[]
+  projectLinks        ProjectClient[]
+  invoices            Invoice[]
+  invitations         Invitation[]
+  waitingItems        WaitingItem[]
+  sessions            ClientSession[]
+  marketplaceLinks    MarketplaceLink[]
+  marketplaceEarnings MarketplaceEarning[]
 
   @@unique([organisationId, email])
   @@index([organisationId])
@@ -189,17 +196,19 @@ model Project {
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
 
-  clients      ProjectClient[]
-  members      ProjectMember[]
-  milestones   Milestone[]
-  tasks        Task[]
-  approvals    Approval[]
-  files        File[]
-  fileRequests FileRequest[]
-  invoices     Invoice[]
-  threads      MessageThread[]
-  activities   Activity[]
-  waitingItems WaitingItem[]
+  clients             ProjectClient[]
+  members             ProjectMember[]
+  milestones          Milestone[]
+  tasks               Task[]
+  approvals           Approval[]
+  files               File[]
+  fileRequests        FileRequest[]
+  invoices            Invoice[]
+  threads             MessageThread[]
+  activities          Activity[]
+  waitingItems        WaitingItem[]
+  marketplaceLinks    MarketplaceLink[]
+  marketplaceEarnings MarketplaceEarning[]
 
   @@unique([organisationId, slug])
   @@index([organisationId])
@@ -239,8 +248,9 @@ model Milestone {
   order       Int       @default(0)
   createdAt   DateTime  @default(now())
 
-  tasks     Task[]
-  approvals Approval[]
+  tasks            Task[]
+  approvals        Approval[]
+  marketplaceLinks MarketplaceLink[]
 
   @@index([projectId])
 }
@@ -516,30 +526,30 @@ model Payment {
 // ---------------------------------------------------------------------------
 
 model WaitingItem {
-  id             String       @id @default(cuid())
-  organisationId String
-  organisation   Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
-  projectId      String?
-  project        Project?     @relation(fields: [projectId], references: [id], onDelete: SetNull)
-  clientId       String?
-  client         Client?      @relation(fields: [clientId], references: [id], onDelete: SetNull)
-  type           String // approval | file_request | payment | task | reply
-  title          String
+  id                         String       @id @default(cuid())
+  organisationId             String
+  organisation               Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  projectId                  String?
+  project                    Project?     @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  clientId                   String?
+  client                     Client?      @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  type                       String // approval | file_request | payment | task | reply
+  title                      String
   // Link back to the source record so "View" can deep-link.
-  sourceType     String
-  sourceId       String
-  amount         Int? // for payment items, minor units
-  currency       String?
-  status         String       @default("waiting") // waiting | resolved
-  requestedAt    DateTime     @default(now())
-  resolvedAt     DateTime?
-  lastRemindedAt DateTime?
-  reminderCount  Int          @default(0)
-  automaticReminderState     String    @default("inherit") // inherit | paused
-  automaticReminderStep      Int       @default(0) // 0 | 1 | 2 automatic sends completed
+  sourceType                 String
+  sourceId                   String
+  amount                     Int? // for payment items, minor units
+  currency                   String?
+  status                     String       @default("waiting") // waiting | resolved
+  requestedAt                DateTime     @default(now())
+  resolvedAt                 DateTime?
+  lastRemindedAt             DateTime?
+  reminderCount              Int          @default(0)
+  automaticReminderState     String       @default("inherit") // inherit | paused
+  automaticReminderStep      Int          @default(0) // 0 | 1 | 2 automatic sends completed
   nextAutomaticReminderAt    DateTime?
   automaticReminderClaimedAt DateTime?
-  createdAt      DateTime     @default(now())
+  createdAt                  DateTime     @default(now())
 
   reminders Reminder[]
 
@@ -549,18 +559,18 @@ model WaitingItem {
 }
 
 model Reminder {
-  id            String      @id @default(cuid())
-  waitingItemId String
-  waitingItem   WaitingItem @relation(fields: [waitingItemId], references: [id], onDelete: Cascade)
-  channel       String      @default("email") // email | in_app
-  automatic     Boolean     @default(false)
-  status        String      @default("sent") // processing | sent | failed
-  scheduledFor  DateTime?
-  idempotencyKey String?    @unique
-  providerId    String?
-  failureReason String?
-  sentAt        DateTime?
-  createdAt     DateTime    @default(now())
+  id             String      @id @default(cuid())
+  waitingItemId  String
+  waitingItem    WaitingItem @relation(fields: [waitingItemId], references: [id], onDelete: Cascade)
+  channel        String      @default("email") // email | in_app
+  automatic      Boolean     @default(false)
+  status         String      @default("sent") // processing | sent | failed
+  scheduledFor   DateTime?
+  idempotencyKey String?     @unique
+  providerId     String?
+  failureReason  String?
+  sentAt         DateTime?
+  createdAt      DateTime    @default(now())
 
   @@index([waitingItemId])
   @@index([status, scheduledFor])
@@ -656,6 +666,182 @@ model Integration {
   @@unique([organisationId, provider])
 }
 
+model WebhookEndpoint {
+  id              String       @id @default(cuid())
+  organisationId  String
+  organisation    Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  url             String
+  description     String?
+  events          String // JSON string array from the fixed webhook event taxonomy
+  status          String       @default("active") // active | disabled
+  secretVersion   Int          @default(1)
+  failureCount    Int          @default(0)
+  lastDeliveredAt DateTime?
+  createdById     String
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  deliveries WebhookDelivery[]
+
+  @@index([organisationId, status])
+}
+
+model WebhookDelivery {
+  id              String          @id @default(cuid())
+  endpointId      String
+  endpoint        WebhookEndpoint @relation(fields: [endpointId], references: [id], onDelete: Cascade)
+  eventId         String
+  eventType       String
+  payload         String
+  status          String          @default("pending") // pending | processing | delivered | failed
+  attemptCount    Int             @default(0)
+  responseStatus  Int?
+  responseSnippet String?
+  lastAttemptAt   DateTime?
+  nextAttemptAt   DateTime?
+  deliveredAt     DateTime?
+  createdAt       DateTime        @default(now())
+
+  @@unique([endpointId, eventId])
+  @@index([status, nextAttemptAt])
+  @@index([endpointId, createdAt])
+}
+
+// Marketplace imports are deliberately separate from the legacy Integration
+// record. A workspace can have several accounts for one marketplace, imports
+// are reviewed before they touch core records, and raw email/CSV content is
+// never persisted here.
+model MarketplaceConnection {
+  id               String       @id @default(cuid())
+  organisationId   String
+  organisation     Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  provider         String
+  label            String?
+  status           String       @default("available") // available | connected | disabled | error
+  importMode       String       @default("review") // review
+  inboundTokenHash String?      @unique
+  config           String? // JSON: non-secret saved mappings and preferences
+  lastImportedAt   DateTime?
+  lastError        String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  imports MarketplaceImport[]
+  links   MarketplaceLink[]
+
+  @@index([organisationId, provider])
+}
+
+model MarketplaceImport {
+  id                String                 @id @default(cuid())
+  organisationId    String
+  organisation      Organisation           @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  connectionId      String?
+  connection        MarketplaceConnection? @relation(fields: [connectionId], references: [id], onDelete: SetNull)
+  provider          String
+  sourceType        String // csv | email | manual | api
+  sourceName        String?
+  sourceFingerprint String
+  parserVersion     String                 @default("1")
+  status            String                 @default("pending_review") // pending_review | completed | partially_completed | failed
+  itemCount         Int                    @default(0)
+  importedCount     Int                    @default(0)
+  ignoredCount      Int                    @default(0)
+  errorCount        Int                    @default(0)
+  warningSummary    String?
+  errorSummary      String?
+  reviewedAt        DateTime?
+  completedAt       DateTime?
+  createdAt         DateTime               @default(now())
+
+  items    MarketplaceImportItem[]
+  earnings MarketplaceEarning[]
+
+  @@unique([organisationId, sourceType, sourceFingerprint])
+  @@index([organisationId, createdAt])
+  @@index([connectionId])
+}
+
+model MarketplaceImportItem {
+  id                 String            @id @default(cuid())
+  importId           String
+  import             MarketplaceImport @relation(fields: [importId], references: [id], onDelete: Cascade)
+  fingerprint        String
+  externalType       String // order | project | milestone | earning
+  externalId         String?
+  normalizedMetadata String // validated metadata-only JSON
+  confidence         String? // JSON field-to-score map
+  warnings           String? // JSON string array
+  proposedAction     String? // create | update | link | ignore
+  reviewStatus       String            @default("pending") // pending | imported | ignored | error
+  clientId           String?
+  projectId          String?
+  milestoneId        String?
+  earningId          String?
+  errorMessage       String?
+  reviewedAt         DateTime?
+  createdAt          DateTime          @default(now())
+
+  @@unique([importId, fingerprint])
+  @@index([importId, reviewStatus])
+}
+
+model MarketplaceLink {
+  id              String                 @id @default(cuid())
+  organisationId  String
+  organisation    Organisation           @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  connectionId    String?
+  connection      MarketplaceConnection? @relation(fields: [connectionId], references: [id], onDelete: SetNull)
+  provider        String
+  externalType    String // client | project | milestone | earning
+  externalId      String
+  externalUrl     String?
+  engagementMode  String                 @default("marketplace_only") // marketplace_only | direct
+  clientId        String?
+  client          Client?                @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  projectId       String?
+  project         Project?               @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  milestoneId     String?
+  milestone       Milestone?             @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+  remoteStatus    String?
+  remoteUpdatedAt DateTime?
+  lastImportedAt  DateTime               @default(now())
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+
+  @@unique([organisationId, provider, externalType, externalId])
+  @@index([connectionId])
+  @@index([clientId])
+  @@index([projectId])
+  @@index([milestoneId])
+}
+
+model MarketplaceEarning {
+  id                    String            @id @default(cuid())
+  organisationId        String
+  organisation          Organisation      @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  importId              String
+  import                MarketplaceImport @relation(fields: [importId], references: [id], onDelete: Restrict)
+  projectId             String?
+  project               Project?          @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  clientId              String?
+  client                Client?           @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  provider              String
+  externalTransactionId String
+  transactionType       String
+  grossAmount           Int?
+  netAmount             Int?
+  feeAmount             Int?
+  currency              String
+  occurredAt            DateTime?
+  createdAt             DateTime          @default(now())
+
+  @@unique([organisationId, provider, externalTransactionId])
+  @@index([projectId])
+  @@index([clientId])
+  @@index([importId])
+}
+
 model Subscription {
   id                   String       @id @default(cuid())
   organisationId       String       @unique
@@ -679,6 +865,7 @@ model Referral {
   referralCode    String
   referrerType    String // user | organisation
   referrerId      String
+  waitlistEmail   String?
   // Funnel timestamps — rewards are intentionally not hard-coded.
   signupUserId    String?
   signedUpAt      DateTime?
@@ -688,7 +875,9 @@ model Referral {
   attributionDate DateTime  @default(now())
   createdAt       DateTime  @default(now())
 
+  @@index([referralCode, waitlistEmail])
   @@index([referralCode])
+  @@index([referrerType, referrerId])
 }
 
 // First-party, privacy-conscious attribution. First-touch is preserved when an

@@ -20,8 +20,8 @@ export async function simulatePaymentAction(formData: FormData): Promise<void> {
   const client = await getPortalClient();
   if (!client) redirect("/portal/enter");
 
-  const invoice = await db.invoice.findUnique({ where: { id: invoiceId }, select: { clientId: true } });
-  if (!invoice || invoice.clientId !== client!.id) redirect("/portal/invoices");
+  const invoice = await db.invoice.findUnique({ where: { id: invoiceId }, select: { clientId: true, project: { select: { marketplaceLinks: { where: { engagementMode: "marketplace_only" }, select: { id: true }, take: 1 } } } } });
+  if (!invoice || invoice.clientId !== client!.id || invoice.project?.marketplaceLinks.length) redirect("/portal/invoices");
 
   await markInvoicePaid(invoiceId, { method: "stripe", reference: "dev-simulated" });
   redirect("/portal/invoices?paid=1");

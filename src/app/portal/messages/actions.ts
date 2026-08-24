@@ -8,8 +8,10 @@ import { assertClientProject } from "@/lib/portal";
 import { viewerKey } from "@/lib/message-reads";
 import { trackEvent } from "@/lib/marketing/events";
 import { sendClientMessageNotification } from "@/lib/email";
+import { notifyMembers } from "@/lib/notifications";
+import { saveMessageAttachments } from "@/lib/message-attachments";
 
-const schema = z.object({ body: z.string().min(1).max(4000) });
+const schema = z.object({ body: z.string().max(4000).optional() });
 
 /**
  * Client sends a message from the portal. Scoped to the client's assigned
@@ -20,8 +22,10 @@ export async function sendPortalMessageAction(formData: FormData): Promise<void>
   const client = await getPortalClient();
   if (!client) return;
 
-  const parsed = schema.safeParse({ body: formData.get("body") });
+  const parsed = schema.safeParse({ body: formData.get("body") || undefined });
   if (!parsed.success) return;
+  const uploads = formData.getAll("attachments").filter((value): value is File => value instanceof File && value.size > 0);
+  if (!parsed.data.body?.trim() && !uploads.length) return;
 
   // Resolve the client's first assigned project.
   const link = await db.projectClient.findFirst({
@@ -45,14 +49,23 @@ export async function sendPortalMessageAction(formData: FormData): Promise<void>
     });
   }
 
+  const body = parsed.data.body?.trim() || `Shared ${uploads.length} attachment${uploads.length === 1 ? "" : "s"}`;
+  let attachmentIds: string[] = [];
+  try {
+    attachmentIds = await saveMessageAttachments({ files: uploads, organisationId: project.organisationId, projectId: project.id, threadId: thread.id, uploaderType: "client", uploaderId: client.id });
+  } catch {
+    return;
+  }
+
   await db.message.create({
     data: {
       threadId: thread.id,
-      body: parsed.data.body.trim(),
+      body,
       authorType: "client",
       authorId: client.id,
       authorName: client.name,
       readBy: JSON.stringify([viewerKey("client", client.id)]),
+      attachments: attachmentIds.length ? JSON.stringify(attachmentIds) : null,
     },
   });
   await db.messageThread.update({ where: { id: thread.id }, data: { updatedAt: new Date() } });
@@ -70,13 +83,15 @@ export async function sendPortalMessageAction(formData: FormData): Promise<void>
   });
   await trackEvent("client.action_completed", { organisationId: project.organisationId }, { type: "message" });
 
+  await notifyMembers({ organisationId: project.organisationId, type: "message.received", title: `New message from ${client.name}`, body, href: `/inbox/${thread.id}` });
+
   // Notify agency staff by email (best-effort, never throws).
   void notifyAgencyOfClientMessage({
     organisationId: project.organisationId,
     projectName: project.name,
     clientName: client.name,
     threadId: thread.id,
-    preview: parsed.data.body.trim().slice(0, 200),
+    preview: body.slice(0, 200),
   });
 
   revalidatePath("/portal/messages");

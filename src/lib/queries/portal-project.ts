@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import type { PortalProjectView } from "@/lib/portal-view";
 import { countUnread, viewerKey } from "@/lib/message-reads";
+import { parseAttachmentIds } from "@/lib/message-attachments";
 
 /**
  * Build the portal view of a project. Caller must have already verified the
@@ -51,11 +52,15 @@ export async function getPortalProjectView(projectId: string, clientId: string):
       projectId,
       archived: false,
       uploaderType: "user",
-      OR: [{ relatedType: null }, { relatedType: { not: "file_request" } }],
+      OR: [{ relatedType: null }, { relatedType: { notIn: ["file_request", "message"] } }],
     },
     orderBy: { createdAt: "desc" },
     select: { id: true, name: true, mimeType: true },
   });
+
+  const attachmentIds = project.threads.flatMap((thread) => thread.messages.flatMap((message) => parseAttachmentIds(message.attachments)));
+  const attachmentFiles = attachmentIds.length ? await db.file.findMany({ where: { id: { in: attachmentIds }, organisationId: project.organisationId }, select: { id: true, name: true, mimeType: true, size: true } }) : [];
+  const attachmentsById = new Map(attachmentFiles.map((file) => [file.id, file]));
 
   const nextMilestone = project.milestones.find((m) => m.status !== "complete");
   const blockingApproval = project.approvals.find((a) => a.status === "awaiting_approval");
@@ -118,6 +123,7 @@ export async function getPortalProjectView(projectId: string, clientId: string):
         authorName: m.authorName,
         authorType: m.authorType,
         createdAt: m.createdAt.toISOString(),
+        attachments: parseAttachmentIds(m.attachments).flatMap((id) => { const file = attachmentsById.get(id); return file ? [file] : []; }),
       })),
     ),
     messagesUnread: countUnread(

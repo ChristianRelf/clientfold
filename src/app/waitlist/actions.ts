@@ -4,6 +4,8 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { getVisitorId } from "@/lib/marketing/attribution";
 import { trackEvent } from "@/lib/marketing/events";
+import { recordConversion } from "@/lib/marketing/experiments";
+import { captureReferral } from "@/lib/marketing/referrals";
 
 const waitlistSchema = z.object({
   name: z.string().trim().min(1, "Enter your name").max(120),
@@ -11,6 +13,7 @@ const waitlistSchema = z.object({
   organisation: z.string().trim().max(120).optional(),
   workType: z.enum(["freelancer", "studio", "agency", "consultancy", "other"]),
   source: z.string().trim().max(160).optional(),
+  ref: z.string().trim().max(80).optional(),
 });
 
 export type WaitlistState = { error?: string; success?: boolean } | undefined;
@@ -19,7 +22,7 @@ export async function joinWaitlistAction(_previous: WaitlistState, formData: For
   const parsed = waitlistSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Check your details" };
 
-  const { name, email, organisation, workType, source } = parsed.data;
+  const { name, email, organisation, workType, source, ref } = parsed.data;
   await db.waitlistEntry.upsert({
     where: { email },
     create: { name, email, organisation: organisation || null, workType, source: source || null },
@@ -27,6 +30,8 @@ export async function joinWaitlistAction(_previous: WaitlistState, formData: For
   });
 
   const visitorId = (await getVisitorId()) ?? undefined;
+  await captureReferral({ code: ref, email });
   await trackEvent("waitlist.joined", { visitorId }, { workType, source: source ?? "direct" });
+  if (visitorId) await Promise.all([recordConversion(visitorId, "hero_copy"), recordConversion(visitorId, "pricing_presentation")]);
   return { success: true };
 }

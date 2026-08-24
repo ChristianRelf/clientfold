@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { FoldMascot } from "@/components/brand/fold-mascot";
 import { cn } from "@/lib/utils";
 import { fireMarketingEvent } from "./tracked-button-link";
 
@@ -57,7 +56,7 @@ export function AutopilotHero() {
     <div ref={rootRef} className="relative overflow-hidden border border-[#c8c9bf] bg-[#f9f8f3] shadow-[0_40px_100px_-56px_rgba(31,34,27,0.7)]">
       <div className="flex h-11 items-center justify-between border-b border-[#deddd5] bg-[#efeee8] px-4 text-[9px] uppercase tracking-[0.12em] text-[#7d7f76]">
         <span className="flex items-center gap-2"><span className="size-1.5 rounded-full bg-[#de7044]" /> Live sample</span>
-        <span className="flex items-center gap-2">Follow-up Autopilot <FoldMascot pose="resting" size="sm" className="-my-3 hidden sm:block" /></span>
+        <span>Follow-up Autopilot</span>
       </div>
 
       <div className="grid min-h-[430px] lg:grid-cols-[0.92fr_1.08fr]">
