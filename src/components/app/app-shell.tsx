@@ -136,7 +136,7 @@ export function AppShell({ org, user, waitingCount, inboxUnread, notifications, 
           <NotificationCenter notifications={notifications} />
           <button
             type="button"
-            className="grid size-9 place-items-center rounded-md border border-border bg-surface"
+            className="grid size-11 place-items-center rounded-md border border-border bg-surface"
             onClick={() => setMobileOpen(true)}
             aria-label="Open navigation"
           >
@@ -148,7 +148,7 @@ export function AppShell({ org, user, waitingCount, inboxUnread, notifications, 
           <span className="text-sm font-semibold tracking-tight">ClientFold</span>
           <button
             type="button"
-            className="grid size-9 place-items-center rounded-md border border-border bg-surface"
+            className="grid size-11 place-items-center rounded-md border border-border bg-surface"
             onClick={() => setCommandOpen(true)}
             aria-label="Search and quick actions"
           >
@@ -267,7 +267,7 @@ function MobileDock({ pathname, waitingCount, inboxUnread }: { pathname: string;
   };
 
   return (
-    <nav aria-label="Quick navigation" className="fixed inset-x-3 bottom-3 z-30 mx-auto grid max-w-[26rem] grid-cols-5 items-center rounded-[1.25rem] border border-border/80 bg-background/95 p-1.5 shadow-pop backdrop-blur-xl lg:hidden">
+    <nav aria-label="Quick navigation" className="safe-area-dock fixed inset-x-3 z-30 mx-auto grid max-w-[26rem] grid-cols-5 items-center rounded-[1.25rem] border border-border/80 bg-background/95 p-1.5 shadow-pop backdrop-blur-xl lg:hidden">
       {beforeCreate.map(item)}
       <Link href="/projects/new" aria-label="New project" className="mx-auto -mt-5 grid size-12 place-items-center rounded-full border-4 border-background bg-foreground text-xl text-background shadow-md transition-transform active:scale-95">+</Link>
       {afterCreate.map(item)}

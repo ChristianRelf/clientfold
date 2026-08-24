@@ -38,7 +38,7 @@ export default async function MarketplaceImportReviewPage({ params }: { params: 
           <div className="flex items-center gap-4"><IntegrationLogo integration={definition} /><div><h1 className="text-xl font-semibold tracking-tight">Review import</h1><p className="mt-0.5 text-[13px] text-muted-foreground">{imported.sourceName ?? imported.sourceType} · {imported.itemCount} item{imported.itemCount === 1 ? "" : "s"}</p></div></div>
           <Badge tone={imported.status === "completed" ? "success" : imported.status === "failed" ? "danger" : imported.status === "partially_completed" ? "warning" : "accent"}>{imported.status.replaceAll("_", " ")}</Badge>
         </div>
-        <div className="mt-5 grid max-w-xl grid-cols-4 gap-2 text-center"><Metric label="Pending" value={imported.itemCount - imported.importedCount - imported.ignoredCount - imported.errorCount} /><Metric label="Imported" value={imported.importedCount} /><Metric label="Ignored" value={imported.ignoredCount} /><Metric label="Errors" value={imported.errorCount} /></div>
+        <div className="mt-5 grid max-w-xl grid-cols-2 gap-2 text-center sm:grid-cols-4"><Metric label="Pending" value={imported.itemCount - imported.importedCount - imported.ignoredCount - imported.errorCount} /><Metric label="Imported" value={imported.importedCount} /><Metric label="Ignored" value={imported.ignoredCount} /><Metric label="Errors" value={imported.errorCount} /></div>
       </header>
 
       <div className="mx-auto max-w-[1000px] space-y-4 p-4 sm:p-6 lg:p-8">

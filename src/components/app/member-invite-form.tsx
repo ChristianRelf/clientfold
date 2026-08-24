@@ -6,7 +6,7 @@ import { inviteMemberAction, type InviteMemberState } from "@/app/(app)/settings
 
 function Submit() {
   const { pending } = useFormStatus();
-  return <button type="submit" disabled={pending} className="h-9 rounded-md bg-foreground px-4 text-xs font-semibold text-background disabled:opacity-50">{pending ? "Inviting…" : "Invite member"}</button>;
+  return <button type="submit" disabled={pending} className="h-11 rounded-md bg-foreground px-4 text-xs font-semibold text-background disabled:opacity-50 sm:h-9">{pending ? "Inviting…" : "Invite member"}</button>;
 }
 
 export function MemberInviteForm({ canInviteAdmin }: { canInviteAdmin: boolean }) {

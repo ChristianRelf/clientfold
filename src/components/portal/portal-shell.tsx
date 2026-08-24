@@ -53,7 +53,7 @@ export function PortalShell({
       <main className="flex-1 px-4 py-5 pb-24 sm:pb-8">{children}</main>
 
       {/* Mobile bottom nav */}
-      <nav className="fixed inset-x-0 bottom-0 z-30 flex justify-around border-t border-border bg-background/95 backdrop-blur sm:hidden">
+      <nav className="safe-area-bottom fixed inset-x-0 bottom-0 z-30 flex justify-around border-t border-border bg-background/95 backdrop-blur sm:hidden">
         {tabs.map((t) => {
           const active = isActive(pathname, t.href, basePath);
           return (
@@ -61,7 +61,7 @@ export function PortalShell({
               key={t.key}
               href={t.href}
               className={cn(
-                "flex flex-1 flex-col items-center gap-0.5 py-2.5 text-2xs font-medium",
+                "flex min-h-12 flex-1 flex-col items-center justify-center gap-0.5 px-1 py-2.5 text-2xs font-medium",
                 active ? "text-accent" : "text-muted-foreground",
               )}
             >

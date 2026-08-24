@@ -34,7 +34,7 @@ export function NotificationCenter({ notifications }: { notifications: Notificat
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
-        className="relative grid size-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        className="relative grid size-11 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground lg:size-8"
         aria-label={unread ? `Notifications, ${unread} unread` : "Notifications"}
         aria-expanded={open}
       >

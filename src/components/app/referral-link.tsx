@@ -30,7 +30,7 @@ export function ReferralLink({ value }: { value: string }) {
       <button
         type="button"
         onClick={copyLink}
-        className="h-9 rounded-md border border-border bg-background px-3 text-[11px] font-medium transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="h-11 rounded-md border border-border bg-background px-3 text-[11px] font-medium transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:h-9"
       >
         {copied ? "Copied" : "Copy link"}
       </button>

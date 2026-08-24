@@ -149,7 +149,7 @@ export function ProjectWizard({ clients }: { clients: ClientOption[] }) {
         <div className="space-y-3">
           <p className="text-[13px] text-muted-foreground">Add the key stages. You can skip this and add them later.</p>
           {milestones.map((m, i) => (
-            <div key={i} className="flex items-center gap-2">
+            <div key={i} className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_10rem_auto] sm:items-center">
               <Input
                 value={m.title}
                 onChange={(e) =>
@@ -163,11 +163,11 @@ export function ProjectWizard({ clients }: { clients: ClientOption[] }) {
                 onChange={(e) =>
                   setMilestones((ms) => ms.map((x, j) => (j === i ? { ...x, dueDate: e.target.value } : x)))
                 }
-                className="h-9 w-40 shrink-0 rounded-md border border-input bg-background px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring sm:w-40"
               />
               <button
                 onClick={() => setMilestones((ms) => ms.filter((_, j) => j !== i))}
-                className="shrink-0 rounded-md px-2 py-1 text-2xs text-muted-foreground hover:bg-muted hover:text-foreground"
+                className="min-h-11 justify-self-start rounded-md px-2 py-1 text-2xs text-muted-foreground hover:bg-muted hover:text-foreground sm:min-h-0"
                 aria-label="Remove milestone"
               >
                 Remove

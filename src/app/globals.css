@@ -73,6 +73,18 @@
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
+  /* Mobile Safari zooms the viewport when focused form controls render below
+   * 16px. Keep every form readable and touch-friendly without forcing each
+   * feature to remember the platform-specific rule. */
+  @media (max-width: 639px) {
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+    select,
+    textarea {
+      min-height: 2.75rem;
+      font-size: 1rem;
+    }
+  }
+
   ::selection {
     background: hsl(var(--accent) / 0.16);
   }
@@ -333,6 +345,18 @@
     color: #4f5b49;
     text-decoration: underline;
     text-underline-offset: 3px;
+  }
+
+  .legal-copy {
+    overflow-wrap: anywhere;
+  }
+
+  .safe-area-bottom {
+    padding-bottom: max(0.625rem, env(safe-area-inset-bottom)) !important;
+  }
+
+  .safe-area-dock {
+    bottom: max(0.75rem, env(safe-area-inset-bottom));
   }
 
   .legal-copy table {

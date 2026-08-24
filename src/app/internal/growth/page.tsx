@@ -54,8 +54,8 @@ export default async function GrowthPage() {
             <h2 className="mb-3 text-xs font-medium uppercase tracking-wide text-muted-foreground">
               Acquisition by source
             </h2>
-            <div className="overflow-hidden rounded-md border border-border">
-              <table className="w-full text-[13px]">
+            <div className="overflow-x-auto rounded-md border border-border">
+              <table className="w-full min-w-[420px] text-[13px]">
                 <thead className="bg-surface text-2xs uppercase tracking-wide text-muted-foreground">
                   <tr>
                     <th className="px-3 py-2 text-left">Source</th>
