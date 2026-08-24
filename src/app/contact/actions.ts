@@ -18,6 +18,6 @@ export async function sendContactAction(_previous: ContactState, formData: FormD
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Check your details" };
   const { company: _company, ...message } = parsed.data;
   const result = await sendContactMessage(message);
-  if (!result.accepted) return { error: "We could not send that just now. Please email hello@clientfold.com instead." };
+  if (!result.accepted) return { error: "We could not send that just now. Please email hello@useclientfold.com instead." };
   return { success: true };
 }

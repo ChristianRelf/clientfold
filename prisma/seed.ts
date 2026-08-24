@@ -32,10 +32,10 @@ async function main() {
 
   // Owner + internal growth user.
   const owner = await db.user.upsert({
-    where: { email: "demo@clientfold.com" },
+    where: { email: "demo@useclientfold.com" },
     update: {},
     create: {
-      email: "demo@clientfold.com",
+      email: "demo@useclientfold.com",
       name: "Alex Morgan",
       passwordHash: hashPassword("clientfold"),
       emailVerified: new Date(),
@@ -43,10 +43,10 @@ async function main() {
   });
 
   await db.user.upsert({
-    where: { email: "growth@clientfold.com" },
+    where: { email: "growth@useclientfold.com" },
     update: { isInternal: true },
     create: {
-      email: "growth@clientfold.com",
+      email: "growth@useclientfold.com",
       name: "Growth Admin",
       passwordHash: hashPassword("clientfold"),
       isInternal: true,
@@ -373,8 +373,8 @@ async function main() {
   });
 
   console.log("Seed complete.");
-  console.log("  Demo login:   demo@clientfold.com / clientfold");
-  console.log("  Internal:     growth@clientfold.com / clientfold");
+  console.log("  Demo login:   demo@useclientfold.com / clientfold");
+  console.log("  Internal:     growth@useclientfold.com / clientfold");
   console.log(`  Client magic link:  ${appUrl}/invite/${inviteToken}`);
   console.log("  Or self-serve at /portal/enter with  sarah@northstar.co");
 }

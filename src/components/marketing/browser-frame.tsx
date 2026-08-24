@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 
 /** A restrained browser chrome used to present real product surfaces. */
 export function BrowserFrame({
-  url = "clientfold.com/waiting",
+  url = "useclientfold.com/waiting",
   children,
   className,
 }: {

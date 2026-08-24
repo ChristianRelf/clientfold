@@ -62,7 +62,7 @@ export default async function SettingsPage() {
             value={org.removeBranding ? "ClientFold branding removed" : "Powered by ClientFold"}
           />
           <Row label="Custom domain" value={org.customDomain ?? "Not configured"} />
-          <Row label="Referral link" value={`clientfold.com/waitlist?ref=${org.referralCode.slice(0, 8)}`} mono />
+          <Row label="Referral link" value={`useclientfold.com/waitlist?ref=${org.referralCode.slice(0, 8)}`} mono />
 
           {/* Payments — Stripe Connect */}
           <div className="rounded-md border border-border p-4">

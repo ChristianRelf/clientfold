@@ -7,9 +7,9 @@ import { SiteNav } from "@/components/marketing/site-nav";
 export const metadata: Metadata = { title: "Contact", description: "Talk to ClientFold about the product, support, billing, privacy or a new integration.", alternates: { canonical: "/contact" } };
 
 const routes = [
-  ["Product & partnerships", "Questions about early access, fit or working together.", "hello@clientfold.com"],
-  ["Support", "Help with an account, project, client portal or integration.", "support@clientfold.com"],
-  ["Privacy & legal", "Data rights, privacy questions and legal notices.", "privacy@clientfold.com"],
+  ["Product & partnerships", "Questions about early access, fit or working together.", "hello@useclientfold.com"],
+  ["Support", "Help with an account, project, client portal or integration.", "support@useclientfold.com"],
+  ["Privacy & legal", "Data rights, privacy questions and legal notices.", "privacy@useclientfold.com"],
 ] as const;
 
 export default async function ContactPage({ searchParams }: { searchParams: Promise<{ topic?: string }> }) {

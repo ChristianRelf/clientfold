@@ -12,7 +12,7 @@ const sections: LegalSection[] = [
     title: "Who we are and when this applies",
     content: <>
       <p>ClientFold is a UK-based client-workspace service. The ClientFold operator identified on your checkout page, order form or subscription receipt is the controller of personal information used to run our website, accounts, subscriptions, support and direct communications. In this notice, <b>ClientFold</b>, <b>we</b>, <b>us</b> and <b>our</b> refer to that operator.</p>
-      <p>This notice applies to website visitors, account holders, organisation members, people who join our waitlist, and clients or other people invited into a ClientFold portal. Contact us at <a href="mailto:privacy@clientfold.com">privacy@clientfold.com</a>.</p>
+      <p>This notice applies to website visitors, account holders, organisation members, people who join our waitlist, and clients or other people invited into a ClientFold portal. Contact us at <a href="mailto:privacy@useclientfold.com">privacy@useclientfold.com</a>.</p>
       <p>When a customer uses ClientFold for its own client work, that customer usually decides why and how information in its workspace is used. The customer is the controller and ClientFold acts as its processor. Section 5 explains this distinction.</p>
     </>,
   },
@@ -94,7 +94,7 @@ const sections: LegalSection[] = [
     title: "International transfers",
     content: <>
       <p>Some recipients may process personal information outside the United Kingdom. Before making a restricted transfer, we use a lawful transfer mechanism appropriate to the destination and recipient. This may include UK adequacy regulations, the UK International Data Transfer Agreement, the UK Addendum to the EU Standard Contractual Clauses, or another safeguard permitted by data protection law.</p>
-      <p>Where required, we assess whether the safeguard provides practical protection and use supplementary measures. Contact <a href="mailto:privacy@clientfold.com">privacy@clientfold.com</a> for more information about the safeguards relevant to your information.</p>
+      <p>Where required, we assess whether the safeguard provides practical protection and use supplementary measures. Contact <a href="mailto:privacy@useclientfold.com">privacy@useclientfold.com</a> for more information about the safeguards relevant to your information.</p>
     </>,
   },
   {
@@ -115,7 +115,7 @@ const sections: LegalSection[] = [
     title: "Security",
     content: <>
       <p>We use technical and organisational measures designed for the nature and risk of the information we handle. These include signed and time-limited sessions, role and tenant access controls, restricted file links, encryption in transit, audit records, provider access controls and procedures for responding to incidents.</p>
-      <p>Access is limited to authorised people and providers who need it. We review safeguards as the Service changes. No system can guarantee absolute security, so use a strong unique password, protect invitation links and tell us promptly at <a href="mailto:security@clientfold.com">security@clientfold.com</a> if you believe an account or workspace has been compromised.</p>
+      <p>Access is limited to authorised people and providers who need it. We review safeguards as the Service changes. No system can guarantee absolute security, so use a strong unique password, protect invitation links and tell us promptly at <a href="mailto:security@useclientfold.com">security@useclientfold.com</a> if you believe an account or workspace has been compromised.</p>
     </>,
   },
   {
@@ -145,7 +145,7 @@ const sections: LegalSection[] = [
         <li>object to certain uses of your information.</li>
       </ul>
       <aside className="legal-callout"><b>Your right to object.</b> You may object at any time to direct marketing. You may also object to processing based on legitimate interests because of your particular situation. We will stop unless we have compelling legitimate grounds to continue or need the information for legal claims.</aside>
-      <p>Rights are not absolute and may apply differently depending on our role and lawful basis. Email <a href="mailto:privacy@clientfold.com">privacy@clientfold.com</a> to make a request. We may ask for information needed to verify your identity and will respond within the period required by law. There is normally no fee, but the law permits one in limited circumstances.</p>
+      <p>Rights are not absolute and may apply differently depending on our role and lawful basis. Email <a href="mailto:privacy@useclientfold.com">privacy@useclientfold.com</a> to make a request. We may ask for information needed to verify your identity and will respond within the period required by law. There is normally no fee, but the law permits one in limited circumstances.</p>
     </>,
   },
   {
@@ -160,7 +160,7 @@ const sections: LegalSection[] = [
     content: <>
       <p>ClientFold is a business service and is not directed to children. We do not knowingly create accounts for people under 18. If you believe a child’s information has been submitted improperly, contact us so we can investigate.</p>
       <p>We may update this notice when the Service, our providers or the law changes. We will publish the current version here and change the date above. We will highlight material changes by email or in the Service where appropriate.</p>
-      <p>Questions, requests and requests for transfer-safeguard information may be sent to <a href="mailto:privacy@clientfold.com">privacy@clientfold.com</a>. Security concerns may be sent to <a href="mailto:security@clientfold.com">security@clientfold.com</a>.</p>
+      <p>Questions, requests and requests for transfer-safeguard information may be sent to <a href="mailto:privacy@useclientfold.com">privacy@useclientfold.com</a>. Security concerns may be sent to <a href="mailto:security@useclientfold.com">security@useclientfold.com</a>.</p>
     </>,
   },
 ];
@@ -172,7 +172,7 @@ export default function PrivacyPage() {
       documentNumber="02"
       title="Privacy Notice"
       summary="How ClientFold handles personal information across our website, accounts and customer workspaces—and the choices and rights available to you."
-      contactEmail="privacy@clientfold.com"
+      contactEmail="privacy@useclientfold.com"
       sections={sections}
     />
   );

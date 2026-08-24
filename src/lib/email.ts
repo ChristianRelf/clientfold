@@ -1,6 +1,6 @@
 import type { ReminderDeliveryResult } from "@/lib/autopilot";
 
-const FROM = process.env.EMAIL_FROM ?? "ClientFold <hello@clientfold.com>";
+const FROM = process.env.EMAIL_FROM ?? "ClientFold <hello@useclientfold.com>";
 
 export function isEmailConfigured(): boolean {
   return Boolean(process.env.RESEND_API_KEY);
@@ -69,7 +69,7 @@ export function sendAgencyReplyNotification(to: string, params: { orgName: strin
 
 export function sendContactMessage(params: { name: string; email: string; topic: string; message: string }): Promise<ReminderDeliveryResult> {
   return send(
-    process.env.CONTACT_EMAIL ?? "hello@clientfold.com",
+    process.env.CONTACT_EMAIL ?? "hello@useclientfold.com",
     `ClientFold enquiry: ${params.topic}`,
     `<p><strong>From:</strong> ${escapeHtml(params.name)} (${escapeHtml(params.email)})</p><p><strong>Topic:</strong> ${escapeHtml(params.topic)}</p><p>${escapeHtml(params.message).replace(/\n/g, "<br />")}</p>`,
     { replyTo: params.email },

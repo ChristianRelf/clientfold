@@ -6,6 +6,7 @@ import { getVisitorId } from "@/lib/marketing/attribution";
 import { trackEvent } from "@/lib/marketing/events";
 import { recordConversion } from "@/lib/marketing/experiments";
 import { captureReferral } from "@/lib/marketing/referrals";
+import { notifyWaitlistDiscord } from "@/lib/discord";
 
 const waitlistSchema = z.object({
   name: z.string().trim().min(1, "Enter your name").max(120),
@@ -31,7 +32,10 @@ export async function joinWaitlistAction(_previous: WaitlistState, formData: For
 
   const visitorId = (await getVisitorId()) ?? undefined;
   await captureReferral({ code: ref, email });
-  await trackEvent("waitlist.joined", { visitorId }, { workType, source: source ?? "direct" });
-  if (visitorId) await Promise.all([recordConversion(visitorId, "hero_copy"), recordConversion(visitorId, "pricing_presentation")]);
+  await Promise.all([
+    trackEvent("waitlist.joined", { visitorId }, { workType, source: source ?? "direct" }),
+    notifyWaitlistDiscord({ name, email, organisation, workType, source, referral: ref }),
+    ...(visitorId ? [recordConversion(visitorId, "hero_copy"), recordConversion(visitorId, "pricing_presentation")] : []),
+  ]);
   return { success: true };
 }

@@ -122,7 +122,7 @@ export function ProductTour() {
       </div>
       <div className="min-w-0 p-2 sm:p-3">
         <div className="overflow-hidden border border-[#d7d6cf] shadow-[0_24px_45px_-36px_rgba(46,49,42,.5)]">
-          <div className="flex h-9 items-center gap-1.5 border-b border-[#deddd7] bg-[#f8f7f3] px-3"><span className="size-1.5 rounded-full bg-[#c7c7c0]"/><span className="size-1.5 rounded-full bg-[#c7c7c0]"/><span className="size-1.5 rounded-full bg-[#c7c7c0]"/><span className="mx-auto text-[8px] text-[#8a8c83]">app.clientfold.com</span></div>
+          <div className="flex h-9 items-center gap-1.5 border-b border-[#deddd7] bg-[#f8f7f3] px-3"><span className="size-1.5 rounded-full bg-[#c7c7c0]"/><span className="size-1.5 rounded-full bg-[#c7c7c0]"/><span className="size-1.5 rounded-full bg-[#c7c7c0]"/><span className="mx-auto text-[8px] text-[#8a8c83]">app.useclientfold.com</span></div>
           {active === "waiting" && <WaitingView />}{active === "portal" && <PortalView />}{active === "approvals" && <ApprovalView />}{active === "invoices" && <InvoicesView />}
         </div>
       </div>

@@ -20,7 +20,7 @@ mockup. See **[Status](#status)** for exactly what is implemented vs. scaffolded
 
 ## Plugins & integrations
 
-`/integrations` is the built-in connector catalogue. It includes provider detail
+`/settings/integrations` is the signed-in connector catalogue. It includes provider detail
 pages, locally stored brand assets, Stripe Connect setup, and reviewed marketplace
 imports for Fiverr, Freelancer.com, Upwork, Contra, and generic CSV data. Imports
 stage metadata for per-item review and keep marketplace earnings separate from
@@ -33,6 +33,11 @@ the Resend `email.received` webhook at `/api/integrations/email/received`. The
 handler verifies signatures and replay windows, retrieves content only long enough
 to normalize allowed metadata, and does not persist raw email or attachments.
 
+New waitlist entries can also notify a Discord channel. Create an incoming
+webhook for the destination channel and set `DISCORD_WAITLIST_WEBHOOK_URL` in the
+runtime environment. The signup is saved before notification delivery, so a
+temporary Discord failure does not lose the entry.
+
 ## Quick start
 
 ```bash
@@ -44,16 +49,33 @@ pnpm db:seed                    # loads the Northline Studio demo dataset
 pnpm dev                        # http://localhost:3000
 ```
 
-## Docker
+## Docker and HTTPS
 
-Build and run the production container with persistent SQLite data and uploads:
+The Compose stack includes Caddy in front of ClientFold. Caddy listens publicly
+on ports 80 and 443, redirects HTTP to HTTPS, and obtains and renews the TLS
+certificate for `useclientfold.com` automatically. The app port remains bound to
+the host loopback interface for local diagnostics only.
+
+Before starting production, point the domain's A and/or AAAA record to the
+server, allow inbound TCP ports 80 and 443 and UDP port 443, and set at least:
+
+```bash
+APP_URL=https://useclientfold.com
+SITE_DOMAIN=useclientfold.com
+ACME_EMAIL=hello@useclientfold.com
+AUTH_SECRET=replace-with-a-long-random-secret
+```
+
+Then build and run the stack with persistent SQLite data, uploads, and Caddy
+certificate state:
 
 ```bash
 docker compose up --build
 ```
 
-Open `http://localhost:3000`. To load (or reset) the Northline Studio demo data
-on startup, run:
+Open `https://useclientfold.com`. Local diagnostics remain available at
+`http://127.0.0.1:3000`. To load (or reset) the Northline Studio demo data on
+startup, run:
 
 ```bash
 SEED_DATABASE=true docker compose up --build
@@ -61,15 +83,16 @@ SEED_DATABASE=true docker compose up --build
 
 On PowerShell, use `$env:SEED_DATABASE="true"` before `docker compose up --build`.
 The database and uploaded files live in the `clientfold_data` and
-`clientfold_uploads` named volumes. Set `CLIENTFOLD_PORT` to publish a different
-host port, and replace `AUTH_SECRET` before exposing the container publicly.
+`clientfold_uploads` named volumes. Caddy certificates and state live in the
+`caddy_data` and `caddy_config` volumes. Set `CLIENTFOLD_PORT` to use a different
+loopback diagnostics port, and replace `AUTH_SECRET` before exposing the stack.
 
 **Demo logins** (seeded):
 
 | Account | Email | Password | Access |
 | --- | --- | --- | --- |
-| Owner | `demo@clientfold.com` | `clientfold` | Northline Studio workspace |
-| Internal | `growth@clientfold.com` | `clientfold` | `/internal/growth` dashboard |
+| Owner | `demo@useclientfold.com` | `clientfold` | Northline Studio workspace |
+| Internal | `growth@useclientfold.com` | `clientfold` | `/internal/growth` dashboard |
 
 ## Where to look
 

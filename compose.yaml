@@ -7,7 +7,7 @@ services:
     init: true
     restart: unless-stopped
     ports:
-      - "${CLIENTFOLD_PORT:-3000}:3000"
+      - "127.0.0.1:${CLIENTFOLD_PORT:-3000}:3000"
     environment:
       DATABASE_URL: file:/data/clientfold.db
       AUTH_SECRET: ${AUTH_SECRET:-local-container-secret-change-before-production}
@@ -17,9 +17,10 @@ services:
       STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
       STRIPE_CONNECT_CLIENT_ID: ${STRIPE_CONNECT_CLIENT_ID:-}
       RESEND_API_KEY: ${RESEND_API_KEY:-}
-      EMAIL_FROM: ${EMAIL_FROM:-ClientFold <hello@clientfold.com>}
+      EMAIL_FROM: ${EMAIL_FROM:-ClientFold <hello@useclientfold.com>}
       INBOUND_EMAIL_DOMAIN: ${INBOUND_EMAIL_DOMAIN:-}
       RESEND_WEBHOOK_SECRET: ${RESEND_WEBHOOK_SECRET:-}
+      DISCORD_WAITLIST_WEBHOOK_URL: ${DISCORD_WAITLIST_WEBHOOK_URL:-}
       STORAGE_BUCKET: ${STORAGE_BUCKET:-}
       STORAGE_REGION: ${STORAGE_REGION:-}
       STORAGE_ACCESS_KEY_ID: ${STORAGE_ACCESS_KEY_ID:-}
@@ -43,6 +44,26 @@ services:
       - clientfold_data:/data
       - clientfold_uploads:/app/.storage
 
+  caddy:
+    image: caddy:2.11.4-alpine
+    restart: unless-stopped
+    depends_on:
+      clientfold:
+        condition: service_healthy
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:-useclientfold.com}
+      ACME_EMAIL: ${ACME_EMAIL:-hello@useclientfold.com}
+    volumes:
+      - ./caddy:/etc/caddy:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    security_opt:
+      - no-new-privileges:true
+
   reminder-worker:
     profiles: ["automation"]
     image: clientfold:local
@@ -58,3 +79,5 @@ services:
 volumes:
   clientfold_data:
   clientfold_uploads:
+  caddy_data:
+  caddy_config:

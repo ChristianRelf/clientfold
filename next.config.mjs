@@ -12,7 +12,7 @@ const nextConfig = {
     return [
       {
         // Private app + portal + internal routes must never be indexed.
-        source: "/(app|portal|internal|integrations)/:path*",
+        source: "/(app|portal|internal|settings)/:path*",
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
       },
     ];

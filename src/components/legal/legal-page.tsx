@@ -10,7 +10,7 @@ export function LegalPage({
   eyebrow = "ClientFold legal",
   title,
   summary,
-  contactEmail = "legal@clientfold.com",
+  contactEmail = "legal@useclientfold.com",
   updated = "23 August 2026",
   sections,
 }: {

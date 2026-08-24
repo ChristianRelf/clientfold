@@ -9,6 +9,7 @@ const COLUMNS: { title: string; links: { href: string; label: string }[] }[] = [
       { href: "/features", label: "Features" },
       { href: "/pricing", label: "Pricing" },
       { href: "/demo", label: "Demo" },
+      { href: "/integrations", label: "Integrations" },
       { href: "/client-approval-software", label: "Client approvals" },
     ],
   },
@@ -24,8 +25,10 @@ const COLUMNS: { title: string; links: { href: string; label: string }[] }[] = [
   {
     title: "Company",
     links: [
+      { href: "/about", label: "About" },
+      { href: "/support", label: "Support" },
+      { href: "/contact", label: "Contact" },
       { href: "/login", label: "Log in" },
-      { href: "/waitlist", label: "Join the waitlist" },
     ],
   },
   {
@@ -35,6 +38,9 @@ const COLUMNS: { title: string; links: { href: string; label: string }[] }[] = [
       { href: "/privacy", label: "Privacy" },
       { href: "/cookies", label: "Cookie notice" },
       { href: "/acceptable-use", label: "Acceptable use" },
+      { href: "/accessibility", label: "Accessibility" },
+      { href: "/refunds", label: "Refunds" },
+      { href: "/security", label: "Security" },
     ],
   },
 ];

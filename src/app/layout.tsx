@@ -9,7 +9,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const requestHeaders = await headers();
   const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
   const protocol = requestHeaders.get("x-forwarded-proto") ?? (host?.includes("localhost") ? "http" : "https");
-  const appUrl = host ? `${protocol}://${host}` : process.env.APP_URL ?? "https://clientfold.com";
+  const appUrl = host ? `${protocol}://${host}` : process.env.APP_URL ?? "https://useclientfold.com";
   const socialImage = new URL("/opengraph-image", appUrl).toString();
   return {
   metadataBase: new URL(appUrl),

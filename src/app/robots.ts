@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const APP_URL = process.env.APP_URL ?? "https://clientfold.com";
+const APP_URL = process.env.APP_URL ?? "https://useclientfold.com";
 
 export default function robots(): MetadataRoute.Robots {
   return {

@@ -26,7 +26,7 @@ const sections: LegalSection[] = [
   {
     title: "Accounts and access",
     content: <>
-      <p>You must provide accurate, current information, keep credentials and devices secure, and promptly tell us at <a href="mailto:security@clientfold.com">security@clientfold.com</a> if you suspect unauthorised access. You are responsible for activity under your account unless it results from our breach of this agreement.</p>
+      <p>You must provide accurate, current information, keep credentials and devices secure, and promptly tell us at <a href="mailto:security@useclientfold.com">security@useclientfold.com</a> if you suspect unauthorised access. You are responsible for activity under your account unless it results from our breach of this agreement.</p>
       <p>Workspace owners and administrators control membership, roles, projects and client invitations. Invitation and portal links must be sent only to intended recipients. Client access can be revoked, and you should review access whenever a working relationship or project ends.</p>
       <p>We may require reasonable verification before changing ownership, billing details or administrator access. One person must not create accounts through bots or use false identities to bypass plan limits.</p>
     </>,
@@ -58,7 +58,7 @@ const sections: LegalSection[] = [
     title: "Cancellation and refunds",
     content: <>
       <p>You may cancel a paid subscription at any time through billing settings or by contacting us. Cancellation stops the next renewal; paid access normally continues until the end of the current billing period.</p>
-      <p>Except where an order, promotional offer or applicable law says otherwise, fees already paid are non-refundable and we do not give credits for partial periods or unused capacity. If we terminate the Service for reasons unrelated to your breach, we will refund prepaid fees for the unused portion of the affected paid period.</p>
+      <p>Except where our <a href="/refunds">Refund and Cancellation Policy</a>, an order, promotional offer or applicable law says otherwise, fees already paid are non-refundable and we do not give credits for partial periods or unused capacity. If we terminate the Service for reasons unrelated to your breach, we will refund prepaid fees for the unused portion of the affected paid period.</p>
       <p>Nothing in these terms removes a cancellation, refund or other right that cannot legally be excluded.</p>
     </>,
   },
@@ -162,7 +162,7 @@ const sections: LegalSection[] = [
       <p>Neither party is liable for delay caused by events outside its reasonable control. You may not transfer this agreement without our written consent, except as part of a genuine sale of your business. We may transfer it as part of a reorganisation, financing or sale of our business, provided your rights are not materially reduced.</p>
       <p>If a provision is unenforceable, the rest remains effective. A delay in enforcing a right is not a waiver. This agreement does not create a partnership, agency or employment relationship, and no third party has a right to enforce it. Notices may be sent to the email address associated with your account.</p>
       <p>These terms are governed by the laws of England and Wales, and the courts of England and Wales have exclusive jurisdiction, unless mandatory law requires otherwise.</p>
-      <p>Questions and legal notices may be sent to <a href="mailto:legal@clientfold.com">legal@clientfold.com</a>.</p>
+      <p>Questions and legal notices may be sent to <a href="mailto:legal@useclientfold.com">legal@useclientfold.com</a>.</p>
     </>,
   },
 ];

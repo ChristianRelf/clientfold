@@ -8,6 +8,9 @@ const LEGAL_LINKS = [
   { href: "/privacy", label: "Privacy" },
   { href: "/cookies", label: "Cookies" },
   { href: "/acceptable-use", label: "Acceptable use" },
+  { href: "/accessibility", label: "Accessibility" },
+  { href: "/refunds", label: "Refunds" },
+  { href: "/security", label: "Security" },
 ];
 
 export function LegalHeader({ activeHref }: { activeHref: string }) {

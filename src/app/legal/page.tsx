@@ -5,7 +5,7 @@ import { SiteFooter } from "@/components/marketing/site-footer";
 
 export const metadata: Metadata = {
   title: "Legal centre",
-  description: "ClientFold terms, privacy information, cookie notice and acceptable use rules.",
+  description: "ClientFold terms, privacy, accessibility, refund, security, cookie and acceptable use documents.",
   alternates: { canonical: "/legal" },
 };
 
@@ -14,6 +14,9 @@ const documents = [
   { number: "02", href: "/privacy", title: "Privacy Notice", body: "What personal information we handle, why we use it, who receives it and your rights.", meta: "14 sections" },
   { number: "03", href: "/cookies", title: "Cookie Notice", body: "The cookies and similar technologies we use, their duration and how to control them.", meta: "6 sections" },
   { number: "04", href: "/acceptable-use", title: "Acceptable Use", body: "The boundaries that keep ClientFold lawful, secure and useful for every workspace.", meta: "6 sections" },
+  { number: "05", href: "/accessibility", title: "Accessibility Statement", body: "Our accessibility goal, known limitations and the route for reporting a barrier or requesting an alternative.", meta: "6 sections" },
+  { number: "06", href: "/refunds", title: "Refund & Cancellation", body: "How to stop renewal, request a refund and ask us to correct a subscription billing problem.", meta: "7 sections" },
+  { number: "07", href: "/security", title: "Security & Disclosure", body: "A practical overview of safeguards and how to report a potential vulnerability responsibly.", meta: "6 sections" },
 ];
 
 export default function LegalCentrePage() {
@@ -37,8 +40,8 @@ export default function LegalCentrePage() {
             </div>
             <div className="self-end border-t border-[#4e554b] pt-5 lg:border-l lg:border-t-0 lg:pl-7 lg:pt-0">
               <p className="text-[9px] font-medium uppercase tracking-[0.16em] text-[#7f897b]">Document set</p>
-              <p className="mt-2 text-sm text-[#e2e4dc]">4 current documents</p>
-              <p className="mt-5 text-[10px] leading-5 text-[#aeb4aa]">Last reviewed<br /><span className="text-[#e2e4dc]">23 August 2026</span></p>
+              <p className="mt-2 text-sm text-[#e2e4dc]">7 current documents</p>
+              <p className="mt-5 text-[10px] leading-5 text-[#aeb4aa]">Last reviewed<br /><span className="text-[#e2e4dc]">24 August 2026</span></p>
             </div>
           </div>
         </header>
@@ -65,7 +68,7 @@ export default function LegalCentrePage() {
           </div>
           <div className="mt-8 flex flex-col items-start justify-between gap-3 border-t border-[#d8d7d0] pt-6 text-[11px] text-[#777970] sm:flex-row sm:items-center">
             <p>Questions or need a copy of a document?</p>
-            <a className="font-medium text-[#4f5b49] underline underline-offset-4" href="mailto:legal@clientfold.com">legal@clientfold.com</a>
+            <a className="font-medium text-[#4f5b49] underline underline-offset-4" href="mailto:legal@useclientfold.com">legal@useclientfold.com</a>
           </div>
         </section>
       </main>

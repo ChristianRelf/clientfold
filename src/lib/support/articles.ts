@@ -107,7 +107,7 @@ export const supportArticles: SupportArticle[] = [
     readTime: "4 min",
     sections: [
       { title: "Change or cancel", body: ["Open Settings → Billing to see the current plan and renewal date. Cancellation stops the next renewal and paid access normally continues until the end of the billing period."], steps: ["Open Billing settings.", "Choose Manage subscription.", "Confirm the change or cancellation in the billing portal.", "Save a copy of the confirmation for your records."] },
-      { title: "Request a refund", body: ["Read the Refund Policy for the current eligibility rules. If you believe there was a duplicate charge, billing error, unauthorised payment or material service failure, contact billing@clientfold.com with the account email and invoice reference."], note: "Do not send card numbers, security codes or bank-login details." },
+      { title: "Request a refund", body: ["Read the Refund Policy for the current eligibility rules. If you believe there was a duplicate charge, billing error, unauthorised payment or material service failure, contact billing@useclientfold.com with the account email and invoice reference."], note: "Do not send card numbers, security codes or bank-login details." },
       { title: "Export before access ends", body: ["Export important project records and download files before the end of the retention window. Closing an account does not automatically cancel amounts already due for completed billing periods."] },
     ],
   },
